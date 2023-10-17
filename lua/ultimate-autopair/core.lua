@@ -1,6 +1,7 @@
 local M={}
 M.I={}
 local MAP_MODES={'n','x','s','o','i','c','t'} --'l'
+---@alias map_modes 'n'|'x'|'s'|'o'|'i'|'c'|'t'
 ---@param mode string
 ---@param key string
 ---@return table?
@@ -31,16 +32,33 @@ function M.run(hash)
 end
 ---@param id any
 function M.clear_id(id)
-    for _,v in pairs(M.hooks) do
-        for k,i in ipairs({unpack(v)}) do
-            if i.id==id then table.remove(v,k) end
+    for _,v in pairs{unpack(M.hooks)} do
+        for k,i in ipairs{unpack(v)} do
+            if i.id==id then
+                table.remove(v,k)
+            end
         end
     end
-    --TODO: remove unused keymapings
+    M.gc_keymaps()
+end
+function M.gc_keymaps()
+    for _,mode in ipairs(MAP_MODES) do
+        local maps=vim.api.nvim_get_keymap(mode)
+        for _,key in ipairs(maps) do
+            local hash=key.rhs:match('^v:lua.'..M.global_name..'.run.%("(.*)"%)$')
+            if not hash then goto continue end
+            hash=hash:gsub('\\([\\"])','%1')
+            if #M.hooks[hash]>0 then goto continue end
+            local info=M.hooks[hash]
+            vim.keymap.del(mode,key.lhs)
+            if info.prev_map then vim.fn.mapset(mode,false,info.prev_map) end
+            ::continue::
+        end
+    end
 end
 ---@param action table
 ---@param key string
----@param mode string
+---@param mode map_modes
 ---@param opt? table
 function M.create_map_hook(mode,key,action,opt)
     key=vim.fn.keytrans(key)
