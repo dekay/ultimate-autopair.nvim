@@ -1,75 +1,57 @@
----@class core.o
----@field key string|core.okey
----@field line string
----@field lines string[]
----@field _offset number
-----@field incheck boolean
-----@field inoinit boolean?
----@field col number
----@field row number
----@field mode 'c'|'i'|string
----@field __core_mem? fun():core.imodule[]
----@field true_pos? core.o.true_pos
----@class core.o.true_pos
----@field buffer number
----@field col number
----@field row number
----@class core.module:core.imodule
----@field save table
----@class core.imodule
----@field get_map? core.get_map-fn
----@field oinit? core.oinit-fn
----@field check? core.check-fn
----@field doc? string
----@field sort? core.sort-fn
----@field filter? core.filter-fn
----@field p number
----@alias core.get_map-fn fun(mod:string):string[]?
----@alias core.check-fn fun(o:core.o):string?
----@alias core.filter-fn fun(o:core.o):boolean?
----@alias core.oinit-fn fun(delete:boolean?)
----@alias core.sort-fn fun(a:core.imodule,b:core.imodule):boolean?
----@class core.okey
----@field autocmd? string|string[]
-
-local debug=require'ultimate-autopair.debug'
-local utils=require'ultimate-autopair.utils'
 local M={}
----@type core.imodule[]
-M.mem={}
----@type table<string,table<string,table|false>>
-M.map={}
-M.modes={'i','c'}
-M.funcs={}
 M.I={}
+local MAP_MODES={'n','x','s','o','i','c','t'} --'l'
 ---@param mode string
----@return table<string,table>
-function M.I.get_maps(mode)
+---@param key string
+---@return table?
+function M.I.get_map(mode,key)
     local maps=vim.api.nvim_get_keymap(mode)
-    local ret={}
     for _,keyinfo in ipairs(maps) do
-        ret[keyinfo.lhs]=keyinfo
+        if vim.fn.keytrans(keyinfo.lhsraw)==key then return keyinfo end
     end
-    return ret
+end
+---@param hash string
+---@return string
+function M.wrapp_run_as_vimscript(hash)
+    return ('v:lua.%s.run("%s")'):format(M.global_name,hash:gsub('[\\"]','\\%1'))
 end
 ---@param mode string
-function M.delete_mem_map(mode)
-    local mapps=M.I.get_maps(mode)
-    for key,old_map in pairs(M.map[mode] or {}) do
-        if mapps[vim.fn.keytrans(key)] and M.funcs[key] and
-            mapps[vim.fn.keytrans(key)].callback==M.funcs[key] then
-            vim.keymap.del(mode,vim.fn.keytrans(key),{})
-            if old_map then vim.fn.mapset(mode,false,old_map) end
+---@param key string
+---@return string
+function M.get_key_hash(mode,key)
+    return mode..';'..key
+end
+M.hooks={}
+---@param hash string
+function M.run(hash)
+    if not M.hooks[hash] then error('invalid hash') end
+    for _,act in ipairs(M.hooks[hash]) do
+        act.cb(M.hooks[hash])
+    end
+end
+---@param id any
+function M.clear_id(id)
+    for _,v in pairs(M.hooks) do
+        for k,i in ipairs({unpack(v)}) do
+            if i.id==id then table.remove(v,k) end
         end
     end
+    --TODO: remove unused keymapings
 end
-function M.clear()
-    vim.api.nvim_create_augroup('UltimateAutopair',{clear=true})
-    for _,mode in ipairs(M.modes) do
-        M.delete_mem_map(mode)
+---@param action table
+---@param key string
+---@param mode string
+---@param opt? table
+function M.create_map_hook(mode,key,action,opt)
+    key=vim.fn.keytrans(key)
+    local hash=M.get_key_hash(mode,key)
+    if M.hooks[hash] then
+        table.insert(M.hooks[hash],action)
+        return
     end
-    M.mem={}
-    M.map={}
-    M.funcs={}
+    M.hooks[hash]={action,prev_map=M.I.get_map(mode,key),type='key',default=key}
+    vim.keymap.set(mode,key,M.wrapp_run_as_vimscript(hash),opt)
 end
+M.global_name='_'..vim.fn.rand()..'_ULTIMATE_AUTOPAIR_CORE'
+_G[M.global_name]=M
 return M
