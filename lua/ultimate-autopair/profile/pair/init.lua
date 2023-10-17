@@ -1,0 +1,1 @@
+---@class prof.config
