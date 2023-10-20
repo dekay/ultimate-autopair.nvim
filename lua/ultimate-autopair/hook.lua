@@ -17,7 +17,6 @@ end
 function M.init(mem)
     for _,v in pairs(mem) do
         for _,i in pairs(v.get and v.get() or {}) do
-            vim.pprint(i)
             if i.type=='key' then
                 vim.keymap.set(i.mode,i.key,v.check,{
                     noremap=true,

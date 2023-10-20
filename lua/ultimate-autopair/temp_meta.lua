@@ -1,9 +1,11 @@
 ---@class ua.id
 ---@class ua.module
----@field get? fun():ua.hook.info[]
----@field check? fun():string?
+---@field get ua.get-fn
+---@field check ua.check-fn
 ---@field desc string?
 ---@field id ua.id
----@field filter? function
+---@field filter function
 ---@field sort? function
 ---@field p number
+---@alias ua.check-fn fun(o:any):string?
+---@alias ua.get-fn fun():ua.hook.info[]
