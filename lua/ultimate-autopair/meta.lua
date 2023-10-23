@@ -2,10 +2,11 @@
 ---@class ua.module
 ---@field get ua.get-fn
 ---@field check ua.check-fn
+---@field filter ua.filter-fn
 ---@field desc string?
 ---@field id ua.id
----@field filter function
 ---@field sort? function
 ---@field p number
 ---@alias ua.check-fn fun(o:any):string?
+---@alias ua.filter-fn fun(o:any):boolean?
 ---@alias ua.get-fn fun():ua.hook.info[]

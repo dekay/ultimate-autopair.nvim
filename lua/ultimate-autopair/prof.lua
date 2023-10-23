@@ -1,4 +1,4 @@
----@class ua.prof.config
+---@class ua.prof.conf
 ---@field profile? string
 ---@field p? number
 
@@ -9,7 +9,7 @@ function M.get_profile_init(profile)
     if type(profile)=='function' then return profile end
     return require('ultimate-autopair.profile.'..profile).init
 end
----@param conf ua.prof.config
+---@param conf ua.prof.conf
 ---@param mem ua.module[]
 ---@param id ua.id
 function M.init_conf(id,conf,mem)
@@ -18,7 +18,7 @@ function M.init_conf(id,conf,mem)
     end
     M.get_profile_init(conf.profile or 'default')(conf,mem,id)
 end
----@param confs ua.prof.config[]
+---@param confs ua.prof.conf[]
 ---@param id ua.id
 ---@return ua.module[]
 function M.init(id,confs)

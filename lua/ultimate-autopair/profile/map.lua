@@ -1,4 +1,4 @@
----@class ua.prof.map.conf:ua.prof.config
+---@class ua.prof.map.conf:ua.prof.conf
 ---@field [number] ua.prof.map.opt
 ---@class ua.prof.map.mod:ua.module
 ---@field mode string[]
