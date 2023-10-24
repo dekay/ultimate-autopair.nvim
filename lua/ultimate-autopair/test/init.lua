@@ -1,24 +1,13 @@
 local M={}
 M.fn={
-    ok=function (msg)
-        vim.notify('Ok:'..msg,vim.log.levels.INFO)
-    end,
-    info=function (msg)
-        vim.notify('Info:'..msg,vim.log.levels.INFO)
-    end,
-    error=function (msg)
-        vim.notify('Err:'..msg,vim.log.levels.ERROR)
-    end,
-    warning=function (msg)
-        vim.notify('Warn:'..msg,vim.log.levels.WARN)
-    end,
+    ok=function (msg) vim.notify('Ok:'..msg,vim.log.levels.INFO) end,
+    info=function (msg) vim.notify('Info:'..msg,vim.log.levels.INFO) end,
+    error=function (msg) vim.notify('Err:'..msg,vim.log.levels.ERROR) end,
+    warning=function (msg) vim.notify('Warn:'..msg,vim.log.levels.WARN) end,
 }
 function M.get_paths()
     local path=vim.api.nvim_get_runtime_file('lua/ultimate-autopair',false)[1]
-    return{
-        path=path,
-        root=vim.fn.fnamemodify(path,':h:h'),
-    }
+    return{path=path,root=vim.fn.fnamemodify(path,':h:h')}
 end
 function M.check_not_alowed_files_and_strings(paths)
     local function handle_stdout(_,data,_)
@@ -30,7 +19,7 @@ function M.check_not_alowed_files_and_strings(paths)
     end
     if not (vim.fn.executable('grep') and vim.fn.executable('find')) then
         M.fn.warning('Some of the required executables are missing for dev testing')
-        M.fn.info('INFO Pleas make sure that find and grep are installed')
+        M.fn.info('INFO Pleas make sure that "find" and "grep" are installed')
         return
     end
     local string_check_print=vim.fn.jobstart({
@@ -87,9 +76,9 @@ function M.start_test_runner_and_test(paths)
     ---use tcp server for out instead of file
     local jobstat=vim.fn.jobwait({job},10000)[1]
     if jobstat==-1 then
-        M.fn.warning('timeout: tester process did not exit')
+        M.fn.warning('timeout: test runner did not exit')
     elseif jobstat~=0 then
-        M.fn.warning('job exited with code '..jobstat)
+        M.fn.warning('error: test runner exited with code '..jobstat)
     end
     vim.fn.jobstop(job)
     M.parse_out(vim.fn.readfile(outfile))

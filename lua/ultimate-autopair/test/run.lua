@@ -3,7 +3,7 @@ if _G.UA_IN_TEST then pcall(require,'ua-test') end
 local M={}
 local list_of_tests=require'ultimate-autopair.test.test'
 local ua=require'ultimate-autopair'
-local ua_utils=require'ultimate-autopair.utils'
+--local ua_utils=require'ultimate-autopair.utils'
 local ua_hook=require'ultimate-autopair.hook'
 M.stat={
     ok=1,
@@ -57,7 +57,15 @@ function M.sort_test_by_conf(list_tests)
     end
     return ret
 end
-function M.run(outfile)
+function M.run(outfile,nopcall)
+    vim.fn.writefile({},outfile,'a')
+    if not nopcall then
+        local s,err=pcall(M.run,outfile,true)
+        if not s then
+            vim.fn.writefile({'ERR´DEBUG test runner core exited with error:'..err},outfile,'a')
+        end
+        return
+    end
     M.fn=M.generate_output_funcs(outfile)
     local conf_tests=M.sort_test_by_conf(list_of_tests)
     local categorys=vim.tbl_keys(list_of_tests)
@@ -75,7 +83,6 @@ function M.run(outfile)
             M.fn.ok('all test in category `'..category..'` have passed')
         end
     end
-    vim.fn.writefile({},outfile,'a')
 end
 function M.run_tests(conf,tests,has_not_ok)
     if conf=='skip' then

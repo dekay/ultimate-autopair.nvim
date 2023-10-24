@@ -17,6 +17,7 @@
 ---@alias ua.hook.hook ua.hook.hook_map|ua.hook.hook_au
 ---@alias ua.hook.hash string
 
+local utils=require'ultimate-autopair.utils'
 local M={}
 ---@type ua.hook.hook[]
 M.hooks={}
@@ -95,8 +96,9 @@ end
 ---@return string
 function M.run(hash)
     local hook=M.hooks[hash]
+    local o=utils.get_o_creator(hash)
     for _,v in ipairs(hook) do
-        local ret=v.check()
+        local ret=v.check(o(v))
         if ret then return ret end
     end
     return hook.lhs

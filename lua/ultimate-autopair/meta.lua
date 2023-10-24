@@ -1,4 +1,5 @@
 ---@class ua.id
+---@class ua.o
 ---@class ua.module
 ---@field get ua.get-fn
 ---@field check ua.check-fn
