@@ -8,7 +8,8 @@
 ---@field [number] ua.module
 ---@class ua.hook.hook_map
 ---@field prev_map? table
----@field lhs string
+---@field key string
+---@field mode string
 ---@field type 'key'
 ---@field [number] ua.module
 ---@class ua.hook.hook_au
@@ -19,7 +20,7 @@
 
 local utils=require'ultimate-autopair.utils'
 local M={}
----@type ua.hook.hook[]
+---@type table<ua.hook.hash,ua.hook.hook>
 M.hooks={}
 M.I={}
 ---@param mode string
@@ -58,38 +59,47 @@ function M.append_to_hash(hash,m)
 end
 ---@param hash ua.hook.hash
 ---@return string
-function M.hash_run_to_viml(hash)
+function M.hash_expr_run_to_viml(hash)
     return ('v:lua.%s.run("%s")'):format(M.global_name,hash:gsub('[\\"]','\\%1'))
 end
----@param hash ua.hook.hash
+---@param info ua.hook.hook
 ---@return string
-function M.get_hook_desc(hash)
+function M.get_hook_desc(info)
     local descs={}
-    for _,v in ipairs(M.hooks[hash]) do
+    for _,v in ipairs(info) do
         descs[#descs+1]=v.desc
     end
     return table.concat(descs,'\n\t\t ')
 end
----@param info ua.hook.info
----@param m ua.module
-function M.create_map_hook(info,m)
-    local hash=M.get_default_hash(info)
-    M.append_to_hash(hash,m)
-    vim.keymap.set(info.mode,vim.fn.keytrans(info.key),M.hash_run_to_viml(hash),{
-        noremap=true,
-        expr=true,
-        replace_keycodes=false,
-        desc=M.get_hook_desc(hash)
-    })
+---@param hash ua.hook.hash
+---@param info ua.hook.hook
+function M.create_map_hook(hash,info)
+    if true then
+        vim.keymap.set(info.mode,vim.fn.keytrans(info.key),M.hash_expr_run_to_viml(hash),{
+            noremap=true,
+            expr=true,
+            replace_keycodes=false,
+            desc=M.get_hook_desc(info)
+        })
+    else
+        vim.keymap.set(info.mode,vim.fn.keytrans(info.key),M.hash_run_to_viml(hash),{
+            noremap=true,
+            expr=false,
+            replace_keycodes=false,
+            desc=M.get_hook_desc(info)
+        })
+    end
 end
 ---@param mem ua.module[]
 function M.init(mem)
     for _,v in pairs(mem) do
         for _,i in pairs(v.get and v.get() or {}) do
-            if i.type=='key' then
-                M.create_map_hook(i,v)
-            end
+            local hash=M.get_default_hash(i)
+            M.append_to_hash(hash,v)
         end
+    end
+    for hash,info in pairs(M.hooks) do
+        M.create_map_hook(hash,info)
     end
 end
 ---@param hash ua.hook.hash
@@ -101,7 +111,7 @@ function M.run(hash)
         local ret=v.check(o(v))
         if ret then return ret end
     end
-    return hook.lhs
+    return hook.key
 end
 M.global_name='_'..vim.fn.rand()..'_ULTIMATE_AUTOPAIR_HASH'
 _G[M.global_name]=M

@@ -13,4 +13,18 @@ end
 function M.create_go(hash)
     return {hash=hash}
 end
+---@generic T:string|string?
+---@param str T
+---@return T
+function M.keycode(str)
+  return str and vim.api.nvim_replace_termcodes(str,true,true,true)
+end
+M.key_bs=M.keycode'<bs>'
+M.key_del=M.keycode'<del>'
+M.key_left=M.keycode'<left>'
+M.key_right=M.keycode'<right>'
+M.key_end=M.keycode'<end>'
+M.key_home=M.keycode'<home>'
+M.key_up=M.keycode'<up>'
+M.key_down=M.keycode'<down>'
 return M
