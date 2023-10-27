@@ -6,3 +6,4 @@
     + make mappings use `InsertCharPre` (and `CmdlineCharPre`)
 + Easy documented hook api
     + Like `hook.send_key('(')` > `hook._run('(',mode=utils.mode())`
++ Add doc about unique mapping
