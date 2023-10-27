@@ -49,7 +49,7 @@ function M.get_default_hash(info)
     local hash=M.get_hash(info)
     if M.hooks[hash] then
     elseif info.type=='key' then
-        M.hooks[hash]={prev_map=M.I.get_map(info.mode,info.key),lhs=vim.fn.keytrans(info.key),type='key'}
+        M.hooks[hash]={prev_map=M.I.get_map(info.mode,info.key),key=vim.fn.keytrans(info.key),type='key',mode=info.mode}
     else error() end
     return hash
 end
@@ -61,7 +61,7 @@ end
 ---@param hash ua.hook.hash
 ---@return string
 function M.hash_run_to_viml(hash)
-    return ('v:lua.%s.run("%s")'):format(M.global_name,hash:gsub('[\\"]','\\%1'))
+    return (vim.keycode'<C-r>=v:lua.%s.run("%s")\r'):format(M.global_name,hash:gsub('[\\"]','\\%1'))
 end
 ---@param info ua.hook.hook
 ---@return string
@@ -75,6 +75,7 @@ end
 ---@param hash ua.hook.hash
 ---@param info ua.hook.hook
 function M.create_map_hook(hash,info)
+    vim.lg(hash,info)
     vim.keymap.set(info.mode,vim.fn.keytrans(info.key),M.hash_run_to_viml(hash),{
         noremap=true,
         desc=M.get_hook_desc(info)
@@ -102,6 +103,7 @@ end
 ---@param hash ua.hook.hash
 function M.run(hash)
     core._run(M.get(hash))
+    return ''
 end
 M.global_name='_'..vim.fn.rand()..'_ULTIMATE_AUTOPAIR_HASH'
 _G[M.global_name]=M
