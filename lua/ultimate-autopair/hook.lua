@@ -101,10 +101,7 @@ function M.get(hash)
 end
 ---@param hash ua.hook.hash
 function M.run(hash)
-    local s=M.get(hash)
-    if type(s)=='string' then
-        vim.api.nvim_input(s)
-    end
+    core._run(M.get(hash))
 end
 M.global_name='_'..vim.fn.rand()..'_ULTIMATE_AUTOPAIR_HASH'
 _G[M.global_name]=M
