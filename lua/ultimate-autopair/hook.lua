@@ -61,7 +61,7 @@ end
 ---@param hash ua.hook.hash
 ---@return string
 function M.hash_run_to_viml(hash)
-    return (vim.keycode'<C-r>=v:lua.%s.run("%s")\r'):format(M.global_name,hash:gsub('[\\"]','\\%1'))
+    return (utils.keycode'<C-r>=v:lua.%s.run("%s")\r'):format(M.global_name,hash:gsub('[\\"]','\\%1'))
 end
 ---@param info ua.hook.hook
 ---@return string
