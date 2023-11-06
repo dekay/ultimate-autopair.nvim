@@ -8,6 +8,8 @@ end
 ---@param keys string
 function M.I.feedkeys(keys)
     vim.api.nvim_feedkeys(keys,'n',false)
+    --vim.api.nvim_feedkeys(keys,'ni',false)
+    --This works with macros, but requires that all the inputs are passed in at once
 end
 ---@param pos number[]
 function M.I.gotopos(pos)

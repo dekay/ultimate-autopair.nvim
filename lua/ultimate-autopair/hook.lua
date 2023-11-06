@@ -79,6 +79,8 @@ function M.create_map_hook(hash,info)
     vim.keymap.set(info.mode,vim.fn.keytrans(info.key),M.hash_run_to_viml(hash),{
         noremap=true,
         desc=M.get_hook_desc(info)
+        --expr=true --TODO
+        ---the best sulution, don't forget to add a<bs> to make it work with undo
     })
 end
 ---@param mem ua.module[]
