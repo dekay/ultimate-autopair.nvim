@@ -5,4 +5,8 @@ function M.check(pair_start,pair_end)
         M.isambiguous=true
     end
 end
+function M.is_valid()
+    if not M.isambiguous then return true end
+    return M.open_pair_ambigous()
+end
 return M
