@@ -16,5 +16,6 @@
 3. The hook system recalls the action to the modules until one of them returns an action.
     + If no module returns an action, a fallback is used.
 4. The action is sent to the editor
-
-
+## o
++ `o.scol`: the start of the object col, is same as `o.ecol` if incheck
++ `o.scol`: the end of the object col, is same as `o.ecol` if incheck
