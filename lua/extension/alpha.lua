@@ -14,7 +14,7 @@ function M.call(m)
         end
         return cb()
     end,{
-            if_checks={utils.ONLY_NORMAL_TEXT,utils.ONLY_INSERT,
+            if_checks={utils.ONLY_NORMAL_TEXT,
                 utils.OPTION_TO_FILTER, --probably uneeded, the user can specifi themself
             },
             special_pair_configs={

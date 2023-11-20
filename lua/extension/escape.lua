@@ -13,7 +13,7 @@ function M.call(m)
         end
         return cb()
     end,{
-            if_checks={utils.ONLY_STRING_TEXT,utils.ONLY_INSERT,
+            if_checks={utils.ONLY_STRING_TEXT,
                 utils.OPTION_TO_FILTER, --probably uneeded, the user can specifi themself
                 utils.OPTIOM_PAIR_CONF_CAN_DISABLE, --probably uneeded, the user can specifi themself
             },
