@@ -12,7 +12,7 @@ end
 local M={}
 local list_of_tests=require'ultimate-autopair.test.test'
 local ua=require'ultimate-autopair'
-local ua_core=require'ultimate-autopair.core'
+local ua_action=require'ultimate-autopair.action'
 local ua_utils=require'ultimate-autopair.utils'
 M.stat={
     ok=1,
@@ -150,7 +150,7 @@ function M.run_test(testopt)
     if #key~=1 then
         M.fn.warning('DEBUG: is not interactive and size of key is not 1')
     end
-    local action=ua_core.run(map[key] or key)
+    local action=ua_action.run(map[key] or key)
     local deparsed_result_line=M.run_action(action,lines,linenr,col,opt)
     if deparsed_result_line~=unparsed_resulting_line then
         return M.stat.faild,deparsed_result_line

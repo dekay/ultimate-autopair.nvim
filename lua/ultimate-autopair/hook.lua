@@ -19,7 +19,7 @@
 ---@alias ua.hook.hash string
 
 local utils=require'ultimate-autopair.utils'
-local core=require'ultimate-autopair.core'
+local action=require'ultimate-autopair.action'
 local M={}
 ---@type table<ua.hook.hash,ua.hook.hook>
 M.hooks={}
@@ -98,11 +98,11 @@ end
 function M.get(hash)
     local hook=M.hooks[hash]
     local o=utils.get_o_creator(hash)
-    return core._eval(hook,o,hook.key)
+    return action._eval(hook,o,hook.key)
 end
 ---@param hash ua.hook.hash
 function M.run(hash)
-    core._run(M.get(hash))
+    action._run(M.get(hash))
     return ''
 end
 M.global_name='_'..vim.fn.rand()..'_ULTIMATE_AUTOPAIR_HASH'

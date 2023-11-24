@@ -1,8 +1,19 @@
 local M={save={}}
 local utils=require'ua.ultils'
 function M.in_tsnode(o,nodetypes,half_pos)
-    local save=utils.save(o.save,M.in_tsnode,nodetypes)
+    ---TODO: implement tree support (like skip-tree)
     local node,node2=utils.gettsnode(o,{half_pos=half_pos})
+    local save={}
+    while node:parent() and (not vim.tbl_contains(nodetypes,node:type())) do
+        save[node:id()]=node
+        node=node:parent() --[[@as TSNode]]
+    end
+    if node2==node then return node end
+    while node2:parent() and (not vim.tbl_contains(nodetypes,node2:type())) do
+        node2=node2:parent() --[[@as TSNode]]
+        if save[node2:id()] then return node end
+    end
+    return node,node2
 
 end
 function M.get_node(o,conf)
@@ -20,7 +31,7 @@ function M.call(m)
     utils.register_check(m,function (o,cb,conf)
         local save=o.save[M.save]
         if not save then
-            local ssave,t=M.get_node(o,conf)
+            local ssave,t=M.get_node(o.org_o,conf)
             if t then
                 utils.split()
             end
