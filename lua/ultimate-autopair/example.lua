@@ -1,0 +1,25 @@
+---@meta
+---@class ua.pos
+---@filed row number
+---@filed col number
+---@class ua.cursor
+---@filed row number
+---@filed col number
+---@field halfsize boolean wheather the cursor is half sized (in insert mode)
+---@class ua.event
+---@field key string?
+---@field auevent table?
+---@class ua.o
+---@field lines string[] list of lines
+---@field line string current line
+---@field mode string
+---@field buf number
+---@class ua.o.check:ua.o
+---@field cursor ua.cursor cursor pos
+---@class ua.o.filter:ua.o
+---@field start ua.pos start of the object
+---@field end_ ua.pos end of the object
+---@class ua.o.prefilter:ua.o
+---@field fpos ua.cursor pos to use as start point for filter presets (normaly the cursor pos)
+---@class ua.o.sendtoprofile
+---@field eventinfo ua.event the trigger event
