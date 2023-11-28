@@ -1,6 +1,7 @@
 local M={_id=0}
-local objman=require('ultimate-autopair.objman')
-local default=require('ultimate-autopair.default')
+local objmem=require'ultimate-autopair.objmem'
+local default=require'ultimate-autopair.default'
+local prof=require'ultimate-autopair.profile'
 local _
 ---@param conf ua.prof.conf?
 ---@param id ua.id?
@@ -14,9 +15,8 @@ function M.init(configs,id)
     id=id or M._id
     --configs=_.config_manager.init(configs)
     _.hook.clear(id)
-    local objects={}
-    objman[id]=objects
-    _.profile.create_objects_from_config(configs,objects)
+    objmem[id]={}
+    prof.init(configs,objmem[id])
     _.hook.init(id)
 end
 ---@param conf ua.prof.conf?

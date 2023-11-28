@@ -1,10 +1,13 @@
 local M={}
+---@param profile string|function
+---@return fun(conf:ua.prof.conf,objects:ua.object[])
+function M.get_profile_init(profile)
+    if type(profile)=='function' then return profile end
+    return require('ultimate-autopair.profile.'..profile).init
+end
 ---@param conf ua.prof.conf
 ---@param objects ua.object[]
 function M.init_conf(conf,objects)
-    if type(conf)=='function' then
-        conf({profile='_function'},objects)
-    end
     M.get_profile_init(conf.profile or 'default')(conf,objects)
 end
 ---@param confs ua.prof.conf[]
