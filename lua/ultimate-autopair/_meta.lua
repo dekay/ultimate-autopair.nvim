@@ -1,0 +1,3 @@
+---@diagnostic disable: duplicate-doc-alias
+---@alias ua.id number
+---@alias ua.prof.conf table
