@@ -13,9 +13,11 @@ end
 function M.init(configs,id)
     id=id or M._id
     --configs=_.config_manager.init(configs)
-    local objects=objman.create_objs(id,{init=_.hook.init,clear=_.hook.clear})
+    _.hook.clear(id)
+    local objects={}
+    objman[id]=objects
     _.profile.create_objects_from_config(configs,objects)
-    objman.init(id)
+    _.hook.init(id)
 end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf
