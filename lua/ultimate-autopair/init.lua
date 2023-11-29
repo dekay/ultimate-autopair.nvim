@@ -2,7 +2,7 @@ local M={_id=0}
 local objmem=require'ultimate-autopair.objmem'
 local default=require'ultimate-autopair.default'
 local prof=require'ultimate-autopair.profile'
-local _
+local hook=require'ultimate-autopair.hook'
 ---@param conf ua.prof.conf?
 ---@param id ua.id?
 function M.setup(conf,id)
@@ -14,10 +14,10 @@ end
 function M.init(configs,id)
     id=id or M._id
     --configs=_.config_manager.init(configs)
-    _.hook.clear(id)
+    hook.clear(id)
     objmem[id]={}
     prof.init(configs,objmem[id])
-    _.hook.init(id)
+    hook.init(id)
 end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf
