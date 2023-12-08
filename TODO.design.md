@@ -22,3 +22,5 @@ Have a hook creator which does exactly that. Problem: a little bit complicated.
 ### How to send hooks as user
 #### Idea 1 *
 `hook.send(input,type?,mode?)` where mode is infer if not given and type is all if not given. And for the output, don't use the underlying hook-creator, and instead have a separate `hook.act`, which can take options such as `function`, `feedkey` or `expr` (and `dot-all`).
+## How to do the filter system
+## How to do the extension system
