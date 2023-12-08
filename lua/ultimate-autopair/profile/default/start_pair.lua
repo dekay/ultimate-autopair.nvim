@@ -8,9 +8,7 @@ function M.init(start_pair,end_pair)
     return {
         run=M.run,
         object={start_pair=start_pair,end_pair=end_pair},
-        get_hook=function ()
-            return {{mode='i',type='map',input=start_pair}}
-        end
+        hooks={'i;map;'..start_pair},
     }
 end
 return M

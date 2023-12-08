@@ -1,4 +1,5 @@
 ---@class ua.hook.info
 ---@field [number] ua.object
----@type table<ua.hook,ua.hook.info>
+---@field dirty boolean?
+---@type table<string,ua.hook.info>
 return {}

@@ -10,5 +10,5 @@
     + Add doc about unique mapping
     + ctrl-w support: just use `{bs={map={'<C-w>','<bs>'}}}`
 + What is the difference between hook request and hook (NOTHING)
-+ how to create a treesitter query for tree injections
++ How to create a treesitter query for tree injections
 + Function based extension enable `{enable=fun()}`

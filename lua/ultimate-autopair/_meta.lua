@@ -1,13 +1,15 @@
----@class ua.object
----@field get_hook? fun():ua.hook.request[]
----@field run? fun(o:any):string? --TODO:TEMP
+---@class ua.object.create
+---@field get_hook? fun():ua.hook[]
+---@field run? fun(o:any):string? --TODO:TEMP arguments
+---@class ua.object:ua.object.create
+---@field hooks ua.hook.hash[]
 ---@alias ua.id number
 ---@alias ua.prof.conf table
----@alias ua.hook table
----@class ua.hook.request
+---@class ua.hook
 ---@field input string
 ---@field type string
 ---@field mode string
+---@alias ua.hook.hash string
 ---TODO: request options
 ----@field expr boolean --only for type=map, use expr or not
 ----@field feed boolean --only for type=map;expr=false, use nvim_feedkeys instead of using functions to go to places
