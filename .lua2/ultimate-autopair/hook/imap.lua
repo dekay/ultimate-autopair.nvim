@@ -14,12 +14,7 @@ function M.wrapp_run(request,id) --TODO: move somewhere else, also wrong: only a
 end
 ---@param request ua.hook.request
 ---@param id ua.id
-function M.init(request,id)
+function M.map(request,id)
     vim.keymap.set('i',request.input,M.wrapp_run(request,id),{noremap=true,expr=true,replace_keycodes=false})
-end
-
----@param request ua.hook.request
-function M.check(request)
-    return request.mode=='i' and request.type=='map'
 end
 return M

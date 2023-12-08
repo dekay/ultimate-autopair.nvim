@@ -13,6 +13,7 @@ end
 ---@param id ua.id?
 function M.init(configs,id)
     id=id or M._id
+    --configs=_.config_manager.init(configs)
     hook.clear(id)
     objmem[id]={}
     prof.init(configs,objmem[id])

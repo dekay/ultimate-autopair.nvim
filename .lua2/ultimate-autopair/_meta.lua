@@ -1,0 +1,13 @@
+---@class ua.object
+---@field get_hook? fun():ua.hook.request[]
+---@field run? fun(o:any):string? --TODO:TEMP
+---@alias ua.id number
+---@alias ua.prof.conf table
+---@alias ua.hook table
+---@class ua.hook.request
+---@field input string
+---@field type string
+---@field mode string
+---@field expr boolean --only for type=map, use expr or not
+---@field feed boolean --only for type=map;expr=false, use nvim_feedkeys instead of using functions to go to places
+---@field true_dot boolean --only for type=map;expr=true,to prioritize dot repeat above all else, basically only allow <arrow> for movment, no <C-o>...
