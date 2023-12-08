@@ -1,5 +1,5 @@
 local M={_id=0}
-local objmem=require'ultimate-autopair.objmem'
+local objmem=require'ultimate-autopair.mem.obj'
 local default=require'ultimate-autopair.default'
 local prof=require'ultimate-autopair.profile'
 local hook=require'ultimate-autopair.hook'

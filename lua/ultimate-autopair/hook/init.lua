@@ -1,4 +1,4 @@
-local objmem=require'ultimate-autopair.objmem'
+local objmem=require'ultimate-autopair.mem.obj'
 local M={}
 M.hooks={
     require'ultimate-autopair.hook.imap',
