@@ -6,7 +6,7 @@ function M.wrapp_run(request,id) --TODO: move somewhere else, also wrong: only a
     return function()
         local objmem=require'ultimate-autopair.objmem'
         for _,i in ipairs(objmem[id]) do
-            local ret=i.run({request=request,m=i})
+            local ret=i.run({request=request,m=setmetatable({},{__index=i})})
             if ret then return ret end
         end
         return request.input
