@@ -24,7 +24,7 @@ function M.count_start_pair(start_pair,end_pair,multiline,start_pair_filter,end_
     if not gotostart then rlines[#rlines]=rlines[#rlines]:sub(col) end
     if gotostart==true then rlines[1]=rlines[1]:sub(1,col) end
     for rrow,line in ipairs(rlines)do
-        rrow=((multiline and gotostart~=true and #rlines) or row)+1-rrow
+        rrow=(multiline and gotostart~=true and #rlines or row)+1-rrow
         assert(lines[rrow]==line)
         local real_col
         local rline=line:reverse()
