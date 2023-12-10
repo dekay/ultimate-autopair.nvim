@@ -12,3 +12,4 @@
 + What is the difference between hook request and hook (NOTHING)
 + How to create a treesitter query for tree injections
 + Function based extension enable `{enable=fun()}`
++ use `typos` to spell check everything and add to breaking chagne that wrongly spelled arguments are corrected
