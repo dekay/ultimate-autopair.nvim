@@ -13,3 +13,5 @@
 + How to create a treesitter query for tree injections
 + Function based extension enable `{enable=fun()}`
 + use `typos` to spell check everything and add to breaking chagne that wrongly spelled arguments are corrected
++ create a test for each bug report on github
++ make the boolean|nil option acept `"default"` as a replacement for nil
