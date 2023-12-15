@@ -15,3 +15,7 @@
 + use `typos` to spell check everything and add to breaking chagne that wrongly spelled arguments are corrected
 + create a test for each bug report on github
 + make the boolean|nil option acept `"default"` as a replacement for nil
++ FILTER:
+    + have a filter option to whether do use the filter as a filter
+    + have a run option to whether do use the filter when run is called
+        + both options for pair specific conf
