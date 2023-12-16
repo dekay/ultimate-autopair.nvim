@@ -21,6 +21,7 @@
         + both options for pair specific conf
 + Fake insert the character, and only then check the treesitter... !important
     + And make it an option (for speedup)
-    + Or not and rework the filtering system to, instead of using filter on cursor, use filter on the char which is inserted
-        + this also makes it a loot easier to deal with inserting/jumping to characters which are outside of a filtered node
+    + Or not and rework the filtering system to, instead of using filter on cursor, use filter on the char(pair) which is inserted
+        + this also makes it a loot easier to deal with inserting/jumping to characters(pairs) which are outside of a filtered node
             + Example `all_fly=true` `("|")` > `)` > `("")|`
+            + Example `pair=\(,\)` `\|` > `(` > `\(|\)`
