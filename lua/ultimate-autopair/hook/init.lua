@@ -18,7 +18,11 @@ function M.unregister_hook(obj,hash)
     if not hookmem[hash] then return end
     local mem=hookmem[hash]
     for k,v in ipairs(mem) do
-        if v==obj then mem[k]=nil return end
+        if v==obj then
+            mem[k]=nil
+            mem.dirty=true
+            break
+        end
     end
 end
 ---@param id ua.id
@@ -39,5 +43,17 @@ function M.register_hook(obj,hash)
     mem.dirty=true
     table.insert(mem,obj)
     table.insert(obj.hooks,hash)
+end
+function M.update()
+    for k,v in pairs(hookmem) do
+        if not v.dirty then goto continue end
+        v.dirty=false
+        if #v==0 then
+            hookmem[k]=nil
+            goto continue
+        end
+        --TODO: init hook
+        ::continue::
+    end
 end
 return M
