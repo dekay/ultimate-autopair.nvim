@@ -4,6 +4,7 @@ local M={}
 ---@param id ua.id
 function M.clear(id)
     local objects=objmem[id]
+    if not objects then return end
     for _,obj in ipairs(objects) do
         for k,v in pairs(obj.hooks) do
             M.unregister_hook(obj,v)
