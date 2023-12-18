@@ -58,9 +58,13 @@ function M.update()
         if type=='map' then
             vim.keymap.set(mode,key,function ()
                 for _,obj in ipairs(v) do
-                    local o={}
-                    o.m=obj
-                    return obj.run(o)
+                    local o={
+                        m=obj,
+                        line=vim.api.nvim_get_current_line(),
+                        col=vim.fn.col'.',
+                    }
+                    local ret=obj.run(o)
+                    if ret then return ret end
                 end
                 return key
             end,{noremap=true,expr=true,replace_keycodes=false})
