@@ -11,6 +11,7 @@ function M.clear(id)
             obj[k]=nil
         end
     end
+    M.update()
 end
 ---@param obj ua.object
 ---@param hash ua.hook.hash
@@ -19,7 +20,7 @@ function M.unregister_hook(obj,hash)
     local mem=hookmem[hash]
     for k,v in ipairs(mem) do
         if v==obj then
-            mem[k]=nil
+            table.remove(mem,k)
             mem.dirty=true
             break
         end
@@ -33,6 +34,7 @@ function M.init(id)
             M.register_hook(obj,v)
         end
     end
+    M.update()
 end
 ---@param obj ua.object
 ---@param hash ua.hook.hash
@@ -42,7 +44,7 @@ function M.register_hook(obj,hash)
     if vim.tbl_contains(mem,obj) then return end
     mem.dirty=true
     table.insert(mem,obj)
-    table.insert(obj.hooks,hash)
+    --table.insert(obj.hooks,hash)
 end
 function M.update()
     for k,v in pairs(hookmem) do
@@ -52,7 +54,17 @@ function M.update()
             hookmem[k]=nil
             goto continue
         end
-        --TODO: init hook
+        local mode,type,key=k:match('^(.-);(.-);(.*)$')
+        if type=='map' then
+            vim.keymap.set(mode,key,function ()
+                for _,obj in ipairs(v) do
+                    local o={}
+                    o.m=obj
+                    return obj.run(o)
+                end
+                return key
+            end,{noremap=true,expr=true,replace_keycodes=false})
+        end
         ::continue::
     end
 end
