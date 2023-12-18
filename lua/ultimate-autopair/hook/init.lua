@@ -50,11 +50,14 @@ function M.update()
     for k,v in pairs(hookmem) do
         if not v.dirty then goto continue end
         v.dirty=false
+        local mode,type,key=k:match('^(.-);(.-);(.*)$')
         if #v==0 then
             hookmem[k]=nil
+            if type=='map' then
+                vim.keymap.del(mode,key)
+            end
             goto continue
         end
-        local mode,type,key=k:match('^(.-);(.-);(.*)$')
         if type=='map' then
             vim.keymap.set(mode,key,function ()
                 for _,obj in ipairs(v) do
