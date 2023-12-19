@@ -3,6 +3,7 @@
 ---@field run? fun(o:any):string? --TODO:TEMP arguments
 ---@class ua.object:ua.object.create
 ---@field hooks ua.hook.hash[]
+---@field ua.hook_subconf ua.hook.subconf
 ---@alias ua.id number
 ---@alias ua.prof.conf table
 ---@class ua.hook
@@ -10,6 +11,12 @@
 ---@field type string
 ---@field mode string
 ---@alias ua.hook.hash string
+---@alias ua.hook.conf string
+---@alias ua.hook.subconf string
+---@class ua.hook.info
+---@field [number] ua.object
+---@field dirty boolean?
+---@field conf ua.hook.conf?
 ---TODO: request options
 ----@field expr boolean --only for type=map, use expr or not
 ----@field feed boolean --only for type=map;expr=false, use nvim_feedkeys instead of using functions to go to places
