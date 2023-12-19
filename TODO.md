@@ -19,9 +19,6 @@
     + have a filter option to whether do use the filter as a filter
     + have a run option to whether do use the filter when run is called
         + both options for pair specific conf
-+ Fake insert the character, and only then check the treesitter... !important
-    + And make it an option (for speedup)
-    + Or not and rework the filtering system to, instead of using filter on cursor, use filter on the char(pair) which is inserted
-        + this also makes it a loot easier to deal with inserting/jumping to characters(pairs) which are outside of a filtered node
-            + Example `all_fly=true` `("|")` > `)` > `("")|`
-            + Example `pair=\(,\)` `\|` > `(` > `\(|\)`
++ Instead: in tsnode filter, have a way to check the node before and after a character is fake inserted
++ When filtering, filter the whole pair, instead of just the cursor:
+    + Example `pair=\(,\)` `\|` > `(` > `\(|\)`
