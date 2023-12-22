@@ -35,8 +35,10 @@ function M.expr_set(hash)
     end,{noremap=true,expr=true,replace_keycodes=false,desc=table.concat(desc,'\n\t\t ')})
 end
 ---@param act ua.actions?
+---@param conf? {dot:boolean?,true_dot:boolean?}
 ---@return string?
-function M.expr_handle(act)
+function M.expr_handle(act,conf)
+    conf=conf or {dot=true,true_dot=false}
     if act==nil then return end
     local buf=utils.new_str_buf(#act)
     for _,v in ipairs(act) do
@@ -48,9 +50,9 @@ function M.expr_handle(act)
         if type(v)=='string' then
             buf:put(v)
         elseif kind=='left' then
-            buf:put(utils.key_left(args[1],false))
+            buf:put(utils.key_left(args[1],conf.dot))
         elseif kind=='right' then
-            buf:put(utils.key_right(args[1],false))
+            buf:put(utils.key_right(args[1],conf.dot))
         end
     end
     return buf:tostring()
