@@ -1,8 +1,11 @@
-local utils=require'ultimate-autopair.utils'
 local M={}
 function M.run(o)
     local m=o.m.object
-    return m.start_pair..m.end_pair..(vim.keycode'<Left>'):rep(utils.len(m.end_pair))
+    return {
+        m.start_pair,
+        m.end_pair,
+        {'left',m.end_pair},
+    }
 end
 function M.init(start_pair,end_pair)
     return {
