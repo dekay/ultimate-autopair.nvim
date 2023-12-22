@@ -4,11 +4,11 @@ M.jobs={}
 function M.check_not_allowed_string(path)
     if vim.fn.executable('grep')==0 then
         utils.warning('Some of the required executables are missing for dev testing')
-        utils.info('INFO Pleas make sure that find and grep are installed')
+        utils.info('INFO Pleas make sure that grep is installed')
         return
     end
     local blacklist={'vim.lg','print','vim.dev'}
-    local search=table.concat(blacklist,'|')
+    local search=table.concat(blacklist,'\\|')
     local job=vim.fn.jobstart({'grep','-r','--exclude-dir=test',search,path},{on_stdout=function (_,data,_)
         for _,v in ipairs(data) do
             if v~='' then
@@ -44,7 +44,6 @@ function M.start()
             utils.warning(('timeout `%s`'):format(name))
         elseif exitcode~=expected then
             utils.warning(('job `%s` exited with code %s'):format(name,exitcode))
-
         else
             utils.info(('`%s` ran successfully'):format(name))
         end
