@@ -1,9 +1,15 @@
+---@class ua.info
+---@field m ua.object
+---@field line string
+---@field col number
+---@field gsave table
+---@field lsave table
 ---@class ua.act
 ---@field [1] 'left'|'right'|'pos'
 ---@field [number] any
 ---@alias ua.actions (string|ua.act)[]
 ---@class ua.object
----@field run? fun(o:any):ua.actions? --TODO:TEMP arguments
+---@field run? fun(o:ua.info):ua.actions?
 ---@field hooks ua.hook.hash[]
 ---@field __hook_subconf ua.hook.subconf
 ---@field doc? string

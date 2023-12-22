@@ -22,13 +22,14 @@ function M.expr_set(hash)
         table.insert(desc,obj.doc)
     end
     vim.keymap.set(info.mode,info.key,function ()
+        local create_o=hookutils.create_o_wrapper()
         for _,obj in ipairs(objs) do
             local o={
                 m=obj,
                 line=vim.api.nvim_get_current_line(),
                 col=vim.fn.col'.',
             }
-            local ret=M.expr_handle(obj.run(o))
+            local ret=M.expr_handle(obj.run(create_o(obj)))
             if ret then return ret end
         end
         return info.key
