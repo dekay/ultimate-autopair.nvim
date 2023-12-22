@@ -1,5 +1,7 @@
 local objmem=require'ultimate-autopair.mem.obj'
 local hookmem=require'ultimate-autopair.mem.hook'
+local maphook=require'ultimate-autopair.hook.map'
+local hookutils=require'ultimate-autopair.hook.utils'
 local M={}
 ---@param id ua.id
 function M.clear(id)
@@ -51,33 +53,26 @@ function M.register_hook(obj,hash,conf)
         mem.conf=conf
     end
     table.insert(mem,obj)
-    --table.insert(obj.hooks,hash)
 end
 function M.update()
-    for k,v in pairs(hookmem) do
+    for hash,v in pairs(hookmem) do
         if not v.dirty then goto continue end
         v.dirty=false
-        local mode,type,key=k:match('^(.-);(.-);(.*)$')
+        local info=hookutils.get_hash_info(hash)
         if #v==0 then
-            hookmem[k]=nil
-            if type=='map' then
-                vim.keymap.del(mode,key)
+            hookmem[hash]=nil
+            if info.type=='map' then
+                maphook.del(hash)
+            else
+                error()
             end
             goto continue
         end
-        if type=='map' then
-            vim.keymap.set(mode,key,function ()
-                for _,obj in ipairs(v) do
-                    local o={
-                        m=obj,
-                        line=vim.api.nvim_get_current_line(),
-                        col=vim.fn.col'.',
-                    }
-                    local ret=obj.run(o)
-                    if ret then return ret end
-                end
-                return key
-            end,{noremap=true,expr=true,replace_keycodes=false})
+        --TODO: sort objects
+        if info.type=='map' then
+            maphook.set(hash)
+        else
+            error()
         end
         ::continue::
     end

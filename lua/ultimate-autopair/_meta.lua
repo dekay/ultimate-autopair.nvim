@@ -1,9 +1,8 @@
----@class ua.object.create
----@field get_hook? fun():ua.hook[]
+---@class ua.object
 ---@field run? fun(o:any):string? --TODO:TEMP arguments
----@class ua.object:ua.object.create
 ---@field hooks ua.hook.hash[]
----@field ua.hook_subconf ua.hook.subconf
+---@field __hook_subconf ua.hook.subconf
+---@field doc? string
 ---@alias ua.id number
 ---@alias ua.prof.conf table
 ---@class ua.hook
@@ -20,4 +19,4 @@
 ---TODO: request options
 ----@field expr boolean --only for type=map, use expr or not
 ----@field feed boolean --only for type=map;expr=false, use nvim_feedkeys instead of using functions to go to places
-----@field true_dot boolean --only for type=map;expr=true,to prioritize dot repeat above all else, basically only allow <arrow> for movment, no <C-o>...
+----@field true_dot boolean --only for type=map;expr=true,to prioritize dot repeat above all else, basically only allow <arrow> for movement, no <C-o>...

@@ -1,2 +1,2 @@
----@type table<string,ua.hook.info>
+---@type table<ua.hook.hash,ua.hook.info>
 return {}
