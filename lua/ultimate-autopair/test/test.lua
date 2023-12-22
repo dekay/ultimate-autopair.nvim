@@ -1,4 +1,8 @@
 return {
+    simple={
+        {'|','(','(|)'},
+        {'(|)',')','()|'},
+    },
     DEV_run={
         {'foo\nbar|baz\nfizzbuzz','vim','foo\nbarvim|baz\nfizzbuzz'},
         {'foo\n|bar\n','<bs>','foo|bar\n'},
