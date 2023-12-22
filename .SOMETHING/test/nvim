@@ -1,2 +1,2 @@
 #! /bin/sh
-nvim -u NONE -S /home/user/.config/nvim/.other/ua_/.SOMETHING/test/test.lua +"set rtp+=/home/user/.config/nvim/.other/ua_/" +"lua require'ultimate-autopair'.setup()"
+nvim -u NONE -S /home/user/.config/nvim/.other/ua_/.SOMETHING/test/test.lua

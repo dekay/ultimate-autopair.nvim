@@ -1,3 +1,5 @@
+vim.opt.runtimepath:append('/home/user/.config/nvim/.other/ua_')
+vim.cmd'syntax enable'
 function vim.lg(...)
     local d=debug.getinfo(2)
     return vim.fn.writefile(vim.fn.split(
@@ -6,3 +8,6 @@ function vim.lg(...)
     ),'/tmp/nlog','a')
 end
 vim.o.buftype='nofile'
+_G.UA_DEV=1
+require'ultimate-autopair'.setup()
+vim.cmd'checkhealth ultimate-autopair'
