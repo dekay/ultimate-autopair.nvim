@@ -8,9 +8,8 @@ function M.clear(id)
     local objects=objmem[id]
     if not objects then return end
     for _,obj in ipairs(objects) do
-        for k,v in pairs(obj.hooks) do
+        for _,v in pairs(obj.hooks) do
             M.unregister_hook(obj,v)
-            obj[k]=nil
         end
     end
     M.update()
@@ -24,9 +23,10 @@ function M.unregister_hook(obj,hash)
         if v==obj then
             table.remove(mem,k)
             mem.dirty=true
-            break
+            return
         end
     end
+    error()
 end
 ---@param id ua.id
 function M.init(id)

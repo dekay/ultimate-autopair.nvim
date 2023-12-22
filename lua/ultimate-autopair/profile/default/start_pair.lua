@@ -12,6 +12,7 @@ function M.init(start_pair,end_pair)
         run=M.run,
         object={start_pair=start_pair,end_pair=end_pair},
         hooks={'i;map;'..start_pair},
+        doc=('autopairs start pair: %s,%s'):format(start_pair,end_pair),
     }
 end
 return M
