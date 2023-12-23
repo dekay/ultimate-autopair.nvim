@@ -1,15 +1,15 @@
 local M={}
 function M.run(o)
-    local m=o.m.object
-    if o.line:sub(o.col,o.col+#m.end_pair-1)~=m.end_pair then return end
+    local info=o.m.info
+    if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
     return {
-        {'right',m.end_pair},
+        {'right',info.end_pair},
     }
 end
 function M.init(start_pair,end_pair)
     return {
         run=M.run,
-        object={start_pair=start_pair,end_pair=end_pair},
+        info={start_pair=start_pair,end_pair=end_pair},
         hooks={'i;map;'..end_pair},
         doc=('autopairs end pair: %s,%s'):format(start_pair,end_pair),
     }

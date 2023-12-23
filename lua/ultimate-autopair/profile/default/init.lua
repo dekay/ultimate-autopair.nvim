@@ -2,12 +2,7 @@ local M={}
 ---@param conf ua.prof.conf
 ---@param objects ua.object[]
 function M.init(conf,objects)
-    for _,v in pairs(conf) do
-        local obje=require('ultimate-autopair.profile.default.end_pair').init(v[1],v[2])
-        table.insert(objects,obje)
-        local objs=require('ultimate-autopair.profile.default.start_pair').init(v[1],v[2])
-        table.insert(objects,objs)
-    end
+    M.init_pairs(objects,conf,conf)
 end
 ---@param objects ua.object[]
 ---@param conf ua.prof.conf

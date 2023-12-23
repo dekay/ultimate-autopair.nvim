@@ -20,4 +20,19 @@ function M.create_o_wrapper()
         },{__index=oindex})
     end
 end
+function M.sort(tbl)
+    --TODO: move to utils
+    local col={}
+    for _,v in ipairs(tbl) do
+        if not col[v.p or 0] then col[v.p or 0]={} end
+        table.insert(col[v.p or 0],v)
+    end
+    local i=1
+    for _,t in vim.spairs(col) do
+        for _,v in ipairs(t) do
+            tbl[i]=v
+            i=i+1
+        end
+    end
+end
 return M

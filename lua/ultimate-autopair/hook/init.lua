@@ -68,7 +68,7 @@ function M.update()
             end
             goto continue
         end
-        --TODO: sort objects
+        hookutils.sort(hookmem[hash])
         if info.type=='map' then
             maphook.set(hash)
         else
