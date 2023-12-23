@@ -6,21 +6,16 @@ local warn=vim.health.warn or vim.health.report_warn
 local error=vim.health.error or vim.health.report_error
 local start=vim.health.start or vim.health.report_start
 function M.check()
-    local stat,out=pcall(function()
-        start('ultimate-autopair')
-        package.loaded['ultimate-autopair.test']=nil
-        package.loaded['ultimate-autopair.test.utils']=nil
-        package.loaded['ultimate-autopair.test.test']=nil
-        package.loaded['ultimate-autopair.test.run']=nil
-        local utils=require'ultimate-autopair.test.utils'
-        utils.ok=ok
-        utils.error=error
-        utils.warning=warn
-        utils.info=info
-require('ultimate-autopair.test').start()
-    end)
-    if not stat then
-        error(('error while checking health: %s'):format(out))
-    end
+    start('ultimate-autopair')
+    package.loaded['ultimate-autopair.test']=nil
+    package.loaded['ultimate-autopair.test.utils']=nil
+    package.loaded['ultimate-autopair.test.test']=nil
+    package.loaded['ultimate-autopair.test.run']=nil
+    local utils=require'ultimate-autopair.test.utils'
+    utils.ok=ok
+    utils.error=error
+    utils.warning=warn
+    utils.info=info
+    require('ultimate-autopair.test').start()
 end
 return M
