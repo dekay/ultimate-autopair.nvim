@@ -28,11 +28,10 @@ function M.check_not_allowed_string(path)
     end
 end
 function M.start()
-    local path=vim.api.nvim_get_runtime_file('lua/ultimate-autopair',false)[1]
-    local root=vim.fn.fnamemodify(path,':h:h')
-    ---@diagnostic disable-next-line: undefined-field
+    local lua_path=vim.api.nvim_get_runtime_file('lua/ultimate-autopair',false)[1]
+    local plugin_path=vim.fn.fnamemodify(lua_path,':h:h')
     if _G.UA_DEV then
-        M.check_not_allowed_string(path)
+        M.check_not_allowed_string(lua_path)
     end
     if vim.fn.has('nvim-0.9.0')==0 then
         utils.warning('You have an older version of neovim than recommended')
@@ -40,6 +39,6 @@ function M.start()
     if not pcall(require,'nvim-treesitter') then
         utils.warning('nvim-treesitter not installed: most of treesitter specific behavior will not work')
     end
-    require'ultimate-autopair.test.run'.run(root)
+    require'ultimate-autopair.test.run'.run(plugin_path)
 end
 return M

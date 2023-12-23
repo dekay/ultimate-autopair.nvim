@@ -75,7 +75,6 @@ function M.sort_test_by_conf(list_tests)
 end
 function M.run(plugin_path)
     M.chan=vim.fn.jobstart({'nvim','--embed','--headless','--clean'},{rpc=true})
-    M.chan_exec(('lua plugin_path=[[%s]]'):format(plugin_path))
     M.chan_exec(('set rtp+=%s'):format(plugin_path))
     M.chan_exec_lua[[
     function vim.lg(...)
@@ -93,8 +92,7 @@ function M.run(plugin_path)
         for _,testopt in ipairs(skip) do
             local category=testopt._category
             testopt._category=nil
-            local testrepr=vim.inspect(testopt,{newline='',indent=''})
-            utils.info(('test(%s) %s skipped'):format(category,testrepr))
+            utils.info(('test(%s) %s skipped'):format(category,vim.inspect(testopt,{newline='',indent=''})))
         end
     end
     if vim.fn.jobstop(M.chan)==0 then
