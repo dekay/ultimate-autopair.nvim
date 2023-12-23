@@ -42,7 +42,9 @@ function M.get_lines_and_pos()
 end
 function M.feed(input)
     M.request('nvim_input',input)
-    return M.request('nvim_eval','v:errmsg')
+    local errmsg=M.request('nvim_eval','v:errmsg')
+    if errmsg~='' then M.chan_exec('let v:errmsg=""') end
+    return errmsg
 end
 function M.sort_test_by_conf(list_tests)
     local ret={}
@@ -99,6 +101,12 @@ function M.run(plugin_path)
         utils.error('neovim exited abnormally')
     end
 end
+function M._create_mess(v,actual)
+    local ret=('{Initial}:\n%s\n{Input}: `%s`\n{Expected-result}:\n%s'):format(v[1],v[2],v[3])
+    if actual then ret=ret..('\n{Actual-result}:\n%s'):format(actual) end
+    if v[4] then ret=('{Config}:\n%s\n'):format(vim.inspect(v[4]))..ret end
+    return ret
+end
 function M.run_tests(tests)
     local pcategory,ptest=unpack(tests._path)
     M.chan_exec(('lua ua_conf=(require"ultimate-autopair.test.test".%s[%s][4] or {}).c'):format(pcategory,ptest))
@@ -115,9 +123,9 @@ function M.run_tests(tests)
         if conf.ft then M.chan_exec('setf '..conf.ft) end
         local errmsg=M.feed(v[2])
         if errmsg~='' then
-            utils.error(('test(%s) errord:\n%s\n{Initial}:\n%s\n{Input}: `%s`\n{Expected-result}:\n%s'):format(category,errmsg,v[1],v[2],v[3]))
+            utils.error(('test(%s) errord:\n%s\n%s'):format(category,errmsg,M._create_mess(v)))
         elseif M.get_lines_and_pos()~=v[3] then
-            utils.error(('test(%s) failed\n{Initial}:\n%s\n{Input}: `%s`\n{Expected-result}:\n%s\n{Actual-result}:\n%s'):format(category,v[1],v[2],v[3],M.get_lines_and_pos()))
+            utils.error(('test(%s) failed\n%s'):format(category,M._create_mess(v,M.get_lines_and_pos())))
         end
     end
 end
