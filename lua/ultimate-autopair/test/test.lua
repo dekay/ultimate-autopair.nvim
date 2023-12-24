@@ -2,7 +2,7 @@ return {
     simple={
         {'|','(','(|)'},
         {'(|)',')','()|'},
-        {'|','"','"|"'},
+        {'|','"','"|"'}, --TODO: slow; cause of multipair """ creating imap `"""` instead of `"`, making neovim test instance waiting for timeout
         {'"|"','"','""|'},
         {'|"','"','"|"'},
         {'"|','"','""|'},
