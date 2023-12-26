@@ -59,6 +59,9 @@ function M.sort_test_by_conf(list_tests)
                 table.insert(skip,testopt)
                 goto continue
             end
+            if testopt.I then
+                return {[(testopt[4] or {})]={testopt,_path={category,k}}},{}
+            end
             local testconf=testopt[4] and testopt[4].c or {}
             for config,_ in pairs(ret) do
                 if vim.deep_equal(config,testconf) then
