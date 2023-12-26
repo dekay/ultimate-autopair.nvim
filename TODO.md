@@ -22,3 +22,4 @@
 + Instead: in tsnode filter, have a way to check the node before and after a character is fake inserted
 + When filtering, filter the whole pair, instead of just the cursor:
     + Example `pair=\(,\)` `\|` > `(` > `\(|\)`
++ Where to put the open_pair.lua file?

@@ -1,6 +1,8 @@
 ---@class ua.info
 ---@field m ua.object
----@field line string
+---@field line string --Special, is calculated from lines[row], do not set
+---@field lines string[]
+---@field row number
 ---@field col number
 ---@field gsave table
 ---@field lsave table

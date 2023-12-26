@@ -8,11 +8,12 @@ end
 ---@return fun(ua.object):ua.info
 function M.create_o_wrapper()
     --TODO: move to utils
-    local oindex={
-        line=vim.api.nvim_get_current_line(),
+    local oindex=setmetatable({
+        lines={vim.api.nvim_get_current_line()},
+        row=1,
         col=vim.fn.col'.',
         gsave={},
-    }
+    },{__index=function (t,index) return index=='line' and t.lines[t.row] or nil end })
     return function (obj)
         return setmetatable({
             m=obj,
