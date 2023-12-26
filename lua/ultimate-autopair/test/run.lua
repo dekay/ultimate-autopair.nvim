@@ -22,11 +22,11 @@ end
 function M.get_pos()
     return M.request('nvim_win_get_cursor',0)
 end
-function M.set_lines_and_pos(lines)
+function M.set_lines_and_pos(lines,cursor)
     lines=vim.split(lines,'\n')
     local row,col
     for k,v in ipairs(lines) do
-        col=v:find('|')
+        col=v:find(cursor or '|',1,true)
         if col then row=k break end
     end
     assert(row)
@@ -34,10 +34,10 @@ function M.set_lines_and_pos(lines)
     M.set_lines(lines)
     M.set_pos(row,col-1)
 end
-function M.get_lines_and_pos()
+function M.get_lines_and_pos(cursor)
     local lines=M.get_lines()
     local row,col=unpack(M.get_pos())
-    lines[row]=lines[row]:sub(1,col)..'|'..lines[row]:sub(col+1)
+    lines[row]=lines[row]:sub(1,col)..(cursor or '|')..lines[row]:sub(col+1)
     return table.concat(lines,'\n')
 end
 function M.feed(input)
@@ -116,14 +116,14 @@ function M.run_tests(tests)
         M.chan_exec('stopinsert')
         M.chan_exec('bwipeout!')
         M.chan_exec('startinsert')
-        M.set_lines_and_pos(v[1])
+        M.set_lines_and_pos(v[1],conf.cursor)
         if conf.cmd then M.chan_exec(conf.cmd) end
         if conf.ft then M.chan_exec('setf '..conf.ft) end
         local errmsg=M.feed(v[2])
         if errmsg~='' then
             utils.error(('test(%s) errord:\n%s\n%s'):format(category,errmsg,M._create_mess(v)))
-        elseif M.get_lines_and_pos()~=v[3] then
-            utils.error(('test(%s) failed\n%s'):format(category,M._create_mess(v,M.get_lines_and_pos())))
+        elseif M.get_lines_and_pos(conf.cursor)~=v[3] then
+            utils.error(('test(%s) failed\n%s'):format(category,M._create_mess(v,M.get_lines_and_pos(conf.cursor))))
         end
     end
 end
