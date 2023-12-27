@@ -23,3 +23,4 @@
 + When filtering, filter the whole pair, instead of just the cursor:
     + Example `pair=\(,\)` `\|` > `(` > `\(|\)`
 + Where to put the open_pair.lua file?
++ Create treesitter-endwise specific tests

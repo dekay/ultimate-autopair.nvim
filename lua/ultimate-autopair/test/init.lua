@@ -39,6 +39,9 @@ function M.start()
     if not pcall(require,'nvim-treesitter') then
         utils.warning('nvim-treesitter not installed: most of treesitter specific behavior will not work')
     end
+    if not pcall(require,'nvim-treesitter-endwise') then
+        utils.info('INFO nvim-treesitter-endwise not installed: endwise integration will not work')
+    end
     require'ultimate-autopair.test.run'.run(plugin_path)
 end
 return M
