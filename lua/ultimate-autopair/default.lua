@@ -1,6 +1,9 @@
 local in_lisp=function (fn)
     return not fn.in_lisp() or fn.in_string() or fn.in_comment()
 end
+local markdown={
+    ts_not_after={markdown={'latex_block','code_span','fenced_code_block'}}
+}
 return {
     conf={
         {'(',')'},
@@ -26,5 +29,12 @@ return {
             {'`','`',nft={'text'}},
         },
         {'``',"''",ft={'tex'}},
+    },
+    markdown={
+        {'*','*',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+        {'_','_',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+        {'__','__',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+        {'**','**',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+        {'$','$',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
     },
 }
