@@ -56,9 +56,10 @@ function M.activate_abbrev(key)
     return key
 end
 ---@param hash ua.hook.hash
+---@param can_undo boolean?
 ---@param skip_index number?
 ---@return ua.actions
-function M.get_act(hash,skip_index)
+function M.get_act(hash,can_undo,skip_index)
     local info=M.get_hash_info(hash)
     local objs=hookmem[hash]
     local create_o=M.create_o_wrapper()
@@ -67,7 +68,9 @@ function M.get_act(hash,skip_index)
         local o=create_o(obj)
         local act=obj.run(o)
         if act then
-            M.saveundo={act=act,row=o.row,col=o.col,buf=o.buf,key=info.key,index=index,hash=hash}
+            if can_undo then
+                M.saveundo={act=act,row=o.row,col=o.col,buf=o.buf,key=info.key,index=index,hash=hash,can_undo=can_undo}
+            end
             return act
         end
         ::continue::
@@ -88,6 +91,6 @@ end
 function M.last_act_cycle() --TODO: test
     if not M.saveundo then return {} end
     local act=M.saveundo.act
-    return vim.list_extend(M.generate_undo(act),M.get_act(M.saveundo.hash,M.saveundo.index))
+    return vim.list_extend(M.generate_undo(act),M.get_act(M.saveundo.hash,M.saveundo.can_undo,M.saveundo.index))
 end
 return M

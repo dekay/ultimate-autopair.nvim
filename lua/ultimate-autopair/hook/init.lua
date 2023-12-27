@@ -83,6 +83,6 @@ end
 ---@return ua.actions
 function M.send(mode,type,key)
     local hash=hookutils.to_hash(mode,type,key)
-    return hookutils.get_act(hash)
+    return hookutils.get_act(hash,mode=='i')
 end
 return M

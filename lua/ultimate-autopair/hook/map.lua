@@ -26,7 +26,7 @@ function M.expr_set(hash)
         if info.mode:match('[ic]') then
             handle=hookutils.activate_abbrev
         end
-        return handle(M.expr_handle(hookutils.get_act(hash)))
+        return handle(M.expr_handle(hookutils.get_act(hash,info.mode=='i')))
     end,{noremap=true,expr=true,replace_keycodes=false,desc=table.concat(desc,'\n\t\t ')})
 end
 ---@param act ua.actions
