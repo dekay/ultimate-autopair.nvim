@@ -77,4 +77,12 @@ function M.update()
         ::continue::
     end
 end
+---@param mode string
+---@param type string
+---@param key string
+---@return ua.hook.info?
+function M.send(mode,type,key)
+    local hash=hookutils.to_hash(mode,type,key)
+    return hookmem[hash]
+end
 return M

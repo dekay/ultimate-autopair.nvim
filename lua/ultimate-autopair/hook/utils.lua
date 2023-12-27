@@ -5,6 +5,13 @@ function M.get_hash_info(hash)
     local mode,type,key=hash:match('^(.-);(.-);(.*)$')
     return {mode=mode,type=type,key=key,hash=hash}
 end
+---@param mode string
+---@param type string
+---@param key string
+---@return string
+function M.to_hash(mode,type,key)
+    return ('%s;%s;%s'):format(mode,type,key)
+end
 ---@return fun(ua.object):ua.info
 function M.create_o_wrapper()
     --TODO: move to utils

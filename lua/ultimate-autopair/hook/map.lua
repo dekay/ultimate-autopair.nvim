@@ -22,6 +22,7 @@ function M.expr_set(hash)
         table.insert(desc,obj.doc)
     end
     vim.keymap.set(info.mode,info.key,function ()
+        --TODO: move almost everything into a separate function in utils
         local create_o=hookutils.create_o_wrapper()
         local handle=function (key) return key end
         if info.mode:match('[ic]') then
@@ -39,9 +40,12 @@ function M.expr_set(hash)
 end
 ---@param act ua.actions
 function M.undo(act)
+    --TODO: make this global (e.g. move to utils)
     if not M.saveundo then return end
     local buf=utils.new_str_buf(#act)
     --TODO: write a function which undos the last action
+        --OR a function which returns an action which undos the last action (any action)
+        --AND maybe even cycle to the next objects action
     buf:put(M.saveundo.key)
     return buf:tostring()
 end
