@@ -59,6 +59,7 @@ end
 ---@param can_undo boolean?
 ---@param skip_index number?
 ---@return ua.actions
+---@return boolean?
 function M.get_act(hash,can_undo,skip_index)
     local info=M.get_hash_info(hash)
     local objs=hookmem[hash]
@@ -75,7 +76,7 @@ function M.get_act(hash,can_undo,skip_index)
         end
         ::continue::
     end
-    return {info.key}
+    return {info.key},true
 end
 ---@param act ua.actions
 function M.generate_undo(act)
@@ -84,13 +85,15 @@ end
 ---@return ua.actions
 function M.undo_last_act() --TODO: test
     if not M.saveundo then return {} end
-    local act=M.saveundo.act
-    return M.generate_undo(act)
+    local saveundo=M.saveundo
+    M.saveundo=nil
+    return M.generate_undo(saveundo.act)
 end
 ---@return ua.actions
 function M.last_act_cycle() --TODO: test
     if not M.saveundo then return {} end
-    local act=M.saveundo.act
-    return vim.list_extend(M.generate_undo(act),M.get_act(M.saveundo.hash,M.saveundo.can_undo,M.saveundo.index))
+    local saveundo=M.saveundo
+    M.saveundo=nil
+    return vim.list_extend(M.generate_undo(saveundo.act),M.get_act(saveundo.hash,saveundo.can_undo,saveundo.index))
 end
 return M
