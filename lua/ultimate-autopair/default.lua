@@ -31,10 +31,18 @@ return {
         {'``',"''",ft={'tex'}},
     },
     markdown={
+        change={
+            {'`','`',tsnode={lang_detect='after insert',not_after={markdown={'latex_block','fenced_code_block'}}}},
+        },
         {'*','*',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
         {'_','_',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
         {'__','__',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
         {'**','**',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-        {'$','$',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+        {'$','$',ft={'markdown'},tsnode={lang_detect='after insert',not_after={markdown={'code_span','fenced_code_block'}}}},
     },
+    rust={
+        change={
+            {"'","'",tsnode={not_after={rust={'lifetime'}}}},
+        },
+    }
 }
