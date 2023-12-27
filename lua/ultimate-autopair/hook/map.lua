@@ -28,18 +28,28 @@ function M.expr_set(hash)
             handle=hookutils.activate_abbrev
         end
         for _,obj in ipairs(objs) do
-            local ret=M.expr_handle(obj.run(create_o(obj)))
-            if ret then return handle(ret) end
+            local ret=obj.run(create_o(obj))
+            if ret then
+                M.saveundo={act=ret,row=create_o({}).row,col=create_o({}).col,key=info.key}
+                return handle(M.expr_handle(ret))
+            end
         end
         return handle(info.key)
     end,{noremap=true,expr=true,replace_keycodes=false,desc=table.concat(desc,'\n\t\t ')})
 end
----@param act ua.actions?
+---@param act ua.actions
+function M.undo(act)
+    if not M.saveundo then return end
+    local buf=utils.new_str_buf(#act)
+    --TODO: write a function which undos the last action
+    buf:put(M.saveundo.key)
+    return buf:tostring()
+end
+---@param act ua.actions
 ---@param conf? {dot:boolean?,true_dot:boolean?}
 ---@return string?
 function M.expr_handle(act,conf)
     conf=conf or {dot=true,true_dot=false}
-    if act==nil then return end
     local buf=utils.new_str_buf(#act)
     for _,v in ipairs(act) do
         local kind,args

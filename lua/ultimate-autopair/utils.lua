@@ -19,8 +19,7 @@ M.I.key_noundo=M.I.keycode'<C-g>U'
 ---@param minsize number
 ---@return ua._.str_buf
 function M.new_str_buf(minsize)
-    local buf=require'string.buffer'
-    return buf.new(minsize)
+    return require'string.buffer'.new(minsize)
 end
 ---@param len string|number|nil
 ---@param noundo boolean?
