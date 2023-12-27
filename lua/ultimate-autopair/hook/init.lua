@@ -80,9 +80,9 @@ end
 ---@param mode string
 ---@param type string
 ---@param key string
----@return ua.hook.info?
+---@return ua.actions
 function M.send(mode,type,key)
     local hash=hookutils.to_hash(mode,type,key)
-    return hookmem[hash]
+    return hookutils.get_act(hash)
 end
 return M

@@ -1,3 +1,5 @@
+local utils=require'ultimate-autopair.utils'
+local hookmem=require'ultimate-autopair.mem.hook'
 local M={}
 ---@param hash ua.hook.hash
 ---@return {mode:string,type:string,key:string,hash:string}
@@ -52,5 +54,40 @@ function M.activate_abbrev(key)
         return '\x1d'..key
     end
     return key
+end
+---@param hash ua.hook.hash
+---@param skip_index number?
+---@return ua.actions
+function M.get_act(hash,skip_index)
+    local info=M.get_hash_info(hash)
+    local objs=hookmem[hash]
+    local create_o=M.create_o_wrapper()
+    for index,obj in ipairs(objs) do
+        if skip_index and index<=skip_index then goto continue end
+        local o=create_o(obj)
+        local act=obj.run(o)
+        if act then
+            M.saveundo={act=act,row=o.row,col=o.col,buf=o.buf,key=info.key,index=index,hash=hash}
+            return act
+        end
+        ::continue::
+    end
+    return {info.key}
+end
+---@param act ua.actions
+function M.generate_undo(act)
+    return {}
+end
+---@return ua.actions
+function M.undo_last_act() --TODO: test
+    if not M.saveundo then return {} end
+    local act=M.saveundo.act
+    return M.generate_undo(act)
+end
+---@return ua.actions
+function M.last_act_cycle() --TODO: test
+    if not M.saveundo then return {} end
+    local act=M.saveundo.act
+    return vim.list_extend(M.generate_undo(act),M.get_act(M.saveundo.hash,M.saveundo.index))
 end
 return M
