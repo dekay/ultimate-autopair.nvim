@@ -36,4 +36,14 @@ function M.sort(tbl)
         end
     end
 end
+---@param key string
+---@return string
+function M.activate_abbrev(key)
+    if key:sub(1,1)=='\r' then
+        return '\x1d'..key
+    elseif vim.regex('^[^[:keyword:][:cntrl:]\x80]'):match_str(key) then
+        return '\x1d'..key
+    end
+    return key
+end
 return M

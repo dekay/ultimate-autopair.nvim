@@ -4,6 +4,7 @@
 ---@field start_pair string
 ---@field _filter table --TODO: the problem: extension.tsnode can be initialized for specific positions, which means that filter may change, MAYBE?: have a filter initialize function which initializes the filters for a position
 ---@field end_pair string
+---@field main_pair? string
 ---@field conf ua.prof.def.pair.conf
 ---@class ua.prof.def.pair:ua.object
 ---@field info ua.prof.def.pair.info
@@ -11,7 +12,28 @@ local M={}
 ---@param conf ua.prof.conf
 ---@param objects ua.object[]
 function M.init(conf,objects)
-    M.init_pairs(objects,conf,conf)
+    local somepairs={}
+    M.init_pairs(somepairs,conf,conf)
+    M.pair_sort_len(somepairs)
+    for _,v in ipairs(somepairs) do
+        table.insert(objects,v)
+    end
+end
+---@param somepairs ua.prof.def.pair
+function M.pair_sort_len(somepairs)
+    local len={}
+    for _,v in ipairs(somepairs) do
+        local l=-(#v.info.main_pair or -1)
+        if not len[l] then len[l]={} end
+        table.insert(len[l],v)
+    end
+    local k=1
+    for _,v in vim.spairs(len) do
+        for _,i in ipairs(v) do
+            somepairs[k]=i
+            k=k+1
+        end
+    end
 end
 ---@param objects ua.object[]
 ---@param conf ua.prof.conf
@@ -28,8 +50,8 @@ end
 ---@return ua.object[]
 function M.init_pair(conf,pair)
     return {
-        require('ultimate-autopair.profile.default.end_pair').init(pair[1],pair[2]),
-        require('ultimate-autopair.profile.default.start_pair').init(pair[1],pair[2]),
+        require('ultimate-autopair.profile.pair.end_pair').init(pair[1],pair[2]),
+        require('ultimate-autopair.profile.pair.start_pair').init(pair[1],pair[2]),
     }
 end
 return M

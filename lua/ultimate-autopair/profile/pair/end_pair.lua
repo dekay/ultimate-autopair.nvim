@@ -27,6 +27,7 @@ function M.init(start_pair,end_pair)
         info={
             start_pair=start_pair,
             end_pair=end_pair,
+            main_pair=end_pair,
             conf={}, --TODO:TEMP
             _filter={ --TODO:TEMP
                 start_pair_filter=function() return true end,

@@ -104,6 +104,7 @@ end
 ---@return number?
 ---@return number?
 function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
+    --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     assert(info.start_pair==info.end_pair)
     local pair=info.start_pair
@@ -127,9 +128,7 @@ function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
         while pos do
             local real_col=pos+(gotoend==true and row==o.row and o.col-1 or 0)
             if ((count%2==1 and end_pair_filter(row,real_col)) or
-                (count%2==0 and start_pair_filter(row,real_col))) and
-                (real_col>=o.col+#pair-1 or real_col<=o.col-1 or o.row~=row) then
-                --TODO: check above that it works correctly when cursor in between pair
+                (count%2==0 and start_pair_filter(row,real_col))) then
                 count=count+1
                 if not gotoend or not index then
                     index=real_col

@@ -8,7 +8,7 @@ function M.run(o)
         local count=open_pair.count_end_pair(setmetatable({col=o.col},{__index=o}))
         if open_pair.count_end_pair(o,true,count+1,true) then return end
     else
-        if open_pair.count_ambiguous_pair(o,'both')    then return end
+        if open_pair.count_ambiguous_pair(o,'both') then return end
     end
     local last_char=info.start_pair:sub(-1+vim.str_utf_start(info.start_pair,#info.start_pair))
     if o.line:sub(o.col-#info.start_pair+#last_char,o.col-1)~=info.start_pair:sub(0,-1-#last_char) then return end
@@ -25,6 +25,7 @@ function M.init(start_pair,end_pair)
     m.info={
         start_pair=start_pair,
         end_pair=end_pair,
+        main_pair=start_pair,
         conf={}, --TODO:TEMP
         _filter={ --TODO:TEMP
             start_pair_filter=function() return true end,
