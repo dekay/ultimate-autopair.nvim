@@ -19,8 +19,15 @@
     + have a filter option to whether do use the filter as a filter
     + have a run option to whether do use the filter when run is called
         + both options for pair specific conf
-+ Instead: in tsnode filter, have a way to check the node before and after a character is fake inserted
 + When filtering, filter the whole pair, instead of just the cursor:
     + Example `pair=\(,\)` `\|` > `(` > `\(|\)`
 + Where to put the open_pair.lua file?
 + Create treesitter-endwise specific tests
++ ext.fly:
+    + remove unbalanced spaces
+    + hop multiple lines (and remove lines containing only or empty)
++ ext.tsnode:
+    + Instead: in tsnode filter, have a way to check the node before and after a character is fake inserted
+    + An option to quickly define groups of nodes, (like `string` or `comment`)
+    + A way to define a node as extended (`[//$]`), contained (`[""]$`)
+        + And make it filetype specific
