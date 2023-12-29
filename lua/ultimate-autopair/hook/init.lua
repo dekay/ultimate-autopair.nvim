@@ -4,7 +4,7 @@ local maphook=require'ultimate-autopair.hook.map'
 local hookutils=require'ultimate-autopair.hook.utils'
 local M={}
 ---@param id ua.id
-function M.clear(id)
+function M.unregister(id)
     local objects=objmem[id]
     if not objects then return end
     for _,obj in ipairs(objects) do
@@ -29,7 +29,7 @@ function M.unregister_hook(obj,hash)
     error()
 end
 ---@param id ua.id
-function M.init(id)
+function M.register(id)
     local objects=objmem[id]
     for _,obj in ipairs(objects) do
         for _,v in ipairs(obj.hooks) do
