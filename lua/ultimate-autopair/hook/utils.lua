@@ -1,18 +1,31 @@
 local utils=require'ultimate-autopair.utils'
 local hookmem=require'ultimate-autopair.mem.hook'
 local M={}
+M.HASH_SEP1=':'
+M.HASH_SEP2=';'
+M.HASH_CONF_SEP=','
+M.HASH_CONF_SET='='
 ---@param hash ua.hook.hash
----@return {mode:string,type:string,key:string,hash:string}
+---@return {conf:table<string,string>,type:string,key:string,hash:string}
 function M.get_hash_info(hash)
-    local mode,type,key=hash:match('^(.-);(.-);(.*)$')
-    return {mode=mode,type=type,key=key,hash=hash}
+    local type,confstr,key=hash:match(('^(.-)%s(.-)%s(.*)$'):format(M.HASH_SEP1,M.HASH_SEP2))
+    local conf={}
+    for i in vim.gsplit(confstr,M.HASH_CONF_SEP) do
+        local k,v=unpack(vim.split(i,M.HASH_CONF_SET))
+        conf[k]=v
+    end
+    return {conf=conf,type=type,key=key,hash=hash}
 end
----@param mode string
 ---@param type string
 ---@param key string
+---@param conf table<string,string>?
 ---@return string
-function M.to_hash(mode,type,key)
-    return ('%s;%s;%s'):format(mode,type,key)
+function M.to_hash(type,key,conf)
+    local confstrs={}
+    for k,v in vim.spairs(conf or {}) do
+        table.insert(confstrs,k..M.HASH_CONF_SET..v)
+    end
+    return type..M.HASH_SEP1..table.concat(confstrs,M.HASH_CONF_SEP)..M.HASH_SEP2..key
 end
 ---@return fun(ua.object):ua.info
 function M.create_o_wrapper()

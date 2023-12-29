@@ -1,4 +1,5 @@
 local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:TEMP
+local hookutils=require'ultimate-autopair.hook.utils'
 local M={}
 ---@param o ua.info
 ---@return ua.actions|nil
@@ -35,8 +36,8 @@ function M.init(start_pair,end_pair)
             },
         },
         hooks={
-            'i;map;'..end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),
-            'c;map;'..end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),
+            hookutils.to_hash('map',end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),{mode='i'}),
+            hookutils.to_hash('map',end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),{mode='c'}),
         },
         doc=('autopairs end pair: %s,%s'):format(start_pair,end_pair),
     }
