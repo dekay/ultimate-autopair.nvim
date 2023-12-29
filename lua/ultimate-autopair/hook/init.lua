@@ -64,7 +64,7 @@ function M.update()
             if info.type=='map' then
                 maphook.del(hash)
             else
-                error()
+                error(('hook type `%s` can not be unregistered'):format(info.type))
             end
             goto continue
         end
@@ -72,7 +72,7 @@ function M.update()
         if info.type=='map' then
             maphook.set(hash)
         else
-            error()
+            error(('hook type `%s` can not be registered'):format(info.type))
         end
         ::continue::
     end
