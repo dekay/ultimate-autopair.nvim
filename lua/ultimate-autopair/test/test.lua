@@ -25,7 +25,7 @@ return {
         {'|foo','<esc>R(','(|oo',{skip=true}},
     },
     cmdline={
-        {'|','<C-r>="(\r','()|',{skip=true}},
+        {'|','<C-r>="(\r','()|'},
         {'|','<C-r>="foo"<Home><Insert>"(\r','(oo|',{skip=true}},
     },
     utf8={

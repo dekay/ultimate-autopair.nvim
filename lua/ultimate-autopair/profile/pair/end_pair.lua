@@ -34,7 +34,10 @@ function M.init(start_pair,end_pair)
                 end_pair_filter=function() return true end
             },
         },
-        hooks={'i;map;'..end_pair:sub(1,vim.str_utf_end(end_pair,1)+1)},
+        hooks={
+            'i;map;'..end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),
+            'c;map;'..end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),
+        },
         doc=('autopairs end pair: %s,%s'):format(start_pair,end_pair),
     }
 end

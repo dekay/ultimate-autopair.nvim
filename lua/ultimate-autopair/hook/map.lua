@@ -26,13 +26,14 @@ function M.expr_set(hash)
         if info.mode:match('[ic]') then
             handle=hookutils.activate_abbrev
         end
-        return handle(M.expr_handle(hookutils.get_act(hash,info.mode=='i')))
+        return handle(M.expr_handle(hookutils.get_act(hash,info.mode=='i'),info.mode))
     end,{noremap=true,expr=true,replace_keycodes=false,desc=table.concat(desc,'\n\t\t ')})
 end
 ---@param act ua.actions
+---@param mode string
 ---@param conf? {dot:boolean?,true_dot:boolean?}
 ---@return string?
-function M.expr_handle(act,conf)
+function M.expr_handle(act,mode,conf)
     conf=conf or {dot=true,true_dot=false}
     local buf=utils.new_str_buf(#act)
     for _,v in ipairs(act) do
@@ -44,9 +45,9 @@ function M.expr_handle(act,conf)
         if type(v)=='string' then
             buf:put(v)
         elseif kind=='left' then
-            buf:put(utils.key_left(args[1],conf.dot))
+            buf:put(utils.key_left(args[1],conf.dot and mode=='i'))
         elseif kind=='right' then
-            buf:put(utils.key_right(args[1],conf.dot))
+            buf:put(utils.key_right(args[1],conf.dot and mode=='i'))
         end
     end
     return buf:tostring()
