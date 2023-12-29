@@ -4,13 +4,14 @@ local hookutils=require'ultimate-autopair.hook.utils'
 local M={}
 ---@param objects ua.instance
 function M.unregister(objects)
-    if not objects then return end
+    objects.hooked='half'
     for _,obj in ipairs(objects) do
         for _,v in pairs(obj.hooks) do
             M.unregister_hook(obj,v)
         end
     end
     M.update()
+    objects.hooked=false
 end
 ---@param obj ua.object
 ---@param hash ua.hook.hash
@@ -24,16 +25,18 @@ function M.unregister_hook(obj,hash)
             return
         end
     end
-    error()
+    if _G.UA_DEV then error() end
 end
 ---@param objects ua.instance
 function M.register(objects)
+    objects.hooked='half'
     for _,obj in ipairs(objects) do
         for _,v in ipairs(obj.hooks) do
             M.register_hook(obj,v)
         end
     end
     M.update()
+    objects.hooked=true
 end
 ---@param obj ua.object
 ---@param hash ua.hook.hash

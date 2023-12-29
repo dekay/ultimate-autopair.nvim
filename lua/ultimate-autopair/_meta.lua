@@ -1,3 +1,7 @@
+---@class ua.instance
+---@field [number] ua.object
+---@field disabled boolean?
+---@field hooked 'half'|boolean?
 ---@class ua.info
 ---@field m ua.object
 ---@field line string --Special, is calculated from lines[row], do not set
