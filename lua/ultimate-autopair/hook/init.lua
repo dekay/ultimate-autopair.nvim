@@ -70,7 +70,7 @@ function M.update()
         end
         hookutils.stable_sort(hookmem[hash])
         if info.type=='map' then
-            maphook.set(hash,'expr')
+            maphook.set(hash)
         else
             error()
         end

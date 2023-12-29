@@ -10,9 +10,9 @@ function M.del(hash)
     vim.keymap.del(conf.mode,info.key)
 end
 ---@param hash ua.hook.hash
----@param conf ua.hook.conf
+---@param conf ua.hook.conf?
 function M.set(hash,conf)
-    if conf=='expr' then
+    if conf=='expr' or not conf then
         M.expr_set(hash)
     else
         error()
