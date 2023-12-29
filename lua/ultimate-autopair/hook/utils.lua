@@ -16,7 +16,6 @@ function M.to_hash(mode,type,key)
 end
 ---@return fun(ua.object):ua.info
 function M.create_o_wrapper()
-    --TODO: move to utils
     local oindex=setmetatable({
         lines={vim.api.nvim_get_current_line()},
         row=1,
@@ -30,8 +29,8 @@ function M.create_o_wrapper()
         },{__index=oindex})
     end
 end
-function M.sort(tbl)
-    --TODO: move to utils
+---@param tbl ua.object[]
+function M.stable_sort(tbl)
     local col={}
     for _,v in ipairs(tbl) do
         if not col[v.p or 0] then col[v.p or 0]={} end
@@ -56,11 +55,12 @@ function M.activate_abbrev(key)
     return key
 end
 ---@param hash ua.hook.hash
----@param can_undo boolean?
+---@param mode string
 ---@param skip_index number?
 ---@return ua.actions
+---@return ua.hook.subconf?
 ---@return boolean?
-function M.get_act(hash,can_undo,skip_index)
+function M.get_act(hash,mode,skip_index)
     local info=M.get_hash_info(hash)
     local objs=hookmem[hash]
     local create_o=M.create_o_wrapper()
@@ -69,14 +69,14 @@ function M.get_act(hash,can_undo,skip_index)
         local o=create_o(obj)
         local act=obj.run(o)
         if act then
-            if can_undo then
-                M.saveundo={act=act,row=o.row,col=o.col,buf=o.buf,key=info.key,index=index,hash=hash,can_undo=can_undo}
+            if mode=='i' then
+                M.saveundo={act=act,row=o.row,col=o.col,buf=o.buf,key=info.key,index=index,hash=hash,mode=mode}
             end
-            return act
+            return act,obj.__hook_subconf
         end
         ::continue::
     end
-    return {info.key},true
+    return {info.key},{},true --TODO: be able to set default subconf (which could also be a function)
 end
 ---@param act ua.actions
 function M.generate_undo(act)
@@ -95,5 +95,31 @@ function M.last_act_cycle() --TODO: test
     local saveundo=M.saveundo
     M.saveundo=nil
     return vim.list_extend(M.generate_undo(saveundo.act),M.get_act(saveundo.hash,saveundo.can_undo,saveundo.index))
+end
+---@param act ua.actions
+---@param mode string
+---@param conf? ua.hook.subconf
+---@return string?
+function M.act_to_keys(act,mode,conf)
+    conf=conf or {dot=true,true_dot=false,abbr=true}
+    local buf=utils.new_str_buf(#act)
+    for _,v in ipairs(act) do
+        local kind,args
+        if type(v)~='string' then
+            kind=v[1]
+            args={select(2,unpack(v))}
+        end
+        if type(v)=='string' then
+            buf:put(v)
+        elseif kind=='left' then
+            buf:put(utils.key_left(args[1],conf.dot and mode=='i'))
+        elseif kind=='right' then
+            buf:put(utils.key_right(args[1],conf.dot and mode=='i'))
+        end
+    end
+    if conf.abbr and mode:match('[ic]') then
+        return M.activate_abbrev(buf:tostring())
+    end
+    return buf:tostring()
 end
 return M

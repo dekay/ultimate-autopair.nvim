@@ -40,7 +40,7 @@ function M.init(id)
 end
 ---@param obj ua.object
 ---@param hash ua.hook.hash
----@param conf ua.hook.conf?
+---@param conf ua.hook.conf? --TODO
 function M.register_hook(obj,hash,conf)
     if not hookmem[hash] then hookmem[hash]={} end
     local mem=hookmem[hash]
@@ -68,9 +68,9 @@ function M.update()
             end
             goto continue
         end
-        hookutils.sort(hookmem[hash])
+        hookutils.stable_sort(hookmem[hash])
         if info.type=='map' then
-            maphook.set(hash)
+            maphook.set(hash,'expr')
         else
             error()
         end
@@ -83,6 +83,6 @@ end
 ---@return ua.actions
 function M.send(mode,type,key)
     local hash=hookutils.to_hash(mode,type,key)
-    return hookutils.get_act(hash,mode=='i')
+    return hookutils.get_act(hash,mode)
 end
 return M

@@ -13,8 +13,9 @@
 ---@class ua.object
 ---@field run? fun(o:ua.info):ua.actions?
 ---@field hooks ua.hook.hash[]
----@field __hook_subconf ua.hook.subconf
+---@field __hook_subconf ua.hook.subconf --TODO
 ---@field doc? string
+---@field p? number
 ---@alias ua.id number
 ---@alias ua.prof.conf table
 ---@class ua.hook
@@ -23,7 +24,7 @@
 ---@field mode string
 ---@alias ua.hook.hash string
 ---@alias ua.hook.conf string
----@alias ua.hook.subconf string
+---@alias ua.hook.subconf {dot:boolean?,true_dot:boolean?,abbr:boolean?}
 ---@class ua.hook.info
 ---@field [number] ua.object
 ---@field dirty boolean?
