@@ -97,6 +97,7 @@ function M.generate_undo(act)
 end
 ---@return ua.actions
 function M.undo_last_act() --TODO: test
+    --TODO: maybe move to hook.lua
     if not M.saveundo then return {} end
     local saveundo=M.saveundo
     M.saveundo=nil
@@ -104,6 +105,7 @@ function M.undo_last_act() --TODO: test
 end
 ---@return ua.actions
 function M.last_act_cycle() --TODO: test
+    --TODO: maybe move to hook.lua
     if not M.saveundo then return {} end
     local saveundo=M.saveundo
     M.saveundo=nil
