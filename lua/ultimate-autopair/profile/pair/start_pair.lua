@@ -6,7 +6,7 @@ local M={}
 function M.run(o)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     if info.start_pair~=info.end_pair then --TODO:TEMP
-        local count=open_pair.count_end_pair(setmetatable({col=o.col},{__index=o}))
+        local count=open_pair.count_end_pair(setmetatable({col=o.col-1},{__index=o}))
         if open_pair.count_end_pair(o,true,count+1,true) then return end
     else
         if open_pair.count_ambiguous_pair(o,'both') then return end
