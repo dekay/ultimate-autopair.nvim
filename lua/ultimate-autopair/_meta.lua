@@ -8,7 +8,6 @@
 ---@field lines string[]
 ---@field row number
 ---@field col number
----@field gsave table
 ---@field lsave table
 ---@class ua.act
 ---@field [1] 'left'|'right'|'pos'
