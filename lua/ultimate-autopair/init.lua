@@ -13,10 +13,9 @@ end
 ---@param id ua.id?
 function M.init(configs,id)
     id=id or M._id
-    hook.unregister(id)
-    objmem[id]={}
-    prof.init(configs,objmem[id])
-    hook.register(id)
+    if objmem[id] then hook.unregister(objmem[id]) end
+    objmem[id]=prof.init(configs)
+    hook.register(objmem[id])
 end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf

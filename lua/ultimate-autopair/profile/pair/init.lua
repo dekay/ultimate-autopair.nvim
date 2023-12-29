@@ -10,7 +10,7 @@
 ---@field info ua.prof.def.pair.info
 local M={}
 ---@param conf ua.prof.conf
----@param objects ua.object[]
+---@param objects ua.instance
 function M.init(conf,objects)
     local somepairs={}
     M.init_pairs(somepairs,conf,conf)
@@ -35,7 +35,7 @@ function M.pair_sort_len(somepairs)
         end
     end
 end
----@param objects ua.object[]
+---@param objects ua.instance
 ---@param conf ua.prof.conf
 ---@param somepairs any
 function M.init_pairs(objects,conf,somepairs)

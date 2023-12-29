@@ -1,11 +1,9 @@
-local objmem=require'ultimate-autopair.mem.obj'
 local hookmem=require'ultimate-autopair.mem.hook'
 local maphook=require'ultimate-autopair.hook.map'
 local hookutils=require'ultimate-autopair.hook.utils'
 local M={}
----@param id ua.id
-function M.unregister(id)
-    local objects=objmem[id]
+---@param objects ua.instance
+function M.unregister(objects)
     if not objects then return end
     for _,obj in ipairs(objects) do
         for _,v in pairs(obj.hooks) do
@@ -28,9 +26,8 @@ function M.unregister_hook(obj,hash)
     end
     error()
 end
----@param id ua.id
-function M.register(id)
-    local objects=objmem[id]
+---@param objects ua.instance
+function M.register(objects)
     for _,obj in ipairs(objects) do
         for _,v in ipairs(obj.hooks) do
             M.register_hook(obj,v)
