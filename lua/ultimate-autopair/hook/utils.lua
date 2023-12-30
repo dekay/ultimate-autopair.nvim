@@ -113,7 +113,7 @@ end
 ---@param act ua.actions
 ---@param mode string
 ---@param conf? ua.hook.subconf
----@return string?
+---@return string
 function M.act_to_keys(act,mode,conf)
     conf=conf or {dot=true,true_dot=false,abbr=true}
     local buf=utils.new_str_buf(#act)

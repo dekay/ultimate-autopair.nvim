@@ -60,12 +60,12 @@ function M.update()
         v.dirty=false
         local info=hookutils.get_hash_info(hash)
         if #v==0 then
-            hookmem[hash]=nil
             if info.type=='map' then
                 maphook.del(hash)
             else
                 error(('hook type `%s` can not be unregistered'):format(info.type))
             end
+            hookmem[hash]=nil
             goto continue
         end
         hookutils.stable_sort(hookmem[hash])
