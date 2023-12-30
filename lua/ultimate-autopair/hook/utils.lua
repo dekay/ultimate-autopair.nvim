@@ -118,13 +118,14 @@ function M.act_to_keys(act,mode,conf)
     conf=conf or {dot=true,true_dot=false,abbr=true}
     local buf=utils.new_str_buf(#act)
     for _,v in ipairs(act) do
-        local kind,args
-        if type(v)~='string' then
-            kind=v[1]
-            args={select(2,unpack(v))}
-        end
         if type(v)=='string' then
-            buf:put(v)
+            v={'ins',v}
+        end
+        local kind=v[1]
+        local args={select(2,unpack(v))}
+        if kind=='ins' then
+            if not mode:match'[ic]' then error() end
+            buf:put(args[1])
         elseif kind=='left' then
             buf:put(utils.key_left(args[1],conf.dot and mode=='i'))
         elseif kind=='right' then

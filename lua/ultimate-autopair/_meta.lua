@@ -10,7 +10,7 @@
 ---@field col number
 ---@field lsave table
 ---@class ua.act
----@field [1] 'left'|'right'|'pos'
+---@field [1] 'left'|'right'|'ins'
 ---@field [number] any
 ---@alias ua.actions (string|ua.act)[]
 ---@class ua.object
