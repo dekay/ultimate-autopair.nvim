@@ -6,6 +6,10 @@ local markdown={
 }
 return {
     conf={
+        merge={
+            filter=true,
+            extension=true,
+        },
         {'(',')'},
         {'"','"'},
         {"'","'",alpha_before=true,cond=in_lisp},
@@ -21,6 +25,10 @@ return {
             escape={},
             filetype={},
             tsnode={p=-2},
+        },
+        extension={
+            surround={},
+            fly={},
         },
     },
     tex={

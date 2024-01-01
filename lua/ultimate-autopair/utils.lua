@@ -35,4 +35,11 @@ function M.key_right(len,noundo)
     len=type(len)=='string' and M.I.len(len) or len or 1
     return ((noundo and M.I.key_noundo or '')..M.I.key_right):rep(len --[[@as number]])
 end
+---@param o ua.filter
+---@param tree? boolean
+function M.get_filetype(o,tree)
+    if o.buf then return vim.bo[o.buf].filetype end
+    if _G.UA_DEV then error() end
+    return vim.o.filetype
+end
 return M

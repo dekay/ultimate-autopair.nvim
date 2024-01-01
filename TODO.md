@@ -31,3 +31,4 @@
     + An option to quickly define groups of nodes, (like `string` or `comment`)
     + A way to define a node as extended (`[//$]`), contained (`[""]$`)
         + And make it filetype specific
++ Make after-insert a pair option: instead of checking and fake inserting in the filter, do it in the pair filter caller function

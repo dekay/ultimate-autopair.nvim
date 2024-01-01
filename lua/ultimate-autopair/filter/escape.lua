@@ -1,4 +1,5 @@
 local M={}
+---@param o ua.filter
 function M.call(o)
     local col=o.cols-1
     local escape=false
