@@ -10,7 +10,7 @@ function M.count_start_pair(o,gotostart,initial_count,return_pos)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     local start_pair=info.start_pair
     local end_pair=info.end_pair
-    local multiline=info.conf.multiline
+    local multiline=info.multiline
     local start_pair_filter=info._filter.start_pair_filter
     local end_pair_filter=info._filter.end_pair_filter
 
@@ -60,7 +60,7 @@ function M.count_end_pair(o,gotoend,initial_count,return_pos)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     local start_pair=info.start_pair
     local end_pair=info.end_pair
-    local multiline=info.conf.multiline
+    local multiline=info.multiline
     local start_pair_filter=info._filter.start_pair_filter
     local end_pair_filter=info._filter.end_pair_filter
 
@@ -108,7 +108,7 @@ function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     assert(info.start_pair==info.end_pair)
     local pair=info.start_pair
-    local multiline=info.conf.multiline
+    local multiline=info.multiline
     local start_pair_filter=info._filter.start_pair_filter
     local end_pair_filter=info._filter.end_pair_filter
 

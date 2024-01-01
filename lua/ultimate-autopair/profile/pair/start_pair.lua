@@ -19,25 +19,29 @@ function M.run(o)
         {'left',info.end_pair},
     }
 end
+---@param pair any
 ---@return ua.prof.def.pair
-function M.init(start_pair,end_pair)
-    local m={}
-    m.run=M.run
-    m.info={
-        start_pair=start_pair,
-        end_pair=end_pair,
-        main_pair=start_pair,
-        conf={}, --TODO:TEMP
-        _filter={ --TODO:TEMP
-            start_pair_filter=function() return true end,
-            end_pair_filter=function() return true end
+function M.init(pair)
+    local start_pair=pair[1]
+    local end_pair=pair[2]
+
+    return {
+        run=M.run,
+        info={
+            start_pair=start_pair,
+            end_pair=end_pair,
+            main_pair=start_pair,
+            multiline=pair.multiline,
+            _filter={ --TODO:TEMP
+                start_pair_filter=function() return true end,
+                end_pair_filter=function() return true end
+            },
         },
+        hooks={
+            hookutils.to_hash('map',start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),{mode='i'}),
+            hookutils.to_hash('map',start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),{mode='c'}),
+        },
+        doc=('autopairs start pair: %s,%s'):format(start_pair,end_pair)
     }
-    m.hooks={
-        hookutils.to_hash('map',start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),{mode='i'}),
-        hookutils.to_hash('map',start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),{mode='c'}),
-    }
-    m.doc=('autopairs start pair: %s,%s'):format(start_pair,end_pair)
-    return m
 end
 return M

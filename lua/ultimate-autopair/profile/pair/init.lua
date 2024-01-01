@@ -1,11 +1,9 @@
----@class ua.prof.def.pair.conf
----@field multiline? boolean
 ---@class ua.prof.def.pair.info
 ---@field start_pair string
 ---@field _filter table --TODO: the problem: extension.tsnode can be initialized for specific positions, which means that filter may change, MAYBE?: have a filter initialize function which initializes the filters for a position
 ---@field end_pair string
 ---@field main_pair? string
----@field conf ua.prof.def.pair.conf
+---@field multiline? boolean
 ---@class ua.prof.def.pair:ua.object
 ---@field info ua.prof.def.pair.info
 local M={}
@@ -49,9 +47,11 @@ end
 ---@param pair any
 ---@return ua.object[]
 function M.init_pair(conf,pair)
+    local p=(utils and utils.merge or function(x) return x end)(pair,conf) --TODO: temp
+
     return {
-        require('ultimate-autopair.profile.pair.end_pair').init(pair[1],pair[2]),
-        require('ultimate-autopair.profile.pair.start_pair').init(pair[1],pair[2]),
+        require('ultimate-autopair.profile.pair.end_pair').init(p),
+        require('ultimate-autopair.profile.pair.start_pair').init(p),
     }
 end
 return M

@@ -13,7 +13,7 @@ local function restart()
     end)
     lbuf=buf
 end
-vim.schedule(restart)
+vim.defer_fn(restart,100)
 vim.api.nvim_create_autocmd('BufWritePost',{callback=function ()
     if timer then vim.fn.timer_stop(timer) end
     timer=vim.fn.timer_start(100,function ()

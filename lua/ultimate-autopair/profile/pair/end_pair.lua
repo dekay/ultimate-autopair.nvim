@@ -21,15 +21,19 @@ function M.run(o)
         {'right',info.end_pair},
     }
 end
+---@param pair any
 ---@return ua.prof.def.pair
-function M.init(start_pair,end_pair)
+function M.init(pair)
+    local start_pair=pair[1]
+    local end_pair=pair[2]
+
     return {
         run=M.run,
         info={
             start_pair=start_pair,
             end_pair=end_pair,
             main_pair=end_pair,
-            conf={}, --TODO:TEMP
+            multiline=pair.multiline,
             _filter={ --TODO:TEMP
                 start_pair_filter=function() return true end,
                 end_pair_filter=function() return true end
