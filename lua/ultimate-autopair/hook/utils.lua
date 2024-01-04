@@ -10,7 +10,7 @@ M.HASH_CONF_SET='='
 function M.get_hash_info(hash)
     local type,confstr,key=hash:match(('^(.-)%s(.-)%s(.*)$'):format(M.HASH_SEP1,M.HASH_SEP2))
     local conf={}
-    for i in vim.gsplit(confstr,M.HASH_CONF_SEP) do
+    for i in vim.gsplit(confstr,M.HASH_CONF_SEP) do --TODO: maybe replace with string.gmatch
         local k,v=unpack(vim.split(i,M.HASH_CONF_SET))
         conf[k]=v
     end

@@ -27,11 +27,29 @@ function M.check_not_allowed_string(path)
         end
     end
 end
+function M.check_unique_lang_to_ft()
+    local name,ft_to_lang=debug.getupvalue(vim.treesitter.language.get_lang,1)
+    if name~='ft_to_lang' then
+        utils.warning('Couldn\'t get upvalue from treesitter')
+        return
+    end
+    local done={}
+    for _,tree_lang in pairs(ft_to_lang) do
+        if done[tree_lang] then goto continue end
+        local filetypes=vim.treesitter.language.get_filetypes(tree_lang)
+        if #filetypes>1 then
+            utils.warning('Found multiple languages for '..tree_lang..': '..vim.inspect(filetypes))
+        end
+        done[tree_lang]=true
+        ::continue::
+    end
+end
 function M.start()
     local lua_path=vim.api.nvim_get_runtime_file('lua/ultimate-autopair',false)[1]
     local plugin_path=vim.fn.fnamemodify(lua_path,':h:h')
     if _G.UA_DEV then
         M.check_not_allowed_string(lua_path)
+        M.check_unique_lang_to_ft()
     end
     if vim.fn.has('nvim-0.9.0')==0 then
         utils.warning('You have an older version of neovim than recommended')
