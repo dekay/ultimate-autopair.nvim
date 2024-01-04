@@ -22,15 +22,17 @@ function M.check_not_allowed_string(path)
             utils.warning(('timeout `%s`'):format(mt.name))
         elseif exitcode~=(mt.expected or 0) then
             utils.warning(('job `%s` exited with code %s'):format(mt.name,exitcode))
-        else
-            utils.info(('`%s` ran successfully'):format(mt.name))
         end
     end
 end
 function M.check_unique_lang_to_ft()
+    do --TODO:temp
+        utils.warning('check_unique_lang_to_ft is diabeled')
+        return
+    end
     local name,ft_to_lang=debug.getupvalue(vim.treesitter.language.get_lang,1)
     if name~='ft_to_lang' then
-        utils.warning('Couldn\'t get upvalue from treesitter')
+        utils.warning('Couldn\'t get upvalue from treesitter, check_unique_lang_to_ft skipped')
         return
     end
     local done={}

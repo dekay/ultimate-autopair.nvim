@@ -9,5 +9,7 @@ function vim.lg(...)
 end
 vim.o.buftype='nofile'
 _G.UA_DEV=1
+vim.opt.runtimepath:append('/home/user/.local/share/nvim/lazy/nvim-treesitter/')
+require'nvim-treesitter'.setup()
 require'ultimate-autopair'.setup()
 vim.cmd'checkhealth ultimate-autopair'
