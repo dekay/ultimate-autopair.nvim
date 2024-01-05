@@ -38,8 +38,24 @@ end
 ---@param o ua.filter
 ---@param tree? boolean
 function M.get_filetype(o,tree)
+    if o.conf.option.filetype~=nil then
+        return M.opt_eval(o.conf.option.filetype,o)
+    end
     if o.buf then return vim.bo[o.buf].filetype end
     if _G.UA_DEV then error() end
     return vim.o.filetype
+end
+---@param opt any|fun(o:ua.filter):any
+---@param o ua.filter
+function M.opt_eval(opt,o)
+    if type(opt)=='function' then return opt(o) end
+    return opt
+end
+---@param str string
+---@param col number
+function M.get_char(str,col)
+    return str:sub(
+        vim.str_utf_start(str,col)+col,
+        vim.str_utf_end(str,col)+col)
 end
 return M
