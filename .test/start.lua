@@ -9,7 +9,7 @@ local function restart()
     end
     vim.api.nvim_buf_delete(lbuf,{force=true})
     vim.api.nvim_buf_call(buf,function ()
-        vim.fn.termopen('/home/user/.config/nvim/.other/ua_/.test/nvim')
+        vim.fn.termopen('sh -c "cd /home/user/.config/nvim/.other/ua_/.test;./nvim"')
     end)
     lbuf=buf
 end
