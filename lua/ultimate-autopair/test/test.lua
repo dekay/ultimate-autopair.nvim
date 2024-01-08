@@ -54,6 +54,9 @@ return {
         {'a´|b´´c','´','a´´|b´´c',{c={{'´´','´´'}}}},
         {'a´´b´|´c','´','a´´b´´|´c',{c={{'´´','´´'}},skip=true}},
     },
+    filter_alpha={
+        {'don|t',"'","don'|t"},
+    },
     DEV_run={
         {'foo\nbar|baz\nfizzbuzz','vim','foo\nbarvim|baz\nfizzbuzz'},
         {'foo\n|bar\n','<bs>','foo|bar\n'},

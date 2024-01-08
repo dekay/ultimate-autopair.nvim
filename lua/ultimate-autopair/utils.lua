@@ -54,6 +54,7 @@ end
 ---@param str string
 ---@param col number
 function M.get_char(str,col)
+    if col>#str then return '' end
     return str:sub(
         vim.str_utf_start(str,col)+col,
         vim.str_utf_end(str,col)+col)
@@ -76,5 +77,15 @@ function M.run_filters(filters,o)
         end
     end
     return true
+end
+do
+    local _cache={}
+    local regex=vim.regex[=[\v[[=a=][=b=][=c=][=d=][=e=][=f=][=g=][=h=][=i=][=j=][=k=][=l=][=m=][=n=][=o=][=p=][=q=][=r=][=s=][=t=][=u=][=v=][=w=][=x=][=y=][=z=][:keyword:]]]=]
+    function M.is_alpha(char)
+    if not _cache[char] then
+        _cache[char]=regex:match_str(char)
+    end
+    return _cache[char]
+end
 end
 return M

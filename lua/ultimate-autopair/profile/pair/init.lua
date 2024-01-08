@@ -64,23 +64,21 @@ function M.merge_fn(pair,conf)
         if not l1 then return l2 end
         return vim.list_extend(vim.list_extend({},l1),l2)
     end
-    local function merge_keys(t1,t2)
-        if not t2 then return t1 end
-        if not t1 then return t2 end
-        if not vim.F.if_nil(t1.merge,t2.merge,true) then return t1 end
-        return vim.tbl_extend('force',t2,t1)
+    local function merge_tbls(t1,t2)
+        if t1 and t2 and not vim.F.if_nil(t1.merge,t2.merge,true) then return t1 end
+        return vim.tbl_extend('force',t2 or {},t1 or {})
     end
     local p=setmetatable({},{__index=pair})
     p.filter_conf={}
-    for k,_ in pairs(merge_keys(pair.filter,conf.filter)) do
-        local fconf={} --TODO
+    for k,_ in pairs(merge_tbls(pair.filter,conf.filter)) do
+        local fconf=merge_tbls(vim.tbl_get(pair,'filter',k),vim.tbl_get(conf,'filter',k))
         if k=='filetype' then
             if pair.ft then
                 local pairft=merge_list_no(pair.ft,vim.tbl_get(pair,'filter','filetype','ft'))
                 fconf.ft=merge_list(pairft,conf.filter.filetype.ft)
             end
         end
-        IMPLEMENTED_FILTERS={'filetype'}
+        IMPLEMENTED_FILTERS={'filetype','alpha'}
         if vim.tbl_contains(IMPLEMENTED_FILTERS,k) then --TODO:temp
             p.filter_conf[k]=fconf
         end
@@ -92,7 +90,6 @@ end
 ---@return ua.prof.def.pair[]
 function M.init_pair(conf,pair)
     local p=(pair.merge_fn or conf.merge_fn or M.merge_fn)(pair,conf) --TODO: temp
-
     return {
         require('ultimate-autopair.profile.pair.end_pair').init(p),
         require('ultimate-autopair.profile.pair.start_pair').init(p),
