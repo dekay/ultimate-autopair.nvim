@@ -118,6 +118,7 @@ function M.run_tests(tests)
         local conf=v[4] or {}
         M.chan_exec('stopinsert')
         M.chan_exec('bwipeout!')
+        M.chan_exec('edit '..vim.fn.tempname())
         M.chan_exec('set all&')
         M.chan_exec('startinsert')
         M.set_lines_and_pos(v[1],conf.cursor)
