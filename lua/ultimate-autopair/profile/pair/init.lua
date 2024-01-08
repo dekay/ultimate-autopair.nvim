@@ -90,9 +90,6 @@ end
 ---@return ua.prof.def.pair[]
 function M.init_pair(conf,pair)
     local p=(pair.merge_fn or conf.merge_fn or M.merge_fn)(pair,conf) --TODO: temp
-    return {
-        require('ultimate-autopair.profile.pair.end_pair').init(p),
-        require('ultimate-autopair.profile.pair.start_pair').init(p),
-    }
+    return require('ultimate-autopair.profile.pair.pair').init(p)
 end
 return M
