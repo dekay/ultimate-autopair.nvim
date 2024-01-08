@@ -30,13 +30,11 @@ function M.check_unique_lang_to_ft()
         utils.warning('check_unique_lang_to_ft is diabeled')
         return
     end
-    local name,ft_to_lang=debug.getupvalue(vim.treesitter.language.get_lang,1)
-    if name~='ft_to_lang' then
-        utils.warning('Couldn\'t get upvalue from treesitter, check_unique_lang_to_ft skipped')
-        return
-    end
+    local tree_langs=vim.tbl_map(function (x)
+        return vim.fn.fnamemodify(x,':t:r')
+    end,vim.api.nvim_get_runtime_file('parser/*',true))
     local done={}
-    for _,tree_lang in pairs(ft_to_lang) do
+    for _,tree_lang in ipairs(tree_langs) do
         if done[tree_lang] then goto continue end
         local filetypes=vim.treesitter.language.get_filetypes(tree_lang)
         if #filetypes>1 then
