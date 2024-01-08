@@ -55,7 +55,17 @@ return {
         {'a´´b´|´c','´','a´´b´´|´c',{c={{'´´','´´'}},skip=true}},
     },
     filter_alpha={
-        {'don|t',"'","don'|t"},
+        {"don|t","'","don'|t"},
+        {"'a|'","'","'a'|",{skip=true}},
+        {"f|","'","f'|"},
+        {"f|","'","f'|'",{ft='python',skip=true}},
+        {"fr|","'","fr'|'",{ft='python',skip=true}},
+        {"a' |","'","a' '|'",{c={filter={alpha={filter=true}}},skip=true}},
+        {'|a','<','<|a',{c={{'<','>',alpha_after=true}},skip=true}},
+        {'a|','<','a<|',{c={{'<','>',alpha_before=true}},skip=true}},
+        {'<|a','<','<<|a',{c={{'<<','>>',alpha_after=true}},skip=true}},
+        {'a<|','<','a<<|',{c={{'<<','>>',alpha_before=true}},skip=true}},
+        {'b""|','"','b"""|"',{ft='python',c={_conf_internal_pair={{'"""','"""',alpha_before=true}}},skip=true}},
     },
     DEV_run={
         {'foo\nbar|baz\nfizzbuzz','vim','foo\nbarvim|baz\nfizzbuzz'},

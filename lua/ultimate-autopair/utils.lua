@@ -82,10 +82,10 @@ do
     local _cache={}
     local regex=vim.regex[=[\v[[=a=][=b=][=c=][=d=][=e=][=f=][=g=][=h=][=i=][=j=][=k=][=l=][=m=][=n=][=o=][=p=][=q=][=r=][=s=][=t=][=u=][=v=][=w=][=x=][=y=][=z=][:keyword:]]]=]
     function M.is_alpha(char)
-    if not _cache[char] then
-        _cache[char]=regex:match_str(char)
+        if _cache[char]==nil then
+            _cache[char]=regex:match_str(char) and true or false
+        end
+        return _cache[char]
     end
-    return _cache[char]
-end
 end
 return M

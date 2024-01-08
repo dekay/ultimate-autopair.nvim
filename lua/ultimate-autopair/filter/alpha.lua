@@ -9,7 +9,7 @@ function M.call(o)
         end
     end
     if o.conf.before then
-        if utils.is_alpha(utils.get_char(o.line,o.cols)) then
+        if utils.is_alpha(utils.get_char(o.line,o.cols-1)) then
             return
         end
     end
