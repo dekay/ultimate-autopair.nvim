@@ -5,6 +5,21 @@ local M={}
 ---@return ua.actions|nil
 function M.run(o)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
+    do --TODO:temp, move to prof.pair.init.lua
+        local po={
+            cols=o.col,
+            cole=o.col,
+            line=o.line,
+            lines=o.lines,
+            rows=o.row,
+            rowe=o.row,
+        }
+        for k,v in pairs(info.filter_conf) do
+            if not require('ultimate-autopair.filter.'..k).call(setmetatable({conf=v},{__index=po})) then
+                return
+            end
+        end
+    end
     if info.start_pair~=info.end_pair then --TODO:TEMP
         local count2=open_pair.count_start_pair(o)
         --Same as: count_open_end_pair_after
@@ -38,6 +53,7 @@ function M.init(pair)
                 start_pair_filter=function() return true end,
                 end_pair_filter=function() return true end
             },
+            filter_conf=pair.filter_conf, --TODO:TEMP
         },
         hooks={
             hookutils.to_hash('map',end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),{mode='i'}),

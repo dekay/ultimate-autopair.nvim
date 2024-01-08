@@ -1,5 +1,5 @@
 local M={}
-local utils=require'ultimate-autopair.ultils'
+local utils=require'ultimate-autopair.utils'
 ---@param o ua.filter
 ---@return boolean?
 function M.call(o)

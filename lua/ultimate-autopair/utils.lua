@@ -38,7 +38,7 @@ end
 ---@param o ua.filter
 ---@param tree? boolean
 function M.get_filetype(o,tree)
-    if o.conf.option.filetype~=nil then
+    if (o.conf.option or {}).filetype~=nil then
         return M.opt_eval(o.conf.option.filetype,o)
     end
     if o.buf then return vim.bo[o.buf].filetype end
