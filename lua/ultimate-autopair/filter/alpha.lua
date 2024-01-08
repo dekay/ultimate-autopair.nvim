@@ -1,6 +1,7 @@
 local M={}
 local utils=require'ultimate-autopair.ultils'
 ---@param o ua.filter
+---@return boolean?
 function M.call(o)
     if o.conf.after then
         if utils.is_alpha(utils.get_char(o.line,o.cole)) then

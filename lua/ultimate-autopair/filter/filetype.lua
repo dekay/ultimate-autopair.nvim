@@ -1,6 +1,7 @@
 local M={}
 local utils=require'ultimate-autopair.ultils'
 ---@param o ua.filter
+---@return boolean?
 function M.call(o)
     local conf=o.conf
     local ft=utils.get_filetype(o,not conf.tree)
