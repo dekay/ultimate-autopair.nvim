@@ -42,6 +42,7 @@ function M.get_filetype(o,tree)
         return M.opt_eval(o.conf.option.filetype,o)
     end
     if o.buf then return vim.bo[o.buf].filetype end
+    do return vim.o.filetype end --TODO: temp
     if _G.UA_DEV then error() end
     return vim.o.filetype
 end
