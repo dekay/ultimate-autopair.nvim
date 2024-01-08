@@ -58,4 +58,23 @@ function M.get_char(str,col)
         vim.str_utf_start(str,col)+col,
         vim.str_utf_end(str,col)+col)
 end
+---@param filters table<string,table>
+---@param o ua.info
+---@return boolean
+function M.run_filters(filters,o)
+    local po={
+        cols=o.col,
+        cole=o.col,
+        line=o.line,
+        lines=o.lines,
+        rows=o.row,
+        rowe=o.row,
+    }
+    for filter,conf in pairs(filters) do
+        if not require('ultimate-autopair.filter.'..filter).call(setmetatable({conf=conf},{__index=po})) then
+            return false
+        end
+    end
+    return true
+end
 return M

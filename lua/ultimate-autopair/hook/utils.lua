@@ -10,7 +10,7 @@ M.HASH_CONF_SET='='
 function M.get_hash_info(hash)
     local type,confstr,key=hash:match(('^(.-)%s(.-)%s(.*)$'):format(M.HASH_SEP1,M.HASH_SEP2))
     local conf={}
-    for i in vim.gsplit(confstr,M.HASH_CONF_SEP) do --TODO: maybe replace with string.gmatch
+    for i in vim.gsplit(confstr,M.HASH_CONF_SEP) do
         local k,v=unpack(vim.split(i,M.HASH_CONF_SET))
         conf[k]=v
     end
@@ -95,16 +95,14 @@ function M.generate_undo(act)
     return {}
 end
 ---@return ua.actions
-function M.undo_last_act() --TODO: test
-    --TODO: maybe move to hook.lua
+function M.undo_last_act() --TODO
     if not M.saveundo then return {} end
     local saveundo=M.saveundo
     M.saveundo=nil
     return M.generate_undo(saveundo.act)
 end
 ---@return ua.actions
-function M.last_act_cycle() --TODO: test
-    --TODO: maybe move to hook.lua
+function M.last_act_cycle() --TODO
     if not M.saveundo then return {} end
     local saveundo=M.saveundo
     M.saveundo=nil
