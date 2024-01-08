@@ -56,6 +56,8 @@ return {
     },
     filter_alpha={
         {"don|t","'","don'|t"},
+        {"Ã|","'","Ã'|",{cmd='set iskeyword='}},
+        {"_|","'","_'|"},
         {"'a|'","'","'a'|",{skip=true}},
         {"f|","'","f'|"},
         {"f|","'","f'|'",{ft='python',skip=true}},
