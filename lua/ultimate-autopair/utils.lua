@@ -35,14 +35,60 @@ function M.key_right(len,noundo)
     len=type(len)=='string' and M.I.len(len) or len or 1
     return ((noundo and M.I.key_noundo or '')..M.I.key_right):rep(len --[[@as number]])
 end
+M.tslang2lang={
+    markdown_inline='markdown',
+    bash='sh',
+    javascript='javascript',
+    markdown='markdown',
+    html='html',
+    xml='xml',
+    scala='scala',
+    latex='tex',
+    ini='ini',
+    glimmer='handlebars',
+    verilog='verilog',
+    tsx='typescriptreact',
+}
+---@param range Range4
+---@param source string[]|number
+---@param tree boolean?
+---@param incmd boolean?
+function M._pos_get_filetype(range,source,tree,incmd)
+    --TODO: local cache
+    --TODO: temp
+    local function notree()
+        if incmd then return 'vim'
+        elseif type(source)=='number' then
+            return vim.bo[source].filetype
+        else
+            if _G.UA_DEV then error('utils._pos_get_filetype') end
+            return vim.o.filetype
+        end
+    end
+    if not tree then return notree() end
+    if _G.UA_DEV then assert(not incmd or (type(source)=='table' and #source==1),'utils._pos_get_filetype') end
+    local s,parser
+    if type(source)=='table' then
+        s,parser=pcall(vim.treesitter.get_string_parser,source,notree())
+    else
+        s,parser=pcall(vim.treesitter.get_parser,source)
+    end
+    if not s then return notree() end
+    parser:parse()
+    local tslang=parser:language_for_range(range):lang()
+    return M.tslang2lang[tslang] or vim.treesitter.language.get_filetypes(tslang)[1]
+end
 ---@param o ua.filter
----@param tree? boolean
-function M.get_filetype(o,tree)
+function M.get_filetype(o)
     if (o.conf.option or {}).filetype~=nil then
         return M.opt_eval(o.conf.option.filetype,o)
     end
-    if o.buf then return vim.bo[o.buf].filetype end
-    do return vim.o.filetype end --TODO: temp
+    if M.incmd(o) then
+        return 'vim'
+    end
+    if type(o.source)=='number' then
+        return vim.bo[o.source].filetype
+    end
     if _G.UA_DEV then error('utils.get_filetype') end
     return vim.o.filetype
 end
@@ -71,6 +117,7 @@ function M.run_filters(filters,o)
         lines=o.lines,
         rows=o.row,
         rowe=o.row,
+        source=o.buf or o.lines,
     }
     for filter,conf in pairs(filters) do
         if not require('ultimate-autopair.filter.'..filter).call(setmetatable({conf=conf},{__index=po})) then
@@ -83,9 +130,9 @@ do
     local _cache={}
     local regex=vim.regex[=[\c[[=a=][=b=][=c=][=d=][=e=][=f=][=g=][=h=][=i=][=j=][=k=][=l=][=m=][=n=][=o=][=p=][=q=][=r=][=s=][=t=][=u=][=v=][=w=][=x=][=y=][=z=]]]=]
     local regex_keyword=vim.regex[=[\c\k]=]
-    function M.is_keywordy(char,o,tree)
+    function M.is_keywordy(char,o)
         if _cache[char]==true then return true end
-        local ft=M.get_filetype(o,tree)
+        local ft=M.get_filetype(o)
         if _cache[char] and _cache[char][ft]~=nil then return _cache[char][ft] end
         local is_alpha=regex:match_str(char)
         if is_alpha then
@@ -105,5 +152,22 @@ do
         _cache[char][ft]=is_keyword
         return is_keyword
     end
+end
+---@param o ua.filter
+---@return string?
+function M.getcmdtype(o)
+    if (o.conf.option or {}).cmdtype~=nil then
+        return M.opt_eval(o.conf.option.cmdtype,o)
+    end
+    if not M.incmd(o) then return end
+    return vim.fn.getcmdtype()
+end
+---@param o ua.filter
+---@return boolean
+function M.incmd(o)
+    if (o.conf.option or {}).incmd~=nil then
+        return M.opt_eval(o.conf.option.incmd,o)
+    end
+    return vim.fn.mode()=='c'
 end
 return M

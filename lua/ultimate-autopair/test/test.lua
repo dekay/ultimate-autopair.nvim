@@ -63,6 +63,7 @@ return {
         {"'a|'","'","'a'|"},
         {'f|',"'","f'|"},
         {'f|',"'","f'|'",{ft='python'}},
+        {'```python\nf|\n```',"'","```python\nf'|'\n```",{ft='markdown',skip=true}},
         {'Rb|',"'","Rb'|'",{ft='python'}},
         {'bar|',"'","bar'|",{ft='python'}},
         {"a' |","'","a' '|'",{c={filter={alpha={filter=true}}},skip=true}},

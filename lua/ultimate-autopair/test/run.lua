@@ -87,6 +87,7 @@ function M.run(plugin_path)
             vim.inspect(#{...}==1 and ... or {...}),'\n'
         ),'/tmp/nlog','a')
     end]]
+    M.chan_exec_lua[[_G.UA_DEV=true]]
     local conf_tests,skip=M.sort_test_by_conf(list_of_tests)
     for _,tests in pairs(conf_tests) do
         M.run_tests(tests)

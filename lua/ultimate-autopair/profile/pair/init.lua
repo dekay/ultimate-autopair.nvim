@@ -86,11 +86,8 @@ function M.merge_fn(pair,conf)
                 efconf.ft=merge_list(pairft,conf.filter.filetype.ft)
             end
         end
-        IMPLEMENTED_FILTERS={'filetype','alpha'}
-        if vim.tbl_contains(IMPLEMENTED_FILTERS,k) then --TODO:temp
-            p.start_pair_filter[k]=sfconf
-            p.end_pair_filter[k]=efconf
-        end
+        p.start_pair_filter[k]=sfconf
+        p.end_pair_filter[k]=efconf
     end
     return p
 end

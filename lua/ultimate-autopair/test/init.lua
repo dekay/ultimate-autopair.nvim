@@ -26,21 +26,17 @@ function M.check_not_allowed_string(path)
     end
 end
 function M.check_unique_lang_to_ft()
-    do --TODO:temp
-        utils.warning('check_unique_lang_to_ft is diabeled')
-        return
-    end
     local tree_langs=vim.tbl_map(function (x)
         return vim.fn.fnamemodify(x,':t:r')
     end,vim.api.nvim_get_runtime_file('parser/*',true))
-    local done={}
+    local done=require'ultimate-autopair.utils'.tslang2lang
     for _,tree_lang in ipairs(tree_langs) do
         if done[tree_lang] then goto continue end
         local filetypes=vim.treesitter.language.get_filetypes(tree_lang)
         if #filetypes>1 then
             utils.warning('Found multiple languages for '..tree_lang..': '..vim.inspect(filetypes))
         end
-        done[tree_lang]=true
+        done[tree_lang]=''
         ::continue::
     end
 end

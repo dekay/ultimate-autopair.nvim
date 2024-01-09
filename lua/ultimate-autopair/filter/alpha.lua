@@ -4,7 +4,7 @@ local utils=require'ultimate-autopair.utils'
 ---@return boolean?
 function M.call(o)
     if o.conf.after then
-        if utils.is_alpha(utils.get_char(o.line,o.cole),o) then
+        if utils.is_keywordy(utils.get_char(o.line,o.cole),o) then
             return
         end
     end
@@ -14,7 +14,7 @@ function M.call(o)
             vim.regex[[\c\a\@1<!\v((r[fb])|([fb]r)|[frub])$]]:match_str(o.line:sub(1,o.cols-1)) then
             return true
         end
-        if utils.is_alpha(utils.get_char(o.line,o.cols-1),o) then
+        if utils.is_keywordy(utils.get_char(o.line,o.cols-1),o) then
             return
         end
     end
