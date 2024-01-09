@@ -62,8 +62,8 @@ function M.init(pair)
             start_pair_filter=function() return true end,
             end_pair_filter=function() return true end
         },
-        end_pair_filter=pair.filter_conf,
-        start_pair_filter=pair.filter_conf,
+        end_pair_filter=pair.end_pair_filter,
+        start_pair_filter=pair.start_pair_filter,
     }
     return {
         {

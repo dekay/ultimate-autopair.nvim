@@ -4,7 +4,8 @@
 ---@field end_pair string
 ---@field main_pair? string
 ---@field multiline? boolean
----@field filter_conf table
+---@field start_pair_filter table
+---@field end_pair_filter table
 ---@class ua.prof.def.pair:ua.object
 ---@field info ua.prof.def.pair.info
 ---@alias ua.prof.pair.conf table
@@ -69,18 +70,26 @@ function M.merge_fn(pair,conf)
         return vim.tbl_extend('force',t2 or {},t1 or {})
     end
     local p=setmetatable({},{__index=pair})
-    p.filter_conf={}
+    p.start_pair_filter={}
+    p.end_pair_filter={}
     for k,_ in pairs(merge_tbls(pair.filter,conf.filter)) do
-        local fconf=merge_tbls(vim.tbl_get(pair,'filter',k),vim.tbl_get(conf,'filter',k))
+        local sfconf=merge_tbls(
+            vim.tbl_get(pair,'start_pair','filter',k),
+            merge_tbls(vim.tbl_get(pair,'filter',k),vim.tbl_get(conf,'filter',k)))
+        local efconf=merge_tbls(
+            vim.tbl_get(pair,'end_pair','filter',k),
+            merge_tbls(vim.tbl_get(pair,'filter',k),vim.tbl_get(conf,'filter',k)))
         if k=='filetype' then
             if pair.ft then
                 local pairft=merge_list_no(pair.ft,vim.tbl_get(pair,'filter','filetype','ft'))
-                fconf.ft=merge_list(pairft,conf.filter.filetype.ft)
+                sfconf.ft=merge_list(pairft,conf.filter.filetype.ft)
+                efconf.ft=merge_list(pairft,conf.filter.filetype.ft)
             end
         end
         IMPLEMENTED_FILTERS={'filetype','alpha'}
         if vim.tbl_contains(IMPLEMENTED_FILTERS,k) then --TODO:temp
-            p.filter_conf[k]=fconf
+            p.start_pair_filter[k]=sfconf
+            p.end_pair_filter[k]=efconf
         end
     end
     return p

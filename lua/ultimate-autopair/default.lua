@@ -12,8 +12,8 @@ return {
         },
         {'(',')'},
         {'"','"'},
-        --{"'","'",end_pair={alpha_before=true},cond=in_lisp},
-        {"'","'",filter={alpha={before=true}}}, --TODO: temp
+        --{"'","'",start_pair={alpha_before=true},cond=in_lisp},
+        {"'","'",start_pair={filter={alpha={before=true,py_fstr=true}}}}, --TODO: temp
         {'`','`',cond=in_lisp},
         {'```','```',ft={'markdown'}},
         {'<!--','-->',ft={'markdown','html'}},

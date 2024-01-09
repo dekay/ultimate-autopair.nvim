@@ -9,6 +9,11 @@ function M.call(o)
         end
     end
     if o.conf.before then
+        if o.conf.py_fstr and
+            utils.get_filetype(o)=='python' and
+            vim.regex[[\c\a\@1<!\v((r[fb])|([fb]r)|[frub])$]]:match_str(o.line:sub(1,o.cols-1)) then
+            return true
+        end
         if utils.is_alpha(utils.get_char(o.line,o.cols-1)) then
             return
         end
