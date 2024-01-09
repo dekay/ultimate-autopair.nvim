@@ -83,7 +83,7 @@ do
     local _cache={}
     local regex=vim.regex[=[\c[[=a=][=b=][=c=][=d=][=e=][=f=][=g=][=h=][=i=][=j=][=k=][=l=][=m=][=n=][=o=][=p=][=q=][=r=][=s=][=t=][=u=][=v=][=w=][=x=][=y=][=z=]]]=]
     local regex_keyword=vim.regex[=[\c\k]=]
-    function M.is_alpha(char,o,tree)
+    function M.is_keywordy(char,o,tree)
         if _cache[char]==true then return true end
         local ft=M.get_filetype(o,tree)
         if _cache[char] and _cache[char][ft]~=nil then return _cache[char][ft] end
