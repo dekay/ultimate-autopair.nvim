@@ -4,7 +4,7 @@ local utils=require'ultimate-autopair.utils'
 ---@return boolean?
 function M.call(o)
     if not o.conf.skip then return true end
-    return not vim.tbl_contains(o.conf.skip,utils.getcmdtype(o))
+    return not vim.tbl_contains(o.conf.skip,o.source.cmdtype)
 end
 M.conf={
     skip='string[]',

@@ -9,7 +9,7 @@
 ---@field row number
 ---@field col number
 ---@field lsave table
----@field buf? number --TODO: temp
+---@field source ua.source
 ---@class ua.act
 ---@field [1] 'left'|'right'|'ins'
 ---@field [number] any
@@ -30,4 +30,9 @@
 ---@field lines string[]
 ---@field rows number
 ---@field rowe number
----@field source string[]|string|number --TODO: temp
+---@field source ua.source
+---@class ua.source
+---@field o table<string,any>
+---@field cmdtype string|nil
+---@field get_parser fun():LanguageTree?
+---@field __buf? number

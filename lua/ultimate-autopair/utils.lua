@@ -50,29 +50,14 @@ M.tslang2lang={
     tsx='typescriptreact',
 }
 ---@param range Range4
----@param source string[]|number
+---@param source ua.source
 ---@param tree boolean?
----@param incmd boolean?
-function M._pos_get_filetype(range,source,tree,incmd)
+function M._pos_get_filetype(range,source,tree)
     --TODO: local cache
     --TODO: temp
-    local function notree()
-        if incmd then return 'vim'
-        elseif type(source)=='number' then
-            return vim.bo[source].filetype
-        else
-            if _G.UA_DEV then error('utils._pos_get_filetype') end
-            return vim.o.filetype
-        end
-    end
+    local function notree() return source.o.filetype end
     if not tree then return notree() end
-    if _G.UA_DEV then assert(not incmd or (type(source)=='table' and #source==1),'utils._pos_get_filetype') end
-    local s,parser
-    if type(source)=='table' then
-        s,parser=pcall(vim.treesitter.get_string_parser,source,notree())
-    else
-        s,parser=pcall(vim.treesitter.get_parser,source)
-    end
+    local s,parser=source.get_parser()
     if not s then return notree() end
     parser:parse()
     local tslang=parser:language_for_range(range):lang()
@@ -80,17 +65,7 @@ function M._pos_get_filetype(range,source,tree,incmd)
 end
 ---@param o ua.filter
 function M.get_filetype(o)
-    if (o.conf.option or {}).filetype~=nil then
-        return M.opt_eval(o.conf.option.filetype,o)
-    end
-    if M.incmd(o) then
-        return 'vim'
-    end
-    if type(o.source)=='number' then
-        return vim.bo[o.source].filetype
-    end
-    if _G.UA_DEV then error('utils.get_filetype') end
-    return vim.o.filetype
+    return o.source.o.filetype
 end
 ---@param opt any|fun(o:ua.filter):any
 ---@param o ua.filter
@@ -117,7 +92,7 @@ function M.run_filters(filters,o)
         lines=o.lines,
         rows=o.row,
         rowe=o.row,
-        source=o.buf or o.lines,
+        source=o.source,
     }
     for filter,conf in pairs(filters) do
         if not require('ultimate-autopair.filter.'..filter).call(setmetatable({conf=conf},{__index=po})) then
@@ -154,20 +129,8 @@ do
     end
 end
 ---@param o ua.filter
----@return string?
-function M.getcmdtype(o)
-    if (o.conf.option or {}).cmdtype~=nil then
-        return M.opt_eval(o.conf.option.cmdtype,o)
-    end
-    if not M.incmd(o) then return end
-    return vim.fn.getcmdtype()
-end
----@param o ua.filter
 ---@return boolean
 function M.incmd(o)
-    if (o.conf.option or {}).incmd~=nil then
-        return M.opt_eval(o.conf.option.incmd,o)
-    end
-    return vim.fn.mode()=='c'
+    return o.source.cmdtype~=nil
 end
 return M

@@ -29,11 +29,31 @@ function M.to_hash(type,key,conf)
 end
 ---@return fun(ua.object):ua.info
 function M.create_o_wrapper()
+    local cmdtype=vim.fn.getcmdtype()
+    local buf=vim.api.nvim_get_current_buf()
+    local lines={vim.api.nvim_get_current_line()}
+    local row=1
+    local col=vim.fn.col'.'
+    local source={
+        o=vim.bo[buf],
+        get_parser=function () return vim.treesitter.get_parser(buf) end,
+        __buf=buf,
+    }
+    if cmdtype~='' then
+        lines={vim.fn.getcmdline()}
+        row=1
+        col=vim.fn.getcmdpos()
+        source={
+            o=setmetatable({filetype='vim'},{__index=vim.bo[buf]}),
+            cmdtype=cmdtype,
+            get_parser=function () return vim.treesitter.get_string_parser(vim.fn.getcmdline(),'vim') end,
+        }
+    end
     local oindex=setmetatable({
-        lines={vim.api.nvim_get_current_line()},
-        row=1,
-        col=vim.fn.col'.',
-        buf=vim.api.nvim_get_current_buf(),
+        lines=lines,
+        row=row,
+        col=col,
+        source=source,
     },{__index=function (t,index) return index=='line' and t.lines[t.row] or nil end })
     return function (obj)
         return setmetatable({
@@ -83,7 +103,7 @@ function M.get_act(hash,mode,skip_index)
         local act=obj.run(o)
         if act then
             if mode=='i' then
-                M.saveundo={act=act,row=o.row,col=o.col,buf=o.buf,key=info.key,index=index,hash=hash,mode=mode}
+                M.saveundo={act=act,row=o.row,col=o.col,buf=o.source.__buf,key=info.key,index=index,hash=hash,mode=mode}
             end
             return act,obj.__hook_subconf
         end
