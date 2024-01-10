@@ -138,7 +138,8 @@ function M.act_to_keys(act,mode,conf)
     local buf=utils.new_str_buf(#act)
     for _,v in ipairs(act) do
         if type(v)=='string' then v={'ins',v} end
-        if v[1]=='ins' then
+        if not v then
+        elseif v[1]=='ins' then
             if not mode:match'[ic]' then error() end
             buf:put(v[2])
         elseif v[1]=='left' then
