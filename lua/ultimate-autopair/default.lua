@@ -53,5 +53,11 @@ return {
         change={
             {"'","'",tsnode={not_after={rust={'lifetime'}}}},
         },
-    }
+    },
+    lua={ --TODO
+        change={
+            {"'","'",alpha_before={_filter=true,tsnode={not_after={lua={'string'}}}}},
+        },
+        {'%[=-%[','%]=-%]',pattern=true,ft={'lua'}},
+    },
 }
