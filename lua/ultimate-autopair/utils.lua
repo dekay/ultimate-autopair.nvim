@@ -133,4 +133,13 @@ end
 function M.incmd(o)
     return o.source.cmdtype~=nil
 end
+---@param ft string
+---@param option string
+function M.ft_get_option(ft,option)
+    if vim.o.filetype==ft then
+        return vim.o[option]
+    else
+        return vim.filetype.get_option(ft,option)
+    end
+end
 return M

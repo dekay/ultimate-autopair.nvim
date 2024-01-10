@@ -11,6 +11,8 @@ return {
             extension=true,
         },
         {'(',')'},
+        {'[',']'},
+        {'{','}'},
         {'"','"'},
         --{"'","'",start_pair={alpha_before=true},cond=in_lisp},
         {"'","'",start_pair={filter={alpha={before=true,py_fstr=true}}}}, --TODO: temp
@@ -30,6 +32,10 @@ return {
         extension={
             surround={},
             fly={},
+        },
+        integration={
+            autotag={},
+            endwise={},
         },
     },
     tex={
@@ -54,10 +60,19 @@ return {
             {"'","'",tsnode={not_after={rust={'lifetime'}}}},
         },
     },
-    lua={ --TODO
+    --TODO>>
+    lua={
         change={
             {"'","'",alpha_before={_filter=true,tsnode={not_after={lua={'string'}}}}},
         },
-        {'%[=-%[','%]=-%]',pattern=true,ft={'lua'}},
+        {'%[=-%[','%]=-%]',type='patter',ft={'lua'}},
+    },
+    comment={
+        {function (o)
+            local utils=require'ultimate-autopair.utils'
+            local comment=utils.ft_get_option(utils.get_filetype_after_insert(utils.to_filter(o),'´'),'commentstring') --[[@as string]]
+            local pair={comment:match('(.+)%%s(.+)')}
+            return #pair>0 and pair or nil
+        end,type='callable'}
     },
 }
