@@ -6,7 +6,7 @@ local M={}
 ---@return ua.actions|nil
 function M.run_start(o)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
-    if not utils.run_filters(info.start_pair_filter,o) then
+    if not utils.run_filters(info.start_pair_filter,o,#info.start_pair-1) then
         return
     end
     if info.start_pair~=info.end_pair then --TODO:TEMP
@@ -59,8 +59,12 @@ function M.init(pair)
         main_pair=start_pair,
         multiline=pair.multiline,
         _filter={ --TODO:TEMP
-            start_pair_filter=function() return true end,
-            end_pair_filter=function() return true end
+            start_pair_filter=function (o)
+                return utils.run_filters(pair.start_pair_filter,o,#start_pair-1)
+            end,
+            end_pair_filter=function (o)
+                return utils.run_filters(pair.end_pair_filter,o,#end_pair-1)
+            end
         },
         end_pair_filter=pair.end_pair_filter,
         start_pair_filter=pair.start_pair_filter,

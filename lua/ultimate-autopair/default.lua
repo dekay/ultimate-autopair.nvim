@@ -26,7 +26,7 @@ return {
             cmdtype={},
             cond={p=-1},
             escape={},
-            filetype={},
+            filetype={nft={'TelescopePrompt'}},
             tsnode={p=-2},
         },
         extension={

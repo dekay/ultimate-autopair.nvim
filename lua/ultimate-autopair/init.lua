@@ -20,6 +20,8 @@ end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf
 function M.extend_default(conf)
-    return vim.tbl_deep_extend('force',default.conf,conf or {})
+    local c=vim.tbl_deep_extend('force',default.conf,conf or {})
+    vim.list_extend(c,default.conf)
+    return c
 end
 return M

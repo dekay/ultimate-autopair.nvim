@@ -124,7 +124,10 @@ function M.run_tests(tests)
         M.chan_exec('startinsert')
         M.set_lines_and_pos(v[1],conf.cursor)
         if conf.cmd then M.chan_exec(conf.cmd) end
-        if conf.ft then M.chan_exec('setf '..conf.ft) end
+        if conf.ft then
+            M.chan_exec('setf '..conf.ft)
+            --M.chan_exec_lua('pcall(vim.treesitter.start)')
+        end
         local errmsg=M.feed(v[2])
         if errmsg~='' then
             utils.error(('test(%s) errord:\n%s\n%s'):format(category,errmsg,M._create_mess(v)))

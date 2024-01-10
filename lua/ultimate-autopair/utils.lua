@@ -83,10 +83,11 @@ function M.get_char(str,col)
 end
 ---@param filters table<string,table>
 ---@param o ua.info
+---@param _coloff number? --TODO: temp
 ---@return boolean
-function M.run_filters(filters,o)
+function M.run_filters(filters,o,_coloff)
     local po={
-        cols=o.col,
+        cols=o.col-(_coloff or 0),
         cole=o.col,
         line=o.line,
         lines=o.lines,
