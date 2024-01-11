@@ -7,7 +7,7 @@ the more advanced features, refer to |ultimate-autopair-advanced|.
 First, we need to talk about {[non-default-enabled_builtin_pairs]}. They are a
 collection of pairs (and modification for the default pairs) for a particular
 filetype (with some exceptions). For example, the `markdown` one adds pairs
-such as `*` `*`, and makes them not activate inside code lines.
+such as `*` `*`, and makes them not activate inside inline code.
 ------------------------------------------------------------------------------
 Creating-pairs                              *ultimate-autopair-creating-pairs*
 {NOTE} If you want to modify/delete an already existing pair, like the
