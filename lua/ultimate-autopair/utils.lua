@@ -102,33 +102,6 @@ function M.run_filters(filters,o,_coloff)
     end
     return true
 end
-do
-    local _cache={}
-    local regex=vim.regex[=[\c[[=a=][=b=][=c=][=d=][=e=][=f=][=g=][=h=][=i=][=j=][=k=][=l=][=m=][=n=][=o=][=p=][=q=][=r=][=s=][=t=][=u=][=v=][=w=][=x=][=y=][=z=]]]=]
-    local regex_keyword=vim.regex[=[\c\k]=]
-    function M.is_keywordy(char,o)
-        if _cache[char]==true then return true end
-        local ft=M.get_filetype(o)
-        if _cache[char] and _cache[char][ft]~=nil then return _cache[char][ft] end
-        local is_alpha=regex:match_str(char)
-        if is_alpha then
-            _cache[char]=true
-            return true
-        end
-        if not _cache[char] then _cache[char]={} end
-        local is_keyword
-        if ft==vim.o.filetype then
-            is_keyword=regex_keyword:match_str(char) and true or false
-        else
-            local opt_keyword=vim.o.iskeyword
-            vim.o.iskeyword=vim.filetype.get_option(ft,'iskeyword')
-            is_keyword=regex_keyword:match_str(char) and true or false
-            vim.o.iskeyword=opt_keyword
-        end
-        _cache[char][ft]=is_keyword
-        return is_keyword
-    end
-end
 ---@param o ua.filter
 ---@return boolean
 function M.incmd(o)

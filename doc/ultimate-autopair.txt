@@ -1,0 +1,16 @@
+*ultimate-autopair.nvim*
+==============================================================================
+INTRODUCTION                                               *ultimate-autopair*
+{NOTE} This is a simplified intro into this plugin. If you want to read about
+the more advanced features, refer to |ultimate-autopair-advanced|.
+
+First, we need to talk about {[non-default-enabled_builtin_pairs]}. They are a
+collection of pairs (and modification for the default pairs) for a particular
+filetype (with some exceptions). For example, the `markdown` one adds pairs
+such as `*` `*`, and makes them not activate inside code lines.
+------------------------------------------------------------------------------
+Creating-pairs                              *ultimate-autopair-creating-pairs*
+{NOTE} If you want to modify/delete an already existing pair, like the
+builtin pairs, read |ultimate-autopair-changing-pairs|.
+
+vim:tw=78:ft=help:

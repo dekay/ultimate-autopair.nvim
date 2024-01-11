@@ -38,10 +38,10 @@ return {
             endwise={},
         },
     },
-    tex={
+    tex={ --TODO
         change={
             {"'","'",nft={'tex'}},
-            {'`','`',nft={'text'}},
+            {'`','`',nft={'tex'}},
         },
         {'``',"''",ft={'tex'}},
     },
@@ -54,8 +54,11 @@ return {
         {'__','__',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
         {'**','**',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
         {'$','$',ft={'markdown'},tsnode={lang_detect='after insert',not_after={markdown={'code_span','fenced_code_block'}}}},
+        {'~~','~~',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+        --{'***','***',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+        --{'___','___',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
     },
-    rust={
+    rust={ --TODO
         change={
             {"'","'",tsnode={not_after={rust={'lifetime'}}}},
         },

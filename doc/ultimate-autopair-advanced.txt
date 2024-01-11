@@ -1,0 +1,5 @@
+*ultimate-autopair.nvim-advanced*
+==============================================================================
+ADVANCED                                          *ultimate-autopair-advanced*
+
+vim:tw=78:ft=help:
