@@ -1,4 +1,4 @@
-*ultimate-autopair.nvim*
+*ultimate-autopair.txt*
 ==============================================================================
 INTRODUCTION                                               *ultimate-autopair*
 {NOTE} This is a simplified intro into this plugin. If you want to read about

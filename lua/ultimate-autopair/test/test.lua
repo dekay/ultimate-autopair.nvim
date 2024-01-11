@@ -93,9 +93,13 @@ return {
         {'<!-|','-','<!--|-->',{ft='html'}},
         {'|','(','(|',{ft='TelescopePrompt'}},
     },
-    ext_cmdtype={
+    filter_cmdtype={
         {'|','<C-r>="(\r','()|',{c={filter={cmdtype={skip={}}}}}},
         {'|','<C-r>="("\r','(|',{c={filter={cmdtype={skip={'='}}}}}},
+    },
+    filter_tsnode={
+        {'$1+1|$','$','$1+1$|',{c={{'$','$'}},ft='markdown',skip=true}},
+        {'$|$)','(','$(|)$)',{ft='markdown',skip=true}},
     },
     DEV_run={
         {'foo\nbar|baz\nfizzbuzz','vim','foo\nbarvim|baz\nfizzbuzz'},

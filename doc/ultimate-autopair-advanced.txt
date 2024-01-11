@@ -1,4 +1,4 @@
-*ultimate-autopair.nvim-advanced*
+*ultimate-autopair-advanced.txt*
 ==============================================================================
 ADVANCED                                          *ultimate-autopair-advanced*
 

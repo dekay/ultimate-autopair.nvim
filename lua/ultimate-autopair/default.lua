@@ -2,7 +2,7 @@ local in_lisp=function (fn)
     return not fn.in_lisp() or fn.in_string() or fn.in_comment()
 end
 local markdown={
-    ts_not_after={markdown={'latex_block','code_span','fenced_code_block'}}
+    ts_not_after={'latex_block','code_span','fenced_code_block'}
 }
 return {
     conf={
@@ -38,39 +38,62 @@ return {
             endwise={},
         },
     },
-    tex={ --TODO
-        change={
-            {"'","'",nft={'tex'}},
-            {'`','`',nft={'tex'}},
+    tex={
+        disable={
+            ft='tex',
+            {"'","'"},
+            {'`','`'},
         },
-        {'``',"''",ft={'tex'}},
+        set_or_change={
+            ft='tex',
+            {'``',"''"},
+            {'$','$'},
+            {'\\[','\\]'},
+            --{'$$','$$'},
+        }
     },
     markdown={
-        change={
-            {'`','`',tsnode={lang_detect='after insert',not_after={markdown={'latex_block','fenced_code_block'}}}},
+        set_or_change={
+            ft='markdown',
+            {'`','`',tsnode={lang_detect='after insert',not_after={'latex_block','fenced_code_block'}}},
+            {'*','*',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'_','_',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'__','__',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'**','**',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'$','$',tsnode={lang_detect='after insert',not_after={'code_span','fenced_code_block'}}},
+            {'~~','~~',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+            --{'***','***',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+            --{'___','___',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+        }
+    },
+    rust_default_include={ --TODO
+        set_or_change={
+            ft='rust',
+            {"'","'",tsnode={not_after={'lifetime','label'}}},
         },
-        {'*','*',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-        {'_','_',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-        {'__','__',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-        {'**','**',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-        {'$','$',ft={'markdown'},tsnode={lang_detect='after insert',not_after={markdown={'code_span','fenced_code_block'}}}},
-        {'~~','~~',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-        --{'***','***',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-        --{'___','___',ft={'markdown'},tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
     },
     rust={ --TODO
-        change={
-            {"'","'",tsnode={not_after={rust={'lifetime'}}}},
+        set_or_change={
+            ft='rust',
+            {'<','>',
+                tsnode={not_after={'arrow_function','binary_expression','augmented_assignment_expression'}},
+                multiline=function (fn) return fn.treesitter_enabled() end,
+            },
+        }
+    },
+    lua_default_include={ --TODO
+        set_or_change={
+            ft='lua',
+            {"'","'",alpha_before={tsnode={not_after={'string'}}}},
         },
     },
-    --TODO>>
-    lua={
-        change={
-            {"'","'",alpha_before={_filter=true,tsnode={not_after={lua={'string'}}}}},
+    lua={ --TODO
+        set_or_change={
+            ft='lua',
+            {'%[=-%[','%]=-%]',type='patter'},
         },
-        {'%[=-%[','%]=-%]',type='patter',ft={'lua'}},
     },
-    comment={
+    comment={ --TODO
         {function (o)
             local utils=require'ultimate-autopair.utils'
             local comment=utils.ft_get_option(utils.get_filetype_after_insert(utils.to_filter(o),'´'),'commentstring') --[[@as string]]
