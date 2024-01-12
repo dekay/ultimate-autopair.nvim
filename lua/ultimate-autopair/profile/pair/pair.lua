@@ -56,7 +56,6 @@ function M.init(pair)
     local info_mt={
         start_pair=start_pair,
         end_pair=end_pair,
-        main_pair=start_pair,
         multiline=pair.multiline,
         _filter={ --TODO:TEMP
             start_pair_filter=function (o)

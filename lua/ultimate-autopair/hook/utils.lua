@@ -36,7 +36,10 @@ function M.create_o_wrapper()
     local col=vim.fn.col'.'
     local source={
         o=vim.bo[buf],
-        get_parser=function () return vim.treesitter.get_parser(buf) end,
+        get_parser=function ()
+            local s,parser=pcall(vim.treesitter.get_parser,buf)
+            return s and parser or nil
+        end,
         __buf=buf,
     }
     if cmdtype~='' then
@@ -46,7 +49,10 @@ function M.create_o_wrapper()
         source={
             o=setmetatable({filetype='vim'},{__index=vim.bo[buf]}),
             cmdtype=cmdtype,
-            get_parser=function () return vim.treesitter.get_string_parser(vim.fn.getcmdline(),'vim') end,
+            get_parser=function ()
+                local s,parser=pcall(vim.treesitter.get_string_parser,vim.fn.getcmdline(),'vim')
+                return s and parser or nil
+            end,
         }
     end
     local oindex=setmetatable({

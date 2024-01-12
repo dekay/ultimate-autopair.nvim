@@ -55,15 +55,15 @@ return {
     markdown={
         set_or_change={
             ft='markdown',
-            {'`','`',tsnode={lang_detect='after insert',not_after={'latex_block','fenced_code_block'}}},
-            {'*','*',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-            {'_','_',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-            {'__','__',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-            {'**','**',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-            {'$','$',tsnode={lang_detect='after insert',not_after={'code_span','fenced_code_block'}}},
-            {'~~','~~',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-            --{'***','***',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
-            --{'___','___',tsnode={lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'`','`',tsnode={ft='markdown',lang_detect='after insert',not_after={'latex_block','fenced_code_block'}}},
+            {'*','*',tsnode={ft='markdown',lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'_','_',tsnode={ft='markdown',lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'__','__',tsnode={ft='markdown',lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'**','**',tsnode={ft='markdown',lang_detect='after insert',not_after=markdown.ts_not_after}},
+            {'$','$',tsnode={ft='markdown',lang_detect='after insert',not_after={'code_span','fenced_code_block'}}},
+            {'~~','~~',tsnode={ft='markdown',lang_detect='after insert',not_after=markdown.ts_not_after}},
+            --{'***','***',tsnode={ft='markdown',lang_detect='after insert',not_after=markdown.ts_not_after}},
+            --{'___','___',tsnode={ft='markdown',lang_detect='after insert',not_after=markdown.ts_not_after}},
         }
     },
     rust_default_include={ --TODO
@@ -76,7 +76,7 @@ return {
         set_or_change={
             ft='rust',
             {'<','>',
-                tsnode={not_after={'arrow_function','binary_expression','augmented_assignment_expression'}},
+                tsnode={not_after={ft='rust','arrow_function','binary_expression','augmented_assignment_expression'}},
                 multiline=function (fn) return fn.treesitter_enabled() end,
             },
         }
@@ -84,7 +84,7 @@ return {
     lua_default_include={ --TODO
         set_or_change={
             ft='lua',
-            {"'","'",alpha_before={tsnode={not_after={'string'}}}},
+            {"'","'",alpha_before={tsnode={ft='lua',not_after={'string'}}}},
         },
     },
     lua={ --TODO

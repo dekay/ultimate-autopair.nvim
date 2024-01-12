@@ -96,6 +96,7 @@ function M.run_filters(filters,o,_coloff)
         source=o.source,
     }
     for filter,conf in pairs(filters) do
+        filter=filter:gsub('_*%d*$','')
         if not require('ultimate-autopair.filter.'..filter).call(setmetatable({conf=conf},{__index=po})) then
             return false
         end
