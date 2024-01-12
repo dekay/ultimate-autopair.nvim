@@ -1,10 +1,10 @@
 local M={}
----@param o ua.filter
+---@param source ua.source
 ---@param node_types string[]
 ---@return string[]
 ---@return string[]
-function M.get_nodes_and_trees(o,node_types)
-    local qsource=o.source.__buf or table.concat(o.lines,'\n')
+function M.get_nodes_and_trees(source,node_types)
+    local qsource=source.__buf or table.concat(source._lines,'\n')
     local nodes={}
     local langs={}
     local function _get(parser)
@@ -27,7 +27,7 @@ function M.get_nodes_and_trees(o,node_types)
             _get(child)
         end
     end
-    local parser=o.source.get_parser()
+    local parser=source.get_parser()
     if not parser then return {},{} end
     parser:parse()
     _get(parser)
@@ -36,7 +36,7 @@ end
 ---@param o ua.filter
 ---@return boolean?
 function M.call(o)
-    local nodes,langs=M.get_nodes_and_trees(o,{'string'})
+    local nodes,langs=M.get_nodes_and_trees(o.source,{'string'})
     return true
 end
 return M

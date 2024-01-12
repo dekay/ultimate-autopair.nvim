@@ -117,4 +117,12 @@ function M.ft_get_option(ft,option)
         return vim.filetype.get_option(ft,option)
     end
 end
+---@param list string[]
+---@param s string
+---@param i number?
+---@param j number?
+---@return string
+function M.tbl_concat(list,s,i,j)
+    return table.concat(list,s,i,j)
+end
 return M

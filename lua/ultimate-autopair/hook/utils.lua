@@ -31,9 +31,9 @@ end
 function M.create_o_wrapper()
     local cmdtype=vim.fn.getcmdtype()
     local buf=vim.api.nvim_get_current_buf()
-    local lines={vim.api.nvim_get_current_line()}
     local row=1
     local col=vim.fn.col'.'
+    ---@type ua.source
     local source={
         o=vim.bo[buf],
         get_parser=function ()
@@ -41,9 +41,10 @@ function M.create_o_wrapper()
             return s and parser or nil
         end,
         __buf=buf,
+        _lines={vim.api.nvim_get_current_line()},
+        _cache={}
     }
     if cmdtype~='' then
-        lines={vim.fn.getcmdline()}
         row=1
         col=vim.fn.getcmdpos()
         source={
@@ -53,10 +54,12 @@ function M.create_o_wrapper()
                 local s,parser=pcall(vim.treesitter.get_string_parser,vim.fn.getcmdline(),'vim')
                 return s and parser or nil
             end,
+            _lines={vim.fn.getcmdline()},
+            _cache={},
         }
     end
     local oindex=setmetatable({
-        lines=lines,
+        lines=source._lines,
         row=row,
         col=col,
         source=source,
@@ -64,7 +67,6 @@ function M.create_o_wrapper()
     return function (obj)
         return setmetatable({
             m=obj,
-            lsave={},
         },{__index=oindex})
     end
 end

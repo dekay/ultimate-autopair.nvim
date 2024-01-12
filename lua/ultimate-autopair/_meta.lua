@@ -8,7 +8,6 @@
 ---@field lines string[]
 ---@field row number
 ---@field col number
----@field lsave table
 ---@field source ua.source
 ---@class ua.act
 ---@field [1] 'left'|'right'|'ins'
@@ -36,3 +35,5 @@
 ---@field cmdtype string|nil
 ---@field get_parser fun():LanguageTree?
 ---@field __buf? number
+---@field _cache table<function|table,any>
+---@field _lines string[]
