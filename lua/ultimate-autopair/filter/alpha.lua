@@ -1,18 +1,19 @@
 local M={}
 local utils=require'ultimate-autopair.utils'
-M._cache={}
+---@type table<string,true|table<string,boolean>>
+M._cache_keywordy={}
 M._regex=vim.regex[=[\c[[=a=][=b=][=c=][=d=][=e=][=f=][=g=][=h=][=i=][=j=][=k=][=l=][=m=][=n=][=o=][=p=][=q=][=r=][=s=][=t=][=u=][=v=][=w=][=x=][=y=][=z=]]]=]
 M._regex_keyword=vim.regex[=[\c\k]=]
 function M.is_keywordy(char,o)
-    if M._cache[char]==true then return true end
+    if M._cache_keywordy[char]==true then return true end
     local ft=utils.get_filetype(o)
-    if M._cache[char] and M._cache[char][ft]~=nil then return M._cache[char][ft] end
+    if M._cache_keywordy[char] and M._cache_keywordy[char][ft]~=nil then return M._cache_keywordy[char][ft] end
     local is_alpha=M._regex:match_str(char)
     if is_alpha then
-        M._cache[char]=true
+        M._cache_keywordy[char]=true
         return true
     end
-    if not M._cache[char] then M._cache[char]={} end
+    if not M._cache_keywordy[char] then M._cache_keywordy[char]={} end
     local is_keyword
     if ft==vim.o.filetype then
         is_keyword=M._regex_keyword:match_str(char) and true or false
@@ -22,7 +23,7 @@ function M.is_keywordy(char,o)
         is_keyword=M._regex_keyword:match_str(char) and true or false
         vim.o.iskeyword=opt_keyword
     end
-    M._cache[char][ft]=is_keyword
+    M._cache_keywordy[char][ft]=is_keyword
     return is_keyword
 end
 ---@param o ua.filter

@@ -1,36 +1,19 @@
+local query=require'ultimate-autopair._lib.query'
 local M={}
 ---@param source ua.source
 ---@param node_types string[]
 ---@return string[]
----@return string[]
+---@return {[1]:string,[2]:TSNode}[]
 function M.get_nodes_and_trees(source,node_types)
-    local qsource=source.__buf or table.concat(source._lines,'\n')
-    local nodes={}
-    local langs={}
-    local function _get(parser)
-        ---@cast parser LanguageTree
-        local lang=parser:lang()
-        local trees=parser:trees()
-        for _,i in ipairs(node_types) do
-            local s,query=pcall(vim.treesitter.query.parse,lang,('((%s) @%s)'):format(i,i))
-            if not s then goto continue end
-            for _,tree in ipairs(trees) do
-                table.insert(langs,{lang,tree:root()})
-                for _,node in query:iter_captures(tree:root(),qsource,0,-1) do
-                    --TODO: if there is no ask for filter at a row, don't do query there
-                    table.insert(nodes,node)
-                end
-            end
-            ::continue::
-        end
-        for _,child in pairs(parser:children()) do
-            _get(child)
-        end
-    end
     local parser=source.get_parser()
     if not parser then return {},{} end
     parser:parse()
-    _get(parser)
+    local langs=query.get_lang_root_nodes(parser)
+    local qsource=source.__buf or table.concat(source._lines,'\n')
+    local nodes={}
+    for _,v in ipairs(node_types) do
+        vim.list_extend(nodes,query.find_all_node_type(langs,qsource,v))
+    end
     return nodes,langs
 end
 ---@param o ua.filter

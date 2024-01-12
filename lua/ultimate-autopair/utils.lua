@@ -64,6 +64,7 @@ function M._pos_get_filetype(range,source,tree)
     return M.tslang2lang[tslang] or vim.treesitter.language.get_filetypes(tslang)[1]
 end
 ---@param o ua.filter
+---@return string
 function M.get_filetype(o)
     return o.source.o.filetype
 end
@@ -75,6 +76,7 @@ function M.opt_eval(opt,o)
 end
 ---@param str string
 ---@param col number
+---@return string
 function M.get_char(str,col)
     if col>#str then return '' end
     return str:sub(
