@@ -6,6 +6,8 @@ local M={}
 ---@return ua.actions|nil
 function M.run_start(o)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local last_char=info.start_pair:sub(-1+vim.str_utf_start(info.start_pair,#info.start_pair))
+    if o.line:sub(o.col-#info.start_pair+#last_char,o.col-1)~=info.start_pair:sub(0,-1-#last_char) then return end
     if not utils.run_filters(info.start_pair_filter,o,#info.start_pair-1) then
         return
     end
@@ -15,8 +17,6 @@ function M.run_start(o)
     else
         if open_pair.count_ambiguous_pair(o,'both') then return end
     end
-    local last_char=info.start_pair:sub(-1+vim.str_utf_start(info.start_pair,#info.start_pair))
-    if o.line:sub(o.col-#info.start_pair+#last_char,o.col-1)~=info.start_pair:sub(0,-1-#last_char) then return end
     return {
         last_char,
         info.end_pair,
@@ -28,6 +28,7 @@ end
 ---@return ua.actions|nil
 function M.run_end(o)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
+    if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
     if not utils.run_filters(info.end_pair_filter,o) then
         return
     end
@@ -42,7 +43,6 @@ function M.run_end(o)
         local end_count=open_pair.count_ambiguous_pair(o,true,count)
         if not (count==1 and not end_count) then return end
     end
-    if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
     return {
         {'right',info.end_pair},
     }
