@@ -59,7 +59,6 @@ function M._pos_get_filetype(range,source,tree)
     if not tree then return notree() end
     local s,parser=source.get_parser()
     if not s then return notree() end
-    parser:parse()
     local tslang=parser:language_for_range(range):lang()
     return M.tslang2lang[tslang] or vim.treesitter.language.get_filetypes(tslang)[1]
 end

@@ -33,12 +33,19 @@ function M.create_o_wrapper()
     local buf=vim.api.nvim_get_current_buf()
     local row=1
     local col=vim.fn.col'.'
+    local has_parsed={_type='unique_string',_name='has_parsed'}
     ---@type ua.source
-    local source={
+    local source
+    source={
         o=vim.bo[buf],
         get_parser=function ()
             local s,parser=pcall(vim.treesitter.get_parser,buf)
-            return s and parser or nil
+            if not s then return end
+            if not source._cache[has_parsed] then
+                parser:parse()
+                source._cache[has_parsed]=true
+            end
+            return parser
         end,
         __buf=buf,
         _lines={vim.api.nvim_get_current_line()},
@@ -52,7 +59,12 @@ function M.create_o_wrapper()
             cmdtype=cmdtype,
             get_parser=function ()
                 local s,parser=pcall(vim.treesitter.get_string_parser,vim.fn.getcmdline(),'vim')
-                return s and parser or nil
+                if not s then return end
+                if not source._cache[has_parsed] then
+                    parser:parse()
+                    source._cache[has_parsed]=true
+                end
+                return parser
             end,
             _lines={vim.fn.getcmdline()},
             _cache={},

@@ -7,7 +7,6 @@ local M={}
 function M.get_nodes_and_trees(source,node_types)
     local parser=source.get_parser()
     if not parser then return {},{} end
-    parser:parse()
     local langs=query.get_lang_root_nodes(parser)
     local qsource=source.__buf or table.concat(source._lines,'\n')
     local nodes={}
