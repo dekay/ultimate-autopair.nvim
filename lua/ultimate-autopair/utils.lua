@@ -49,23 +49,16 @@ M.tslang2lang={
     verilog='verilog',
     tsx='typescriptreact',
 }
----@param range Range4
----@param source ua.source
----@param tree boolean?
-function M._pos_get_filetype(range,source,tree)
-    --TODO: local cache
-    --TODO: temp
-    local function notree() return source.o.filetype end
-    if not tree then return notree() end
-    local s,parser=source.get_parser()
-    if not s then return notree() end
-    local tslang=parser:language_for_range(range):lang()
-    return M.tslang2lang[tslang] or vim.treesitter.language.get_filetypes(tslang)[1]
-end
 ---@param o ua.filter
 ---@return string
 function M.get_filetype(o)
-    return o.source.o.filetype
+    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1} --TODO: check if offset is correct (and extract into seperate function (or an field for ua.filter))
+    local tree=true
+    if not tree then return o.source.o.filetype end
+    local parser=o.source.get_parser()
+    if not parser then return o.source.o.filetype end
+    local tslang=parser:language_for_range(range):lang()
+    return M.tslang2lang[tslang] or vim.treesitter.language.get_filetypes(tslang)[1]
 end
 ---@param opt any|fun(o:ua.filter):any
 ---@param o ua.filter

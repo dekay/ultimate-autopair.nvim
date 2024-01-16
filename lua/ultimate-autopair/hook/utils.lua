@@ -31,7 +31,7 @@ end
 function M.create_o_wrapper()
     local cmdtype=vim.fn.getcmdtype()
     local buf=vim.api.nvim_get_current_buf()
-    local row=1
+    local row=vim.fn.line'.'
     local col=vim.fn.col'.'
     local has_parsed={_type='unique_string',_name='has_parsed'}
     ---@type ua.source
@@ -48,7 +48,7 @@ function M.create_o_wrapper()
             return parser
         end,
         __buf=buf,
-        _lines={vim.api.nvim_get_current_line()},
+        _lines=vim.api.nvim_buf_get_lines(buf,0,-1,true),
         _cache={}
     }
     if cmdtype~='' then
