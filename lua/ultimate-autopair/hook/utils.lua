@@ -1,5 +1,5 @@
 local utils=require'ultimate-autopair.utils'
-local hookmem=require'ultimate-autopair.mem.hook'
+local hookmem=require'ultimate-autopair.hook.mem'
 local M={}
 M.HASH_SEP1=':'
 M.HASH_SEP2=';'

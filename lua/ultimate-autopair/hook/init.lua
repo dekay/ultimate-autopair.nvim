@@ -1,4 +1,4 @@
-local hookmem=require'ultimate-autopair.mem.hook'
+local hookmem=require'ultimate-autopair.hook.mem'
 local maphook=require'ultimate-autopair.hook.map'
 local hookutils=require'ultimate-autopair.hook.utils'
 local M={}

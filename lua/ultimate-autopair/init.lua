@@ -1,5 +1,8 @@
 local M={_id=0}
-local objmem=require'ultimate-autopair.mem.obj'
+---@type table<ua.id,ua.instance>
+local instances={}
+---@return table<ua.id,ua.instance>
+M['~get_instances']=function() return instances end
 local default=require'ultimate-autopair.default'
 local prof=require'ultimate-autopair.profile'
 local hook=require'ultimate-autopair.hook'
@@ -13,9 +16,14 @@ end
 ---@param id ua.id?
 function M.init(configs,id)
     id=id or M._id
-    if objmem[id] then hook.unregister(objmem[id]) end
-    objmem[id]=prof.init(configs)
-    hook.register(objmem[id])
+    M.deinit(id)
+    instances[id]=prof.init(configs)
+    hook.register(instances[id])
+end
+---@param id ua.id?
+function M.deinit(id)
+    id=id or M._id
+    if instances[id] then hook.unregister(instances[id]) end
 end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf
