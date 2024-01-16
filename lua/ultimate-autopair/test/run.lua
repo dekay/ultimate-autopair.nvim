@@ -41,7 +41,7 @@ function M.get_lines_and_pos(cursor)
     return table.concat(lines,'\n')
 end
 function M.feed(input)
-    M.request('nvim_input',input)
+    if M.request('nvim_input',input)~=#input then return false end
     local errmsg=M.request('nvim_eval','v:errmsg')
     if errmsg~='' then M.chan_exec('let v:errmsg=""') end
     return errmsg
@@ -129,7 +129,9 @@ function M.run_tests(tests)
             M.chan_exec_lua('pcall(vim.treesitter.start)')
         end
         local errmsg=M.feed(v[2])
-        if errmsg~='' then
+        if errmsg==false then
+            utils.error(('test(%s) went wrong:\nThe input could not be processed\nPossible reason: An unmatched `<` may be in the input, replace all unmatched `<` with `<lt>`\n%s'):format(category,M._create_mess(v)))
+        elseif errmsg~='' then
             utils.error(('test(%s) errord:\n%s\n%s'):format(category,errmsg,M._create_mess(v)))
         elseif M.get_lines_and_pos(conf.cursor)~=v[3] then
             utils.error(('test(%s) failed\n%s'):format(category,M._create_mess(v,M.get_lines_and_pos(conf.cursor))))

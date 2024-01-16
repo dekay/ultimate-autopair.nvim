@@ -10,10 +10,10 @@ return {
         {'(',')'},
         {'[',']'},
         {'{','}'},
-        {'"','"'},
-        --{"'","'",start_pair={alpha_before=true},cond=in_lisp},
+        {'"','"',multiline=false},
+        --{"'","'",start_pair={alpha_before=true},cond=in_lisp,multiline=false},
         {"'","'",start_pair={filter={alpha={before=true,py_fstr=true}}}}, --TODO: temp
-        {'`','`',cond=in_lisp},
+        {'`','`',cond=in_lisp,multiline=false},
         {'```','```',ft={'markdown'}},
         {'<!--','-->',ft={'markdown','html'}},
         {'"""','"""',ft={'python'}},

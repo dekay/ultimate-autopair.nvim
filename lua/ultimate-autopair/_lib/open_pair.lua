@@ -30,7 +30,7 @@ function M.count_start_pair(o,gotostart,initial_count,return_pos)
     if not gotostart then rev_lines[#rev_lines]=rev_lines[#rev_lines]:sub(o.col) end
     if gotostart==true then rev_lines[1]=rev_lines[1]:sub(1,o.col) end
     for row,line in ipairs(rev_lines)do
-        row=(multiline and gotostart~=true and #rev_lines or o.row)+1-row
+        row=(multiline and gotostart~=true and #o.lines or o.row)+1-row
         if row~=o.row then assert(o.lines[row]==line) end
         local real_col
         local rline=line:reverse()
