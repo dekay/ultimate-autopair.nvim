@@ -89,6 +89,7 @@ function M.merge_fn(pair,conf)
         p.start_pair_filter[k]=sfconf
         p.end_pair_filter[k]=efconf
     end
+    p.multiline=vim.F.if_nil(pair.multiline,conf.multiline,false)
     return p
 end
 ---@param conf ua.prof.pair.conf

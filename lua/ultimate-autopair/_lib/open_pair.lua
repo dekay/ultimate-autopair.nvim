@@ -135,7 +135,7 @@ function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
     local rowindex
     local lines={o.line}
     if multiline then
-        lines=vim.list_slice(lines,gotoend==true and o.row or nil,(not gotoend) and o.row or nil)
+        lines=vim.list_slice(o.lines,gotoend==true and o.row or nil,(not gotoend) and o.row or nil)
     end
     if not gotoend then lines[#lines]=lines[#lines]:sub(1,o.col) end
     if gotoend==true then lines[1]=lines[1]:sub(o.col) end

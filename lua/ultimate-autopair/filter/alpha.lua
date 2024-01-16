@@ -19,7 +19,7 @@ function M.is_keywordy(char,o)
         is_keyword=M._regex_keyword:match_str(char) and true or false
     else
         local opt_keyword=vim.o.iskeyword
-        vim.o.iskeyword=vim.filetype.get_option(ft,'iskeyword')
+        vim.o.iskeyword=utils.ft_get_option(ft,'iskeyword')
         is_keyword=M._regex_keyword:match_str(char) and true or false
         vim.o.iskeyword=opt_keyword
     end

@@ -6,10 +6,7 @@ local markdown={
 }
 return {
     conf={
-        merge={
-            filter=true,
-            extension=true,
-        },
+        multiline=true,
         {'(',')'},
         {'[',']'},
         {'{','}'},
