@@ -126,7 +126,7 @@ function M.run_tests(tests)
         if conf.cmd then M.chan_exec(conf.cmd) end
         if conf.ft then
             M.chan_exec('setf '..conf.ft)
-            --M.chan_exec_lua('pcall(vim.treesitter.start)')
+            M.chan_exec_lua('pcall(vim.treesitter.start)')
         end
         local errmsg=M.feed(v[2])
         if errmsg~='' then
