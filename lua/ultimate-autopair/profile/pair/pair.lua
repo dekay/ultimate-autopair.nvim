@@ -29,6 +29,7 @@ end
 function M.run_end(o)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
+    --if not utils.run_filters(info.end_pair_filter,o,0,#info.end_pair) then --TODO: don't match cursor range, match end pair range
     if not utils.run_filters(info.end_pair_filter,o) then
         return
     end
