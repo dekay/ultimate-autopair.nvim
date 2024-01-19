@@ -91,9 +91,11 @@ function M.run_filters(filters,o,_coloff)
     }
     for filter,conf in pairs(filters) do
         filter=filter:gsub('_*%d*$','')
+        if conf.filter==false then goto continue end
         if not require('ultimate-autopair.filter.'..filter).call(setmetatable({conf=conf},{__index=po})) then
             return false
         end
+        ::continue::
     end
     return true
 end
