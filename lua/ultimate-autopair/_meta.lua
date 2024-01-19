@@ -10,7 +10,7 @@
 ---@field col number
 ---@field source ua.source
 ---@class ua.act
----@field [1] 'left'|'right'|'ins'
+---@field [1] 'left'|'right'|'ins'|'pos'
 ---@field [number] any
 ---@alias ua.actions (string|ua.act)[]
 ---@class ua.object
@@ -22,7 +22,7 @@
 ---@alias ua.id number
 ---@alias ua.prof.conf table
 ---@class ua.filter
----@field conf table --TODO: temp
+---@field conf table
 ---@field cols number
 ---@field cole number
 ---@field line string --Special, is calculated from lines[row], do not set

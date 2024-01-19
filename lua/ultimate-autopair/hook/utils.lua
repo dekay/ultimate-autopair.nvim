@@ -166,6 +166,8 @@ function M.act_to_keys(act,mode,conf)
             buf:put(utils.key_left(v[2],conf.dot and mode=='i'))
         elseif v[1]=='right' then
             buf:put(utils.key_right(v[2],conf.dot and mode=='i'))
+        elseif v[1]=='pos' then
+            error() --TODO
         end
     end
     if conf.abbr and mode:match('[ic]') then
