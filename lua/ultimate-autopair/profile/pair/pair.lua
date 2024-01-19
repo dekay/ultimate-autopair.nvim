@@ -1,6 +1,6 @@
 local hookutils=require'ultimate-autopair.hook.utils'
 local utils=require'ultimate-autopair.utils'
-local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:TEMP
+local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:make user be able to chose the open_pair detector (separately for open_pair/find_pair/...)
 local M={}
 ---@param o ua.info
 ---@return ua.actions|nil
@@ -11,7 +11,7 @@ function M.run_start(o)
     if not utils.run_filters(info.start_pair_filter,o,#info.start_pair-1) then
         return
     end
-    if info.start_pair~=info.end_pair then --TODO:TEMP
+    if info.start_pair~=info.end_pair then
         local count=open_pair.count_end_pair(setmetatable({col=o.col-1},{__index=o}))
         if open_pair.count_end_pair(o,true,count+1,true) then return end
     else
@@ -29,11 +29,10 @@ end
 function M.run_end(o)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
-    --if not utils.run_filters(info.end_pair_filter,o,0,#info.end_pair) then --TODO: don't match cursor range, match end pair range
-    if not utils.run_filters(info.end_pair_filter,o) then
+    if not utils.run_filters(info.end_pair_filter,o,0,#info.end_pair) then
         return
     end
-    if info.start_pair~=info.end_pair then --TODO:TEMP
+    if info.start_pair~=info.end_pair then
         local count2=open_pair.count_start_pair(o)
         --Same as: count_open_end_pair_after
         local count1=open_pair.count_end_pair(setmetatable({col=o.col-1},{__index=o}))

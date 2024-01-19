@@ -42,7 +42,6 @@ function M.find_all_node_type(langs,source,node_type)
         local query=M.query_from_node_type(node_type,lang)
         if not query then goto continue end
         for _,node in query:iter_captures(root,source,0,-1) do
-            --TODO: if there is no ask for filter at a row, don't do query there
             table.insert(ret,node)
         end
         ::continue::

@@ -12,6 +12,5 @@ end
 M.conf={
     ft='string[]',
     nft='string[]',
-    tree='boolean', --TODO
 }
 return M

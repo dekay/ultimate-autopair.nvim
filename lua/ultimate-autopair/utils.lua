@@ -52,8 +52,8 @@ M.tslang2lang={
 ---@param o ua.filter
 ---@return string
 function M.get_filetype(o)
-    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1} --TODO: check if offset is correct (and extract into seperate function (or an field for ua.filter))
-    local tree=true
+    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1} --MAY: wrong offset
+    local tree=true --TODO: local tree=o.opt.treesitter
     if not tree then return o.source.o.filetype end
     local parser=o.source.get_parser()
     if not parser then return o.source.o.filetype end
@@ -78,11 +78,12 @@ end
 ---@param filters table<string,table>
 ---@param o ua.info
 ---@param _coloff number? --TODO: temp
+---@param _coloffe number? --TODO: temp
 ---@return boolean
-function M.run_filters(filters,o,_coloff)
+function M.run_filters(filters,o,_coloff,_coloffe)
     local po={
         cols=o.col-(_coloff or 0),
-        cole=o.col,
+        cole=o.col-(_coloffe or 0),
         line=o.line,
         lines=o.lines,
         rows=o.row,

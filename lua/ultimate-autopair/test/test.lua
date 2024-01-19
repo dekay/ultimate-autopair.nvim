@@ -54,7 +54,9 @@ return {
         {'\n"|"','"','\n""|'},
         {"\n'|'","'","\n''|",{ft='lua'}},
         {'(\n\n|\n)','(','(\n\n(|)\n)'},
-        {"'|",'\r',"'\n|",{c={cr={autoclose=true}},skip=true}}
+        {"'|",'\r',"'\n|",{c={cr={autoclose=true}},skip=true}},
+        {'*\n|*','*','*\n*|',{c={{'*','*',multiline=true}}}},
+        {'*\n|*','*','*\n*|*',{c={{'*','*',multiline=false}}}},
     },
     cmdline={
         {'|','<C-r>="(\r','()|'},
