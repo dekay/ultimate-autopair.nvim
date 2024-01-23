@@ -5,6 +5,7 @@ M._cache_keywordy={}
 M._regex=vim.regex[=[\c[[=a=][=b=][=c=][=d=][=e=][=f=][=g=][=h=][=i=][=j=][=k=][=l=][=m=][=n=][=o=][=p=][=q=][=r=][=s=][=t=][=u=][=v=][=w=][=x=][=y=][=z=]]]=]
 M._regex_keyword=vim.regex[=[\c\k]=]
 function M.is_keywordy(char,o)
+    --TODO: look into charclass()
     if M._cache_keywordy[char]==true then return true end
     local ft=utils.get_filetype(o)
     if M._cache_keywordy[char] and M._cache_keywordy[char][ft]~=nil then return M._cache_keywordy[char][ft] end
