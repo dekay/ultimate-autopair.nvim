@@ -42,7 +42,7 @@ function M.create_o_wrapper()
             local s,parser=pcall(vim.treesitter.get_parser,buf)
             if not s then return end
             if not source._cache[has_parsed] then
-                parser:parse()
+                parser:parse(true)
                 source._cache[has_parsed]=true
             end
             return parser
@@ -61,7 +61,7 @@ function M.create_o_wrapper()
                 local s,parser=pcall(vim.treesitter.get_string_parser,vim.fn.getcmdline(),'vim')
                 if not s then return end
                 if not source._cache[has_parsed] then
-                    parser:parse()
+                    parser:parse(true)
                     source._cache[has_parsed]=true
                 end
                 return parser
