@@ -55,7 +55,7 @@ function M.create_o_wrapper()
         row=1
         col=vim.fn.getcmdpos()
         source={
-            o=setmetatable({filetype='vim'},{__index=vim.bo[buf]}),
+            o=setmetatable({filetype='vim',buftype='prompt'},{__index=vim.bo[buf]}),
             cmdtype=cmdtype,
             get_parser=function ()
                 local s,parser=pcall(vim.treesitter.get_string_parser,vim.fn.getcmdline(),'vim')
