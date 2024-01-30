@@ -70,7 +70,7 @@ end
 ---@param col number
 ---@return string
 function M.get_char(str,col)
-    if col>#str then return '' end
+    if col>#str or col<=0 then return '' end
     return str:sub(
         vim.str_utf_start(str,col)+col,
         vim.str_utf_end(str,col)+col)

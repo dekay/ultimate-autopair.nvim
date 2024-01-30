@@ -28,9 +28,6 @@ end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf
 function M.extend_default(conf)
-    local flag=(conf or {})[1]
-    local c=vim.tbl_deep_extend('force',default.conf,conf or {})
-    if flag then vim.list_extend(c,default.conf) end
-    return c
+    return require'ultimate-autopair.profile.pair.confsys'.merge_configs(default.conf,conf)
 end
 return M

@@ -7,12 +7,13 @@ local markdown={
 return {
     conf={
         multiline=true,
+        map=true,
+        cmap=true,
         {'(',')'},
         {'[',']'},
         {'{','}'},
         {'"','"',multiline=false},
-        --{"'","'",start_pair={alpha_before=true},cond=in_lisp,multiline=false},
-        {"'","'",start_pair={filter={alpha={before=true,py_fstr=true}}}}, --TODO: temp
+        {"'","'",start_pair={alpha={before=true,py_fstr=true}}}, --TODO: temp
         {'`','`',cond=in_lisp,multiline=false},
         {'```','```',ft={'markdown'}},
         {'<!--','-->',ft={'markdown','html'}},
@@ -65,7 +66,7 @@ return {
         --}
     --},
     --rust_default_include={
-        --set_or_change={
+        --change={
             --ft='rust',
             --{"'","'",tsnode={not_after={'lifetime','label'}}},
         --},
@@ -80,16 +81,13 @@ return {
         --}
     --},
     --lua_default_include={
-        --set_or_change={
+        --change={
             --ft='lua',
             --{"'","'",alpha_before={tsnode={ft='lua',not_after={'string'}}}},
         --},
     --},
     --lua={
-        --set_or_change={
-            --ft='lua',
-            --{'%[=-%[','%]=-%]',type='patter'},
-        --},
+        --{'%[=-%[','%]=-%]',type='patter',ft='lua'},
     --},
     --comment={
         --{function (o)
