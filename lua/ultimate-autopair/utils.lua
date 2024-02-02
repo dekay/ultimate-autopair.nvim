@@ -4,18 +4,18 @@ M.I.len=vim.api.nvim_strwidth
 ---@generic T:string|string?
 ---@param str T
 ---@return T
-function M.I.keycode(str)
+function M.keycode(str)
     return str and vim.api.nvim_replace_termcodes(str,true,true,true)
 end
-M.I.key_bs=M.I.keycode'<bs>'
-M.I.key_del=M.I.keycode'<del>'
-M.I.key_left=M.I.keycode'<left>'
-M.I.key_right=M.I.keycode'<right>'
-M.I.key_end=M.I.keycode'<end>'
-M.I.key_home=M.I.keycode'<home>'
-M.I.key_up=M.I.keycode'<up>'
-M.I.key_down=M.I.keycode'<down>'
-M.I.key_noundo=M.I.keycode'<C-g>U'
+M.I.key_bs=M.keycode'<bs>'
+M.I.key_del=M.keycode'<del>'
+M.I.key_left=M.keycode'<left>'
+M.I.key_right=M.keycode'<right>'
+M.I.key_end=M.keycode'<end>'
+M.I.key_home=M.keycode'<home>'
+M.I.key_up=M.keycode'<up>'
+M.I.key_down=M.keycode'<down>'
+M.I.key_noundo=M.keycode'<C-g>U'
 ---@param minsize number
 ---@return ua._.str_buf
 function M.new_str_buf(minsize)

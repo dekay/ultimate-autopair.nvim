@@ -18,7 +18,7 @@ function M.init(conf,objects)
     local somepairs={}
     M.init_pairs(somepairs,conf,conf)
     M.pair_sort_len(somepairs)
-    M.init_maps(objects)
+    M.init_maps(objects,somepairs)
     for _,v in ipairs(somepairs) do
         table.insert(objects,v)
     end
@@ -57,14 +57,8 @@ function M.init_pair(conf,pair)
     return require('ultimate-autopair.profile.pair.pair').init(p)
 end
 ---@param objects ua.instance
-function M.init_maps(objects)
-    --TODO: move to separate module
-    local hookutils=require'ultimate-autopair.hook.utils'
-    local hooks={
-        bs={hookutils.to_hash('map','<bs>',{mode='i'})}
-    }
-    for _,mapname in ipairs({'bs'}) do
-        table.insert(objects,require('ultimate-autopair.profile.pair.map.'..mapname).init(hooks[mapname]))
-    end
+---@param somepairs ua.prof.def.pair
+function M.init_maps(objects,somepairs)
+    require('ultimate-autopair.profile.pair.map').init(objects,somepairs)
 end
 return M

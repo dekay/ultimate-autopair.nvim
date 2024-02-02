@@ -132,7 +132,7 @@ function M.get_act(hash,mode,skip_index)
         end
         ::continue::
     end
-    return {info.key},{},true --TODO: be able to set default subconf (which could also be a function)
+    return {utils.keycode(info.key)},{},true --TODO: be able to set default subconf (which could also be a function)
 end
 ---@param act ua.actions
 function M.generate_undo(act)

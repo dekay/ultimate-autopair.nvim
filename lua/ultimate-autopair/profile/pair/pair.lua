@@ -51,6 +51,7 @@ end
 ---@param pair ua.prof.pair.conf.pair
 ---@return ua.prof.def.pair[]
 function M.init(pair)
+    ---TODO: pair may include hook options, so follow that
     local start_pair=pair[1]
     local end_pair=pair[2]
 
