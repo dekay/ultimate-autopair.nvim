@@ -1,4 +1,5 @@
 ---@class ua.prof.def.bs.info
+---@field pairs? ua.prof.def.pair[]
 ---@class ua.prof.def.bs:ua.object
 ---@field info ua.prof.def.bs.info
 

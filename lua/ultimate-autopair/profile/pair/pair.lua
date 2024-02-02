@@ -1,3 +1,4 @@
+local pairs=require'ultimate-autopair.profile.pair.utils'
 local hookutils=require'ultimate-autopair.hook.utils'
 local utils=require'ultimate-autopair.utils'
 local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:make user be able to chose the open_pair detector (separately for open_pair/find_pair/...)
