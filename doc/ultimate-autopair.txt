@@ -10,7 +10,7 @@ filetype (with some exceptions). For example, the `markdown` one adds pairs
 such as `*` `*`, and makes them not activate inside inline code.
 ------------------------------------------------------------------------------
 Creating-pairs                              *ultimate-autopair-creating-pairs*
-{NOTE} If you want to modify/delete an already existing pair, like the
-builtin pairs, read |ultimate-autopair-changing-pairs|.
+{NOTE} If you want to change the config of or delete an existing pair, like
+the builtin pairs, read |ultimate-autopair-changing-pairs|.
 
 vim:tw=78:ft=help:

@@ -24,8 +24,8 @@ return {
             cmdtype={},
             cond={p=-1},
             escape={},
-            filetype={nft={'TelescopePrompt'}},
-            tsnode={p=-2},
+            filetype={nft={'TelescopePrompt'},detect_after=true},
+            tsnode={p=-2,lang_detect_after=true},
         },
         extension={
             surround={},

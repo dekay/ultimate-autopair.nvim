@@ -34,9 +34,10 @@ function M.create_o_wrapper()
     local row=vim.fn.line'.'
     local col=vim.fn.col'.'
     local has_parsed={_type='unique_string',_name='has_parsed'}
-    ---@type ua.source
     local source
+    ---@type ua.source
     source={
+        source=buf,
         o=vim.bo[buf],
         get_parser=function ()
             local s,parser=pcall(vim.treesitter.get_parser,buf)
@@ -47,18 +48,20 @@ function M.create_o_wrapper()
             end
             return parser
         end,
-        __buf=buf,
         _lines=vim.api.nvim_buf_get_lines(buf,0,-1,true),
         _cache={}
     }
     if cmdtype~='' then
         row=1
         col=vim.fn.getcmdpos()
+        local cmdline=vim.fn.getcmdline()
+        ---@type ua.source
         source={
+            source=cmdline,
             o=setmetatable({filetype='vim',buftype='prompt'},{__index=vim.bo[buf]}),
             cmdtype=cmdtype,
             get_parser=function ()
-                local s,parser=pcall(vim.treesitter.get_string_parser,vim.fn.getcmdline(),'vim')
+                local s,parser=pcall(vim.treesitter.get_string_parser,cmdline,'vim')
                 if not s then return end
                 if not source._cache[has_parsed] then
                     parser:parse(true)
@@ -66,7 +69,7 @@ function M.create_o_wrapper()
                 end
                 return parser
             end,
-            _lines={vim.fn.getcmdline()},
+            _lines={cmdline},
             _cache={},
         }
     end
@@ -123,7 +126,7 @@ function M.get_act(hash,mode,skip_index)
         local act=obj.run(o)
         if act then
             if mode=='i' then
-                M.saveundo={act=act,row=o.row,col=o.col,buf=o.source.__buf,key=info.key,index=index,hash=hash,mode=mode}
+                M.saveundo={act=act,row=o.row,col=o.col,buf=type(o.source.source)=='number' and o.source.source,key=info.key,index=index,hash=hash,mode=mode}
             end
             return act,obj.__hook_subconf
         end
@@ -168,6 +171,8 @@ function M.act_to_keys(act,mode,conf)
             buf:put(utils.key_right(v[2],conf.dot and mode=='i'))
         elseif v[1]=='pos' then
             error() --TODO
+        elseif v[1]=='delete' then
+            buf:put(utils.key_del(v[2],v[3]))
         end
     end
     if conf.abbr and mode:match('[ic]') then

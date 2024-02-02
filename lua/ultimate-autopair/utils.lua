@@ -35,6 +35,12 @@ function M.key_right(len,noundo)
     len=type(len)=='string' and M.I.len(len) or len or 1
     return ((noundo and M.I.key_noundo or '')..M.I.key_right):rep(len --[[@as number]])
 end
+---@param pre? number
+---@param pos? number
+---@return string
+function M.key_del(pre,pos)
+    return M.I.key_bs:rep(pre or 1)..M.I.key_del:rep(pos or 0)
+end
 M.tslang2lang={
     markdown_inline='markdown',
     bash='sh',
@@ -52,13 +58,43 @@ M.tslang2lang={
 ---@param o ua.filter
 ---@return string
 function M.get_filetype(o)
-    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1} --MAY: wrong offset
+    ---@param ltree LanguageTree
+    local function lang_for_range(ltree,range)
+        local query=vim.treesitter.query.get(ltree:lang(),'injections')
+        if not query then return ltree:lang() end
+        for _,tree in pairs(ltree:trees()) do
+            for _,match,metadata in query:iter_matches(tree:root(),o.source.source,0,-1) do
+                local lang=metadata['injection.language']
+                if metadata['injection.parent'] then lang=ltree:lang() end
+                local trange
+                for id, node in pairs(match) do
+                    local name=query.captures[id]
+                    if name=='injection.language' then
+                        lang=vim.treesitter.get_node_text(node,o.source.source)
+                    elseif name=='injection.content' then
+                        trange={node:range()}
+                    end
+                end
+                if (trange[1]<range[1] or (trange[1]==range[1] and trange[2]<=range[2])) and
+                    (trange[3]>range[3] or (trange[3]==range[3] and trange[4]>=range[4])) then
+                    local child=ltree:children()[lang]
+                    if child then
+                        return lang_for_range(child,range)
+                    else
+                        return lang
+                    end
+                end
+            end
+        end
+        return ltree:lang()
+    end
+    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
     local tree=true --TODO: local tree=o.opt.treesitter
     if not tree then return o.source.o.filetype end
     local parser=o.source.get_parser()
     if not parser then return o.source.o.filetype end
-    local tslang=parser:language_for_range(range):lang()
-    return M.tslang2lang[tslang] or vim.treesitter.language.get_filetypes(tslang)[1]
+    local tslang=lang_for_range(parser,range)
+    return M.tslang2lang[tslang] or vim.treesitter.language.get_filetypes(tslang)[1] or tslang
 end
 ---@param opt any|fun(o:ua.filter):any
 ---@param o ua.filter
