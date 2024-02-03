@@ -98,6 +98,24 @@ function M.merge_configs(def,conf)
     call('integration',M.merge_tbl)
     vim.list_extend(out,def)
     vim.list_extend(out,conf)
+    local pairs=vim.defaulttable(function() return {} end)
+    for k,v in ipairs(conf) do
+        table.insert(pairs[v[1]:gsub(';',';;')..';-'..v[2]],k)
+    end
+    for k,v in ipairs(def) do
+        table.insert(pairs[v[1]:gsub(';',';;')..';-'..v[2]],k)
+    end
+    for _,v in ipairs(conf.change or {}) do
+        assert(pairs[v[1]:gsub(';',';;')..';-'..v[2]],('ultimate-autopair: configuration: trying to change pair %s,%s which does not exist'):format(v[1],v[2]))
+        for _,key in ipairs(pairs[v[1]:gsub(';',';;')..';-'..v[2]]) do
+            out[key]=M.merge_tbl2(out[key],v)
+            out[key][1]=v[1]
+            out[key][2]=v[2]
+        end
+    end
+    for _,v in ipairs(def.change or {}) do
+        assert(not _G.UA_DEV or pairs[v[1]:gsub(';',';;')..';-'..v[2]])
+    end
     return out
 end
 ---@param conf ua.prof.pair.conf

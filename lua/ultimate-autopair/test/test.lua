@@ -50,7 +50,8 @@ return {
         {'(|)\n',')','()|\n'},
         {'\n(|)\n',')','\n()|\n'},
         {'\n |\n()','(','\n (|)\n()'},
-        {'\n "|"\n""','"','\n ""|\n""',{c={config_internal_pairs={{'"','"',multiline=true}}},skip=true}},
+        {'\n "|"\n""','"','\n ""|\n""',{ft='lua',c={change={{'"','"',multiline=true}}}}},
+        {'\n "\n|"\n""','"','\n "\n"|\n""',{ft='lua',c={change={{'"','"',multiline=true}}}}},
         {'(\n  (|)\n)','','(\n  |\n)',{skip=true}},
         {'\n"|"','"','\n""|'},
         {"\n'|'","'","\n''|",{ft='lua'}},
@@ -109,7 +110,7 @@ return {
         {'a|','<lt>','a<|',{c={{'<','>',alpha={before=true}}}}},
         {'<|a','<lt>','<<|a',{c={{'<<','>>',alpha={after=true}}}}},
         {'a<|','<lt>','a<<|',{c={{'<<','>>',alpha={before=true}}}}},
-        {'b""|','"','b"""|"',{ft='python',c={_conf_internal_pair={{'"""','"""',alpha_before=true}}},skip=true}},
+        {'b""|','"','b"""|"',{ft='python',c={change={{'"""','"""',alpha={before=true}}}}}},
     },
     filter_escape={
         {'\\|','(','\\(|'},
