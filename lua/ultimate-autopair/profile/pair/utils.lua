@@ -1,3 +1,4 @@
+local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:make user be able to chose the open_pair detector (separately for open_pair/find_pair/...)
 local M={}
 ---@param o ua.info
 ---@param somepairs ua.prof.def.pair[]
@@ -5,7 +6,7 @@ local M={}
 function M.backwards_get_start_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
-        if v.info.start_pair==o.line:sub(o.col-#v.info.start_pair,o.col-1) then
+        if v.info.type=='start' and v.info.start_pair==o.line:sub(o.col-#v.info.start_pair,o.col-1) then
             table.insert(ret,v)
         end
     end
@@ -17,10 +18,35 @@ end
 function M.backwards_get_end_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
-        if v.info.end_pair==o.line:sub(o.col-#v.info.end_pair,o.col-1) then
+        if v.info.type=='end' and v.info.end_pair==o.line:sub(o.col-#v.info.end_pair,o.col-1) then
             table.insert(ret,v)
         end
     end
     return ret
+end
+---@param o ua.info
+---@return boolean
+function M.pair_balansed_start(o)
+    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    if info.start_pair==info.end_pair then
+        return not open_pair.count_ambiguous_pair(o,'both')
+    end
+    local count=open_pair.count_start_pair(o)
+    return not open_pair.count_start_pair(o,true,count,true)
+end
+---@param o ua.info
+---@return boolean
+function M.pair_balansed_end(o)
+    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    if info.start_pair==info.end_pair then
+        return not open_pair.count_ambiguous_pair(o,'both')
+    end
+    local count=open_pair.count_end_pair(o)
+    return not open_pair.count_end_pair(o,true,count,true)
+    --local count2=open_pair.count_start_pair(o)
+    ----Same as: count_open_end_pair_after
+    --local count1=open_pair.count_end_pair(o)
+    ----Same as: count_open_start_pair_before
+    --return count1>=count2
 end
 return M

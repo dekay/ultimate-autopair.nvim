@@ -12,8 +12,8 @@ function M.run_start(o)
         return
     end
     if info.start_pair~=info.end_pair then
-        local count=open_pair.count_end_pair(setmetatable({col=o.col-1},{__index=o}))
-        if open_pair.count_end_pair(o,true,count+1,true) then return end
+        local count=open_pair.count_end_pair(o)
+        if open_pair.count_end_pair(o,true,count,true) then return end
     else
         if open_pair.count_ambiguous_pair(o,'both') then return end
     end
@@ -35,13 +35,11 @@ function M.run_end(o)
     if info.start_pair~=info.end_pair then
         local count2=open_pair.count_start_pair(o)
         --Same as: count_open_end_pair_after
-        local count1=open_pair.count_end_pair(setmetatable({col=o.col-1},{__index=o}))
+        local count1=open_pair.count_end_pair(o)
         --Same as: count_open_start_pair_before
         if count1==0 or count1>count2 then return end
     else
-        local count=open_pair.count_ambiguous_pair(setmetatable({col=o.col-1},{__index=o})) and 1 or 0
-        local end_count=open_pair.count_ambiguous_pair(o,true,count)
-        if not (count==1 and not end_count) then return end
+        if open_pair.count_ambiguous_pair(o,'both') then return end
     end
     return {
         {'right',info.end_pair},
@@ -78,13 +76,13 @@ function M.init(pair)
     return {
         {
             run=M.run_end,
-            info=setmetatable({main_pair=end_pair},{__index=info_mt}),
+            info=setmetatable({main_pair=end_pair,type='end'},{__index=info_mt}),
             hooks=end_hooks,
             doc=('autopairs end pair: %s,%s'):format(start_pair,end_pair),
         },
         {
             run=M.run_start,
-            info=setmetatable({main_pair=start_pair},{__index=info_mt}),
+            info=setmetatable({main_pair=start_pair,type='start'},{__index=info_mt}),
             hooks=start_hooks,
             doc=('autopairs start pair: %s,%s'):format(start_pair,end_pair)
         }

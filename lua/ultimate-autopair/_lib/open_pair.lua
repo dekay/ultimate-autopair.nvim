@@ -28,7 +28,7 @@ function M.count_start_pair(o,gotostart,initial_count,return_pos)
     end
     local count=initial_count or 0
     if not gotostart then rev_lines[#rev_lines]=rev_lines[#rev_lines]:sub(o.col) end
-    if gotostart==true then rev_lines[1]=rev_lines[1]:sub(1,o.col) end
+    if gotostart==true then rev_lines[1]=rev_lines[1]:sub(1,o.col-1) end
     for row,line in ipairs(rev_lines)do
         row=(multiline and gotostart~=true and #o.lines or o.row)+1-row
         if row~=o.row then assert(o.lines[row]==line) end
@@ -46,7 +46,7 @@ function M.count_start_pair(o,gotostart,initial_count,return_pos)
                 if end_pair_filter(row,real_col) then count=count+1 end
                 next_end_pair=rline:find(end_pair,next_end_pair+#end_pair,true)
             else break end
-            if return_pos and count<=0 then
+            if return_pos and count<0 then
                 return real_col,row
             elseif count<0 then
                 count=0
@@ -81,7 +81,7 @@ function M.count_end_pair(o,gotoend,initial_count,return_pos)
         lines=vim.list_slice(o.lines,gotoend==true and o.row or nil,(not gotoend) and o.row or nil)
     end
     local count=initial_count or 0
-    if not gotoend then lines[#lines]=lines[#lines]:sub(1,o.col) end
+    if not gotoend then lines[#lines]=lines[#lines]:sub(1,o.col-1) end
     if gotoend==true then lines[1]=lines[1]:sub(o.col) end
     for row,line in ipairs(lines) do
         row=((gotoend==true or not multiline) and o.row-1 or 0)+row
@@ -99,7 +99,7 @@ function M.count_end_pair(o,gotoend,initial_count,return_pos)
                 if end_pair_filter(row,real_col) then count=count-1 end
                 next_end_pair=line:find(end_pair,next_end_pair+#end_pair,true)
             else break end
-            if return_pos and count==0 then
+            if return_pos and count<0 then
                 return real_col,row
             elseif count<0 then
                 count=0
@@ -137,7 +137,7 @@ function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
     if multiline then
         lines=vim.list_slice(o.lines,gotoend==true and o.row or nil,(not gotoend) and o.row or nil)
     end
-    if not gotoend then lines[#lines]=lines[#lines]:sub(1,o.col) end
+    if not gotoend then lines[#lines]=lines[#lines]:sub(1,o.col-1) end
     if gotoend==true then lines[1]=lines[1]:sub(o.col) end
     for row,line in ipairs(lines) do
         row=((gotoend==true or not multiline) and o.row-1 or 0)+row
