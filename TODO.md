@@ -1,4 +1,3 @@
-+ add debugging to everything
 + sorting, for both mem and callbacks in hook.callbacks
 + other types of mappings
     + make it possible to activate mappings without an expr mapping using `nvim_feedkeys`
@@ -9,12 +8,13 @@
 + doc
     + Add doc about unique mapping
     + ctrl-w support: just use `{bs={map={'<C-w>','<bs>'}}}`
-+ What is the difference between hook request and hook (NOTHING)
-+ How to create a treesitter query for tree injections
 + Function based extension enable `{enable=fun()}`
+    + For everything, including filters, extensions, pairs, mappings, ...
++ Hook map config
+    + For everything, including pairs and mappings.
 + use `typos` to spell check everything and add to breaking change that wrongly spelled arguments are corrected
 + create a test for each bug report on github
-+ make the boolean|nil option acept `"default"` as a replacement for nil
++ make the boolean|nil option accept `"default"` as a replacement for nil
 + FILTER:
     + have a filter option to whether do use the filter as a filter
     + have a run option to whether do use the filter when run is called
@@ -32,3 +32,9 @@
     + A way to define a node as extended (`[//$]`), contained (`[""]$`)
         + And make it filetype specific
 + Make after-insert a pair option: instead of checking and fake inserting in the filter, do it in the pair filter caller function
++ remember to sort
++ give better name for objman
++ hook.lua handle both input and output
++ remake extensions into extensions for action type extensions and filters for filtering type extensions
+    + make separate config (maybe?)
+    + makes it easy to chose what filters apply and if they work only on insert or global (or only noninsert)
