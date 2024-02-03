@@ -6,9 +6,9 @@ local markdown={
 }
 return {
     conf={
+        map_modes={'i','c'},
+        pair_map_modes=nil,
         multiline=true,
-        map=true,
-        cmap=true,
         {'(',')'},
         {'[',']'},
         {'{','}'},

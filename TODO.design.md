@@ -1,7 +1,7 @@
 # Problems
 ## How to do the hook system
 The hook system handles both input and output.
-Each object requests a hook creation. These requests have a `mode`, a `type` and an `input` key, which denote the what request is created. `mode` can be any major-mode in Neovim. `type` can be `autocmd-function`, `autocmd-feedkeys`, `map-function`, `map-expr` and `map-feedkeys`. If a `map-expr` and a `map-*` have the same `input` then error. The `map-expr` has an option called `dot_all` which will force the output to be dot repeatable. The `input` key contains the input to hook into. It may be `string` for mappings and `string|enum(charset)` for autocmds, where enum(charset) is a set of characters to hook into instead of just one, like all alpha characters (including UTF-8 ones).
+Each object requests a hook creation. These requests have a `type`, a `config` and an `id`, which denote the what request is created. `type` is the type of hook and can currently only be `map`. `type` may have it's own config (like `expr` for `map`), but that uses a different system. `config` is a string to string table, where these values can not be arbitrary, and must not contain specific characters. `id` is the id of the hook, and may be any string. Specific type of hooks will use this id to do stuff, like `map` will use it as the lhs of the keymap.
 Every hook request gets passed to hook creators, if non of them can make sense of the request then error.
 ### How to remember which object requested which hook
 #### Idea 1

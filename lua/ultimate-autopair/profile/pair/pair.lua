@@ -1,4 +1,3 @@
-local pairs=require'ultimate-autopair.profile.pair.utils'
 local hookutils=require'ultimate-autopair.hook.utils'
 local utils=require'ultimate-autopair.utils'
 local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:make user be able to chose the open_pair detector (separately for open_pair/find_pair/...)
@@ -70,23 +69,23 @@ function M.init(pair)
         end_pair_filter=pair.end_pair_filter,
         start_pair_filter=pair.start_pair_filter,
     }
+    local start_hooks={}
+    local end_hooks={}
+    for _,mode in ipairs(pair.map_modes) do
+        table.insert(end_hooks,hookutils.to_hash('map',end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),{mode=mode}))
+        table.insert(start_hooks,hookutils.to_hash('map',start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),{mode=mode}))
+    end
     return {
         {
             run=M.run_end,
             info=setmetatable({main_pair=end_pair},{__index=info_mt}),
-            hooks={
-                hookutils.to_hash('map',end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),{mode='i'}),
-                hookutils.to_hash('map',end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),{mode='c'}),
-            },
+            hooks=end_hooks,
             doc=('autopairs end pair: %s,%s'):format(start_pair,end_pair),
         },
         {
             run=M.run_start,
             info=setmetatable({main_pair=start_pair},{__index=info_mt}),
-            hooks={
-                hookutils.to_hash('map',start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),{mode='i'}),
-                hookutils.to_hash('map',start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),{mode='c'}),
-            },
+            hooks=start_hooks,
             doc=('autopairs start pair: %s,%s'):format(start_pair,end_pair)
         }
     }

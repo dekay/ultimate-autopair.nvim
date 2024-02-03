@@ -73,25 +73,23 @@ end
 ---@param def ua.prof.pair.conf
 ---@param conf ua.prof.pair.conf?
 function M.merge_configs(def,conf)
-    if conf==nil then return def end
+    if conf==nil then
+        return setmetatable(def,{__index={pair_map_modes=def.map_modes}})
+    end
     if conf.mrege_fn then return conf.mrege_fn(def,conf) end
     assert(def.merge~=false)
     assert(conf.profile==nil or conf.profile=='default')
     assert(def.profile==nil or def.profile=='default')
     if conf.merge==false then return conf end
     local out={}
-    local function o(idx) return out[idx] end
-    local function eq(val1,val2) return val1~=false and val2~=false and (val1 or val2) end
     local function call(val,fn,fall)
         local ret=fn(def,conf,val)
         if ret==nil and fall~=nil then ret=fall end
         out[val]=ret
     end
     call('multiline',M.merge)
-    call('map',M.merge)
-    call('cmap',M.merge,o'map')
-    call('pair_map',M.merge,o'map')
-    call('pair_cmap',M.merge,eq(o'cmap',o'pair_map'))
+    call('map_modes',M.merge)
+    call('pair_map_modes',M.merge,out['map_modes'])
     out.filter={}
     call('filter',M.merge_tbl)
     call('extension',M.merge_tbl)
@@ -120,7 +118,8 @@ function M.merge_configs(def,conf)
 end
 ---@param conf ua.prof.pair.conf
 ---@param pair ua.prof.pair.conf.pair
-function M.pair_init(conf,pair,sub)
+---@return ua.prof.pair.conf.pair
+function M.pair_init(conf,pair,_sub)
     assert(conf.merge~=false)
     if pair.merge==false then return pair end
     local out={}
@@ -135,7 +134,7 @@ function M.pair_init(conf,pair,sub)
     if pair.nft and vim.tbl_get(out,'filter','filetype') then
         out.filter.filetype.nft=M.merge_list(out.filter.filetype.nft or {},pair.nft)
     end
-    if sub then return out end
+    if _sub then return out end
     vim.list_extend(out,pair)
     out.start_pair_filter=out.filter
     if pair.start_pair then
@@ -146,6 +145,7 @@ function M.pair_init(conf,pair,sub)
         out.end_pair_filter=M.merge_tbl(pair,M.pair_init(conf,pair.end_pair,true),'filter')
     end
     out.multiline=M.merge(conf,pair,'multiline')
+    out.map_modes=pair.map_modes or conf.pair_map_modes
     return out
 end
 return M
