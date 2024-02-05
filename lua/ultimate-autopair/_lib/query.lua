@@ -48,4 +48,32 @@ function M.find_all_node_type(langs,source,node_type)
     end
     return ret
 end
+
+---@param node_types string[]
+---@return string
+function M.node_types_to_query_str(node_types)
+    return table.concat(vim.tbl_map(function(v) return ('((%s) @%s)'):format(v,v) end,node_types))
+end
+---@param parser LanguageTree
+---@param node_types string[]
+function M.find_all_node_types(parser,node_types)
+    local query_str=M.node_types_to_query_str(node_types)
+    local cache={}
+    local ret={}
+    parser:for_each_tree(function(tree,ltree)
+        local lang=ltree:lang()
+        local query
+        if cache[lang] then
+            query=cache[lang]
+        else
+            query=vim.treesitter.query.parse(lang,query_str)
+            cache[lang]=query
+        end
+        for _,node in query:iter_captures(tree:root(),ltree:source(),0,-1) do
+            table.insert(ret,node)
+        end
+
+    end)
+    return ret
+end
 return M
