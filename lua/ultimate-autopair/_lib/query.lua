@@ -49,6 +49,24 @@ function M.find_all_node_type(langs,source,node_type)
     return ret
 end
 
+---@type table<string,table<string,boolean>>
+M._cache_lang_node_types=vim.defaulttable(function() return {} end)
+---@param node_types string[]
+---@param lang string
+---@return string[]
+function M.remove_invalid_node_types(node_types,lang)
+    local cache=M._cache_lang_node_types[lang]
+    local ret={}
+    for _,node_type in ipairs(node_types) do
+        if cache[node_type]==nil then
+            cache[node_type]=pcall(vim.treesitter.query.parse,lang,('(%s)'):format(node_type))
+        end
+        if cache[node_type] then
+            table.insert(ret,node_type)
+        end
+    end
+    return ret
+end
 ---@param node_types string[]
 ---@return string
 function M.node_types_to_query_str(node_types)
@@ -57,17 +75,24 @@ end
 ---@param parser LanguageTree
 ---@param node_types string[]
 function M.find_all_node_types(parser,node_types)
-    local query_str=M.node_types_to_query_str(node_types)
-    local cache={}
+    local cache_node_types={}
+    local cache_query={}
     local ret={}
     parser:for_each_tree(function(tree,ltree)
         local lang=ltree:lang()
+        local query_str
+        if cache_node_types[lang] then
+            query_str=cache_node_types[lang]
+        else
+            query_str=M.node_types_to_query_str(M.remove_invalid_node_types(node_types,lang))
+            cache_node_types[lang]=query_str
+        end
         local query
-        if cache[lang] then
-            query=cache[lang]
+        if cache_query[lang] then
+            query=cache_query[lang]
         else
             query=vim.treesitter.query.parse(lang,query_str)
-            cache[lang]=query
+            cache_query[lang]=query
         end
         for _,node in query:iter_captures(tree:root(),ltree:source(),0,-1) do
             table.insert(ret,node)
