@@ -170,7 +170,7 @@ function M.act_to_keys(act,mode,conf)
         elseif v[1]=='right' then
             buf:put(utils.key_right(v[2],conf.dot and mode=='i'))
         elseif v[1]=='pos' then
-            error() --TODO
+            error('TODO') --TODO
         elseif v[1]=='delete' then
             buf:put(utils.key_del(v[2],v[3]))
         end
