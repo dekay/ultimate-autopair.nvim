@@ -3,7 +3,7 @@ local  M={}
 function M.check_not_allowed_string(path)
     if vim.fn.executable('grep')==0 then
         utils.warning('Some of the required executables are missing for dev testing')
-        utils.info('INFO Pleas make sure that grep is installed')
+        utils.info('INFO Please make sure that grep is installed')
         return
     end
     local blacklist={'vim.lg','print','vim.dev'}

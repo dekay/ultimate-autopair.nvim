@@ -35,6 +35,15 @@ return {
       autotag={},
       endwise={},
     },
+    backspace={
+      overjump=function (_,data)
+        --If pair is ambiguous then don't overjump
+        if data and data.pair and data.pair.info.start_pair==data.pair.info.start_pair then
+          return false
+        end
+        return true
+      end
+    }
   },
   --TODO:
   --tex={
