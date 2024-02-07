@@ -63,4 +63,24 @@ function M.run_start_pair_filter(o)
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     return utils.run_filters(info.start_pair_filter,o,nil,-#info.start_pair)
 end
+---@param o ua.info
+---@return number?
+---@return number?
+function M.next_open_end_pair(o)
+    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    if info.start_pair==info.end_pair then
+        return open_pair.count_ambiguous_pair(o,true,0,true)
+    end
+    return open_pair.count_end_pair(o,true,0,true)
+end
+---@param o ua.info
+---@return number?
+---@return number?
+function M.prev_open_start_pair(o)
+    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    if info.start_pair==info.end_pair then
+        return open_pair.count_ambiguous_pair(o,false,0,true)
+    end
+    return open_pair.count_start_pair(o,true,0,true)
+end
 return M

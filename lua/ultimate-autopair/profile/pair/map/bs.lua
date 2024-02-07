@@ -13,18 +13,30 @@ function M.run(o)
     local info=m.info
     local spairs=putils.backwards_get_start_pairs(o,info.pairs)
     for _,p in ipairs(spairs) do
+        local opair=setmetatable({m=p},{__index=o})
         if o.line:sub(o.col,o.col+#p.info.end_pair-1)==p.info.end_pair
-            and putils.run_end_pair_filter(setmetatable({m=p},{__index=o}))
-            and putils.pair_balansed_start(setmetatable({m=p},{__index=o}))
+            and putils.run_end_pair_filter(opair)
+            and putils.pair_balansed_start(opair)
         then
             return {{'delete',#p.info.start_pair,#p.info.end_pair}}
+        end
+        local col,row=putils.next_open_end_pair(opair)
+        if col and row
+            and putils.pair_balansed_start(opair)
+        then
+            return {
+                {'delete',#p.info.start_pair},
+                {'pos',col,row},
+                {'delete',0,#p.info.start_pair},
+            }
         end
     end
     local epairs=putils.backwards_get_end_pairs(o,info.pairs)
     for _,p in ipairs(epairs) do
+        local opair=setmetatable({m=p},{__index=o})
         if o.line:sub(o.col-#p.info.end_pair-#p.info.start_pair,o.col-#p.info.end_pair-1)==p.info.start_pair
-            and putils.run_start_pair_filter(setmetatable({m=p,col=o.col-#p.info.end_pair-#p.info.start_pair},{__index=o}))
-            and putils.pair_balansed_end(setmetatable({m=p},{__index=o}))
+            and putils.run_start_pair_filter(setmetatable({col=o.col-#p.info.end_pair-#p.info.start_pair},{__index=opair}))
+            and putils.pair_balansed_end(opair)
         then
             return {{'delete',#p.info.start_pair+#p.info.end_pair}}
         end
