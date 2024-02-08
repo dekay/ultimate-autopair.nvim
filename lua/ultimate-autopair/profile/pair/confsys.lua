@@ -1,4 +1,41 @@
 local M={}
+local in_lisp=function (fn)
+  return not fn.in_lisp() or fn.in_string() or fn.in_comment()
+end
+M.conf={
+    --TODO: design this to be intuitive, and logical
+    map_modes={{'i','c'}},
+    pair_map_modes={nil,t='string[]',fallback=function (conf) return conf.map_modes end},
+    multiline={true},
+    _sdef={
+        {'(',')'},
+        {'[',']'},
+        {'{','}'},
+        {'"','"',multiline=false},
+        {"'","'",start_pair={alpha={before=true,py_fstr=true}},multiline=false},
+        {'`','`',cond={cond=in_lisp},multiline=false},
+        {'```','```',ft={'markdown'}},
+        {'<!--','-->',ft={'markdown','html'}},
+        {'"""','"""',ft={'python'}},
+        {"'''","'''",ft={'python'}},
+        _t='pair',
+    },
+    _t_pair={
+        [1]='string',
+        [2]='string',
+        multiline={nil,t='boolean'},
+        map_modes={nil,t='string[]'},
+        alpha={_t='alpha'},
+        cmdtype={_t='cmdtype'},
+        cond={_t='cond'},
+        escape={_t='escape'},
+        filetype={_t='filetype'},
+        tsnode={_t='tsnode'},
+    },
+    filter={
+
+    }
+}
 function M.merge_val(origin,new)
     assert(type(origin)~='table')
     assert(type(new)~='table')
