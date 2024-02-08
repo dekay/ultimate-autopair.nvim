@@ -14,7 +14,7 @@ return {
     {'{','}'},
     {'"','"',multiline=false},
     {"'","'",start_pair={alpha={before=true,py_fstr=true}},multiline=false},
-    {'`','`',cond=in_lisp,multiline=false},
+    {'`','`',cond={cond=in_lisp},multiline=false},
     {'```','```',ft={'markdown'}},
     {'<!--','-->',ft={'markdown','html'}},
     {'"""','"""',ft={'python'}},
