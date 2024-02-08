@@ -21,7 +21,7 @@ return {
     {"'''","'''",ft={'python'}},
     filter={
       alpha={},
-      cmdtype={},
+      cmdtype={skip={'/','?','@',''}},
       cond={p=-1},
       escape={},
       filetype={nft={'TelescopePrompt'},detect_after=true},

@@ -142,6 +142,8 @@ return {
     filter_cmdtype={
         {'|','<C-r>="(\r','()|',{c={filter={cmdtype={skip={}}}}}},
         {'|','<C-r>="("\r','(|',{c={filter={cmdtype={skip={'='}}}}}},
+        {'|','<C-r>=input("")\r(\r','(|'},
+        {'|','<C-r>=input("")\r(\r','()|',{c={filter={cmdtype={skip={merge=false}}}}}},
     },
     filter_tsnode={
         {'$1+1|$','$','$1+1$|',{c={{'$','$'}},ft='markdown',skip=true}},
@@ -189,7 +191,7 @@ return {
         {"a''|",'<bs>',"a'|"},
         {"a'|'",'<bs>',"a|'"},
         {"a'|' '",'<bs>',"a|' '"},
-        {"a''| '",'<bs>',"a'| '"},
+        {"a''| '",'<bs>',"a'| '",{skip=true}},
         {'<!--|-->','<bs>','<!-|-->'},
         --{'[|foo]','','|foo'},
         --{'[|\n]','','|\n'},

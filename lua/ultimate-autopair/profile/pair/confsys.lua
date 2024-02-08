@@ -1,3 +1,4 @@
+--TODO: like redo the whole file
 local M={}
 function M.merge(def,conf,val)
     assert(def.merge~=false)
@@ -5,9 +6,12 @@ function M.merge(def,conf,val)
     if conf[val]~=nil then return conf[val] end
     return def[val]
 end
+function M.merge2(tbl1,tbl2,val)
+    if tbl2.merge==false then return tbl2[val] end
+    if tbl2[val]~=nil then return tbl2[val] end
+    return tbl1[val]
+end
 function M._merge(def,conf,val)
-    assert(def.merge~=false)
-    assert(conf.merge~=false)
     local v=vim.F.if_nil(conf[val],def[val])
     if type(v)=='table' then
         return M.merge_tbl(def,conf,val)
@@ -16,7 +20,25 @@ function M._merge(def,conf,val)
 
     end
 end
-function M.merge_tbl2(tbl1,tbl2)
+function M._merge3(def,conf,val)
+    local v=vim.F.if_nil(conf[val],def[val])
+    if type(v)=='table' then
+        return M.merge_tbl3(def,conf,val)
+    else
+        return M.merge2(def,conf,val)
+
+    end
+end
+function M._merge2(tbl1,tbl2,val)
+    local v=vim.F.if_nil(tbl2[val],tbl1[val])
+    if type(v)=='table' then
+        return M.merge_tbl22(tbl1[val],tbl2[val])
+    else
+        return M.merge2(tbl1,tbl2,val)
+
+    end
+end
+function M.merge_tbl21(tbl1,tbl2)
     if tbl2 and tbl2.merge==false then tbl1=nil end
     local out={}
     local keys={}
@@ -25,10 +47,34 @@ function M.merge_tbl2(tbl1,tbl2)
     for k,_ in pairs(keys) do
         if type(k)=='number' then
         else
-            out[k]=M._merge(tbl1 or {},tbl2 or {},k)
+            out[k]=M._merge2(tbl1 or {},tbl2 or {},k)
         end
     end
-    return out
+    return out --TODO: remove merge if only tbl1.merge==false
+end
+function M.merge_tbl22(tbl1,tbl2)
+    tbl1=tbl1 or {}
+    tbl2=tbl2 or {}
+    if tbl2.merge==false then
+        return tbl2
+    end
+    local out={}
+    local keys={}
+    for k,_ in pairs(tbl1) do keys[k]=true end
+    for k,_ in pairs(tbl2) do keys[k]=true end
+    local ikeys={}
+    for k,_ in pairs(keys) do
+        if type(k)=='number' then
+            ikeys[k]=true
+        else
+            out[k]=M._merge2(tbl1,tbl2,k)
+        end
+    end
+    for k,_ in ipairs(ikeys) do
+        table.insert(out,tbl2[k])
+        table.insert(out,tbl1[k])
+    end
+    return out --TODO: remove merge if only tbl1.merge==false
 end
 function M.merge_tbl(def,conf,val)
     assert(def.merge~=false)
@@ -36,7 +82,9 @@ function M.merge_tbl(def,conf,val)
     local td=def[val] or {}
     local tc=conf[val] or {}
     assert(td.merge~=false)
-    if tc.merge==false then td={} end
+    if tc.merge==false then
+        return tc
+    end
     local out={}
     local keys={}
     for k,_ in pairs(td) do keys[k]=true end
@@ -54,6 +102,30 @@ function M.merge_tbl(def,conf,val)
         table.insert(out,td[k])
     end
     return out
+end
+function M.merge_tbl3(def,conf,val)
+    local td=def[val] or {}
+    local tc=conf[val] or {}
+    if tc.merge==false then
+        return tc
+    end
+    local out={}
+    local keys={}
+    for k,_ in pairs(td) do keys[k]=true end
+    for k,_ in pairs(tc) do keys[k]=true end
+    local ikeys={}
+    for k,_ in pairs(keys) do
+        if type(k)=='number' then
+            ikeys[k]=true
+        else
+            out[k]=M._merge3(td,tc,k)
+        end
+    end
+    for k,_ in ipairs(ikeys) do
+        table.insert(out,tc[k])
+        table.insert(out,td[k])
+    end
+    return out --TODO: remove merge if only td.merge==false
 end
 function M.merge_list(l1,l2)
     local out={}
@@ -83,6 +155,10 @@ function M.merge_configs(def,conf)
     if conf.merge==false then return conf end
     local out={}
     local function call(val,fn,fall)
+        if type(conf[val])=='table' and conf[val].merge==false then
+            out[val]=conf[val]
+            return
+        end
         local ret=fn(def,conf,val)
         if ret==nil and fall~=nil then ret=fall end
         out[val]=ret
@@ -106,7 +182,7 @@ function M.merge_configs(def,conf)
     for _,v in ipairs(conf.change or {}) do
         assert(pairs[v[1]:gsub(';',';;')..';-'..v[2]],('ultimate-autopair: configuration: trying to change pair %s,%s which does not exist'):format(v[1],v[2]))
         for _,key in ipairs(pairs[v[1]:gsub(';',';;')..';-'..v[2]]) do
-            out[key]=M.merge_tbl2(out[key],v)
+            out[key]=M.merge_tbl21(out[key],v)
             out[key][1]=v[1]
             out[key][2]=v[2]
         end
@@ -127,7 +203,7 @@ function M.pair_init(conf,pair,_sub)
     for k,_ in pairs(conf.filter) do
         filters[k]=pair[k]
     end
-    out.filter=M.merge_tbl2(conf.filter,filters)
+    out.filter=M.merge_tbl21(conf.filter,filters)
     if pair.ft and vim.tbl_get(out,'filter','filetype') then
         out.filter.filetype.ft=M.merge_list(out.filter.filetype.ft or {},pair.ft)
     end
