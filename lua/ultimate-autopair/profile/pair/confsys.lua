@@ -2,38 +2,30 @@ local M={}
 local in_lisp=function (fn)
   return not fn.in_lisp() or fn.in_string() or fn.in_comment()
 end
-M.conf={
-    --TODO: design this to be intuitive, and logical
-    map_modes={_def={'i','c'}},
-    pair_map_modes={nil,t='string[]',fallback=function (conf) return conf.map_modes end},
-    multiline={true},
-    _sdef={
-        {'(',')'},
-        {'[',']'},
-        {'{','}'},
-        {'"','"',multiline=false},
-        {"'","'",start_pair={alpha={before=true,py_fstr=true}},multiline=false},
-        {'`','`',cond={cond=in_lisp},multiline=false},
-        {'```','```',ft={'markdown'}},
-        {'<!--','-->',ft={'markdown','html'}},
-        {'"""','"""',ft={'python'}},
-        {"'''","'''",ft={'python'}},
-        _t='pair',
+local function v(val)
+    return type(val)=='table' and val or {val}
+end
+local function t(tbl)
+    return rawset(tbl,'__t',true)
+end
+M.conf=t{
+    --TODO
+    map_modes=v{'i','c'},
+    pair_map_modes=v{nil,t='table',fallback=function (conf) return conf.map_modes end}, --TODO: _fallbacks should be calculated after the whole config is initialized
+    __number=t{
+        [1]=v{nil,required=true,t='table'},
+        [2]=v{nil,required=true,t='table'},
+        __key={'filters'},
     },
-    _t_pair={
-        [1]='string',
-        [2]='string',
-        multiline={nil,t='boolean'},
-        map_modes={nil,t='string[]'},
-        alpha={_t='alpha'},
-        cmdtype={_t='cmdtype'},
-        cond={_t='cond'},
-        escape={_t='escape'},
-        filetype={_t='filetype'},
-        tsnode={_t='tsnode'},
-    },
-    filter={
-
+    __obj={ --TODO: evaluate objects before other
+        filters={__type='key',
+            alpha={},
+            cmdtype={},
+            cond={},
+            escape={},
+            filetype={},
+            tsnode={},
+        }
     }
 }
 function M.merge_val(origin,new)
