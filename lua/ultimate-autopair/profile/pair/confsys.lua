@@ -4,7 +4,7 @@ local in_lisp=function (fn)
 end
 M.conf={
     --TODO: design this to be intuitive, and logical
-    map_modes={{'i','c'}},
+    map_modes={_def={'i','c'}},
     pair_map_modes={nil,t='string[]',fallback=function (conf) return conf.map_modes end},
     multiline={true},
     _sdef={
