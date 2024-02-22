@@ -4,13 +4,13 @@ local lbuf=vim.api.nvim_create_buf(false,true)
 vim.api.nvim_set_current_buf(lbuf)
 local function restart()
     local buf=vim.api.nvim_create_buf(false,true)
-    for _,win in ipairs(vim.fn.win_findbuf(lbuf)) do
-        vim.api.nvim_win_set_buf(win,buf)
-    end
     vim.api.nvim_buf_delete(lbuf,{force=true})
     vim.api.nvim_buf_call(buf,function ()
         vim.fn.termopen('sh -c "cd /home/user/.config/nvim/.other/ua_/.test;./nvim"')
     end)
+    for _,win in ipairs(vim.fn.win_findbuf(lbuf)) do
+        vim.api.nvim_win_set_buf(win,buf)
+    end
     lbuf=buf
 end
 vim.defer_fn(restart,100)
