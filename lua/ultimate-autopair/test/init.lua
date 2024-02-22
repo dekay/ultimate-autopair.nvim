@@ -35,7 +35,7 @@ function M.check_unique_lang_to_ft()
         if done[tree_lang] then
             local ft=done[tree_lang]
             if ft~='' and not vim.tbl_contains(filetypes,ft) and not vim.tbl_contains(tree_langs,ft) then
-                utils.warning(('filetype `%s` in `utils.tslang2lang` is maybe incorrect'):format(ft))
+                utils.warning(('filetype `%s` in `utils.tslang2lang` may be incorrect'):format(ft))
             end
             goto continue
         end
