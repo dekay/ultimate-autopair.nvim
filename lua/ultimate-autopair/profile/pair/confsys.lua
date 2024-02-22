@@ -1,32 +1,40 @@
 local M={}
 local in_lisp=function (fn)
-  return not fn.in_lisp() or fn.in_string() or fn.in_comment()
+    return not fn.in_lisp() or fn.in_string() or fn.in_comment()
 end
-local function v(val)
-    return type(val)=='table' and val or {val}
-end
-local function t(tbl)
-    return rawset(tbl,'__t',true)
-end
-M.conf=t{
-    --TODO
-    map_modes=v{'i','c'},
-    pair_map_modes=v{nil,t='table',fallback=function (conf) return conf.map_modes end}, --TODO: _fallbacks should be calculated after the whole config is initialized
-    __number=t{
-        [1]=v{nil,required=true,t='table'},
-        [2]=v{nil,required=true,t='table'},
-        __key={'filters'},
+M.conf={ --TODO
+    _t='t',
+    map_modes={_v={'i','c'},_vc={},_t='t',full_mode={false}},
+    pair_map_modes={_v=nil,_vc={_t='s'},_t='t',fallback=function (conf) return conf.map_modes end}, --TODO: _fallbacks should be calculated after the whole config is initialized
+    _v={
+        {'(',')'},
     },
-    __obj={ --TODO: evaluate objects before other
-        filters={__type='key',
-            alpha={},
-            cmdtype={},
-            cond={},
-            escape={},
-            filetype={},
-            tsnode={},
-        }
-    }
+    _i={'pairs',{
+        {'(',')'},
+    }},
+    _objects={
+        pair_1={
+            _t='t',
+        },
+        pairs_2={
+            _vc={
+                _t='t',
+                [1]={nil,_t='s',_r=true},
+                [2]={nil,_t='s',_r=true},
+                _i={'filters',nil},
+                start_pair={
+                    _i={'filters',nil},
+                },
+                end_pair={
+                    _i={'filters',nil},
+                },
+            },
+        },
+    },
+    change={
+        _t='t',
+        _i={'pairs',{}},
+    },
 }
 function M.merge_val(origin,new)
     assert(type(origin)~='table')

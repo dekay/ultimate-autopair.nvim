@@ -45,6 +45,7 @@ end
 ---@param somepairs ua.prof.def.pair
 ---@return ua.prof.def.bs
 function M.init(somepairs)
+    --TODO: each pair may have it's own backspace config defined
     return {
         hooks={hookutils.to_hash('map','<bs>',{mode='i'})},
         docs='autopairs backspace',
