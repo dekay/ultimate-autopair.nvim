@@ -51,7 +51,7 @@ function M.merge(origin,new)
 end
 function M.merge_tbl(origin,new)
     if new==nil then return origin end
-    if new.merge==false or origin==nil then
+    if new.merge==false or origin==nil or (new.merge~=true and origin.merge==false) then
         return new
     end
     local out={}
