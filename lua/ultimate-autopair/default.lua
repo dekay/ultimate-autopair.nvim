@@ -1,9 +1,9 @@
 local in_lisp=function (fn)
   return not fn.in_lisp() or fn.in_string() or fn.in_comment()
 end
-local markdown={
-  ts_not_after={'latex_block','code_span','fenced_code_block'}
-}
+--local markdown={
+  --ts_not_after={'latex_block','code_span','fenced_code_block'}
+--}
 return {
   conf={
     map_modes={'i','c',merge=false},
@@ -36,9 +36,10 @@ return {
       endwise={},
     },
     backspace={
-      overjump=function (_,data)
+      overjump=function (_,obj)
+        local info=obj.info
         --If pair is ambiguous then don't overjump
-        if data and data.pair and data.pair.info.start_pair==data.pair.info.start_pair then
+        if info and info.main_pair and info.start_pair==info.pair.start_pair then
           return false
         end
         return true
