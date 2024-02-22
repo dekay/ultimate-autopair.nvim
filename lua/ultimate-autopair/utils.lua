@@ -54,6 +54,9 @@ M.tslang2lang={
     glimmer='handlebars',
     verilog='verilog',
     tsx='typescriptreact',
+    muttrc='muttrc',
+    sql='sql',
+    tcl='tcl',
 }
 ---@param o ua.filter
 ---@return string

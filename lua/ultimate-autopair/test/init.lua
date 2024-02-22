@@ -3,7 +3,7 @@ local  M={}
 function M.check_not_allowed_string(path)
     if vim.fn.executable('grep')==0 then
         utils.warning('Some of the required executables are missing for dev testing')
-        utils.info('INFO Please make sure that grep is installed')
+        utils.info('INFO Please make sure that `grep` is installed')
         return
     end
     local blacklist={'vim.lg','print','vim.dev'}
@@ -31,8 +31,14 @@ function M.check_unique_lang_to_ft()
     end,vim.api.nvim_get_runtime_file('parser/*',true))
     local done=require'ultimate-autopair.utils'.tslang2lang
     for _,tree_lang in ipairs(tree_langs) do
-        if done[tree_lang] then goto continue end
         local filetypes=vim.treesitter.language.get_filetypes(tree_lang)
+        if done[tree_lang] then
+            local ft=done[tree_lang]
+            if ft~='' and not vim.tbl_contains(filetypes,ft) and not vim.tbl_contains(tree_langs,ft) then
+                utils.warning(('filetype `%s` in `utils.tslang2lang` is maybe incorrect'):format(ft))
+            end
+            goto continue
+        end
         if #filetypes>1 then
             utils.warning('Found multiple languages for '..tree_lang..': '..vim.inspect(filetypes))
         end

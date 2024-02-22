@@ -17,11 +17,11 @@ function M.get_lang_root_nodes(root_parser)
         vim.list_extend(children,parser:children())
     end
 end
----@type table<string,table<string,Query|false>>
+---@type table<string,table<string,vim.treesitter.Query|false>>
 M._cache_queries=vim.defaulttable(function() return {} end)
 ---@param node_type string
 ---@param lang string
----@return Query?
+---@return vim.treesitter.Query?
 function M.query_from_node_type(node_type,lang)
     if M._cache_queries[lang][node_type]~=nil then
         return M._cache_queries[lang][node_type] or nil

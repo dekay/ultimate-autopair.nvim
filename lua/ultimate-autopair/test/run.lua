@@ -77,7 +77,10 @@ function M.sort_test_by_conf(list_tests)
     return ret,skip
 end
 function M.run(plugin_path)
-    M.chan=vim.fn.jobstart({'nvim','--embed','--headless','--clean'},{rpc=true})
+    if (vim.fn.systemlist({vim.v.progpath,'--version'})[1]~=vim.api.nvim_exec2('version',{output=true}).output:gsub('^\n(.-)\n.*','%1')) then
+        utils.warning(("The version number in `:version` didn't match `:!%s --version`"):format(vim.v.progpath))
+    end
+    M.chan=vim.fn.jobstart({vim.v.progpath,'--embed','--headless','--clean'},{rpc=true})
     M.chan_exec(('set rtp+=%s'):format(plugin_path))
     M.chan_exec_lua[[
     function vim.lg(...)
