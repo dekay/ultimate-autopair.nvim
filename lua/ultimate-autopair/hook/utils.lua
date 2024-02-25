@@ -132,7 +132,7 @@ function M.get_act(hash,mode,skip_index)
         end
         ::continue::
     end
-    return {utils.keycode(info.key)},{},true --TODO: be able to set default subconf (which could also be a function)
+    return {utils.keycode(info.key)},nil,true --TODO: be able to set default subconf (which could also be a function)
 end
 ---@param act ua.actions
 function M.generate_undo(act)
@@ -170,7 +170,11 @@ function M.act_to_keys(act,mode,conf)
         elseif v[1]=='right' then
             buf:put(utils.key_right(v[2],conf.dot and mode=='i'))
         elseif v[1]=='pos' then
-            error('TODO') --TODO
+            if conf.true_dot then
+                error('Not implemented')
+            else
+                buf:put(utils.key_pos_nodot(v[2],v[3]))
+            end
         elseif v[1]=='delete' then
             buf:put(utils.key_del(v[2],v[3]))
         end

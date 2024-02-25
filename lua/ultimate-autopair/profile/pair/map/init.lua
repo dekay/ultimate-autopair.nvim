@@ -1,6 +1,7 @@
 local M={}
 M.maps={
     bs=true,
+    cr=true,
 }
 ---@param objects ua.instance
 ---@param somepairs ua.prof.def.pair

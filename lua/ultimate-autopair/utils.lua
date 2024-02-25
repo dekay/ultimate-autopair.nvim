@@ -16,6 +16,7 @@ M.I.key_home=M.keycode'<home>'
 M.I.key_up=M.keycode'<up>'
 M.I.key_down=M.keycode'<down>'
 M.I.key_noundo=M.keycode'<C-g>U'
+M.I.key_i_ctrl_o=M.keycode'<C-\\><C-o>'
 ---@param minsize number
 ---@return ua._.str_buf
 function M.new_str_buf(minsize)
@@ -40,6 +41,13 @@ end
 ---@return string
 function M.key_del(pre,pos)
     return M.I.key_bs:rep(pre or 1)..M.I.key_del:rep(pos or 0)
+end
+---@param col number
+---@param row number?
+---@return string
+function M.key_pos_nodot(col,row,cmd)
+    if not row then return M.I.key_i_ctrl_o..col..'|' end
+    return M.I.key_i_ctrl_o..row..'gg'..M.I.key_i_ctrl_o..col..'|'
 end
 M.tslang2lang={
     markdown_inline='markdown',

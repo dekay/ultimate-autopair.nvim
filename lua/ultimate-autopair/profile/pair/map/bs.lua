@@ -25,9 +25,10 @@ function M.run(o)
             and putils.pair_balansed_start(opair)
         then
             return {
-                {'delete',#p.info.start_pair},
                 {'pos',col,row},
-                {'delete',0,#p.info.start_pair},
+                {'delete',0,#p.info.end_pair},
+                {'pos',o.col,o.row},
+                {'delete',#p.info.start_pair},
             }
         end
     end
