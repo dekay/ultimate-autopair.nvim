@@ -2,26 +2,21 @@ local M={}
 local utils=require'ultimate-autopair.utils'
 ---@type table<string,true|table<string,boolean>>
 M._cache_keywordy={}
-M._regex=vim.regex[=[\c[[=a=][=b=][=c=][=d=][=e=][=f=][=g=][=h=][=i=][=j=][=k=][=l=][=m=][=n=][=o=][=p=][=q=][=r=][=s=][=t=][=u=][=v=][=w=][=x=][=y=][=z=]]]=]
-M._regex_keyword=vim.regex[=[\c\k]=]
 function M.is_keywordy(char,o)
-    --TODO: look into charclass()
+    if char=='\0' then return false end
     if M._cache_keywordy[char]==true then return true end
     local ft=utils.get_filetype(o)
-    if M._cache_keywordy[char] and M._cache_keywordy[char][ft]~=nil then return M._cache_keywordy[char][ft] end
-    local is_alpha=M._regex:match_str(char)
-    if is_alpha then
-        M._cache_keywordy[char]=true
-        return true
-    end
     if not M._cache_keywordy[char] then M._cache_keywordy[char]={} end
     local is_keyword
     if ft==vim.o.filetype then
-        is_keyword=M._regex_keyword:match_str(char) and true or false
+        is_keyword=vim.fn.charclass(char)==2
     else
         local opt_keyword=vim.o.iskeyword
+        local opt_lisp=vim.o.lisp
         vim.o.iskeyword=utils.ft_get_option(ft,'iskeyword')
-        is_keyword=M._regex_keyword:match_str(char) and true or false
+        vim.o.lisp=utils.ft_get_option(ft,'lisp')
+        is_keyword=vim.fn.charclass(char)==2
+        vim.o.lisp=opt_lisp
         vim.o.iskeyword=opt_keyword
     end
     M._cache_keywordy[char][ft]=is_keyword

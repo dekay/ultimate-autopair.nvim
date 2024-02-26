@@ -28,6 +28,9 @@ end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf
 function M.extend_default(conf)
+    if conf and conf.profile and conf.profile~='default' then
+        return conf
+    end
     return require'ultimate-autopair.profile.pair.confsys'.merge_configs(default.conf,conf)
 end
 return M

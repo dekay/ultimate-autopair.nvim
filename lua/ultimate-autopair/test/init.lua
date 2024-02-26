@@ -57,7 +57,8 @@ function M.start()
         utils.warning('You have an older version of neovim than recommended')
     end
     if not pcall(require,'nvim-treesitter') then
-        utils.warning('nvim-treesitter not installed: most of treesitter specific behavior will not work')
+        utils.warning('nvim-treesitter not installed: is required for treesitter specific behavior')
+        utils.info('NOTE: nvim-treesitter is not required if parsers are installed through another way')
     end
     if not pcall(require,'nvim-treesitter-endwise') then
         utils.info('nvim-treesitter-endwise not installed: endwise integration will not work')

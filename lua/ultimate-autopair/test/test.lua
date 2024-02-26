@@ -35,6 +35,7 @@ return {
         {'"""|"""','"','""""""|',{ft='python'}},
         {'<cr|','>','<cr>|<cr>',{c={{'<cr>','<cr>'}}}},
         {'|','&','&|',{c={{'&','?',map_modes={'c'}}}}},
+        {'\0|\0',"'","\0'|'\0"},
     },
     multiline={
         {'|\n)','(','(|\n)'},
@@ -97,7 +98,8 @@ return {
     },
     filter_alpha={
         {'don|t',"'","don'|t"},
-        {'Ã|',"'","Ã'|",{cmd='set iskeyword='}},
+        {'Ã|',"'","Ã'|"},
+        {'Ã|',"'","Ã'|'",{cmd='set iskeyword='}},
         {'_|',"'","_'|"},
         {'-|',"'","-'|",{ft='lisp'}},
         {'```query\n.|\n```',"'","```query\n.'|\n```",{ft='markdown'}},
@@ -249,6 +251,9 @@ return {
         --{'{|','\r','{\n|\n};',{skip=true,ft='c',c={autosemi={'c'},autoclose=true}}},
         --{'{|};','\r','{\n|\n};',{skip=true,ft='c',c={autosemi={'c'},autoclose=true}}},
         --{'(function()|)','<cr>','(function()\n|\nend)',{req='endwise'}},
+    },
+    profile_map={
+        {'|','a','bb|',{c={profile='map',{'i','a','bb'}}}},
     },
     DEV_run={
         {'foo\nbar|baz\nfizzbuzz','vim','foo\nbarvim|baz\nfizzbuzz'},
