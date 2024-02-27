@@ -9,6 +9,7 @@
 ---@field row number
 ---@field col number
 ---@field source ua.source
+---@field _lsave table --TODO: temp
 ---@class ua.act
 ---@field [1] 'left'|'right'|'ins'|'pos'|'delete'
 ---@field [number] any
@@ -30,6 +31,7 @@
 ---@field rows number
 ---@field rowe number
 ---@field source ua.source
+---@field lsave? table
 ---@class ua.source
 ---@field o table<string,any>
 ---@field cmdtype string|nil

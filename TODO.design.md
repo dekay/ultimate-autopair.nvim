@@ -23,8 +23,11 @@ Have a hook creator which does exactly that. Problem: a little bit complicated.
 #### Idea 1 *
 `hook.send(input,type?,mode?)` where mode is infer if not given and type is all if not given. And for the output, don't use the underlying hook-creator, and instead have a separate `hook.act`, which can take options such as `function`, `feedkey` or `expr` (and `dot-all`).
 ## How to do the filter system
+### How to do pre calls for filters
+### How to only do filter on insert
 ## How to do the extension system
 ## How to other
 ### How to do the cmdline
 #### Idea 1 *
 There are two kind of sources: buffer and string. A buffer source is a number which corresponds to a buffer. A string source is a string or table of string, and some extra information, like options (which contains filetype), iscmdline.
+### How to do the config system

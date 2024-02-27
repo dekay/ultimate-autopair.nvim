@@ -137,6 +137,8 @@ function M.run_filters(filters,o,_coloff,_coloffe)
         rows=o.row,
         rowe=o.row,
         source=o.source,
+        lsave=o._lsave,
+        _o=o, --TODO: temp (only for debugging)
     }
     for filter,conf in pairs(filters) do
         filter=filter:gsub('_*%d*$','')
@@ -162,12 +164,19 @@ function M.ft_get_option(ft,option)
         return vim.filetype.get_option(ft,option)
     end
 end
----@param list string[]
----@param s string
----@param i number?
----@param j number?
----@return string
-function M.tbl_concat(list,s,i,j)
-    return table.concat(list,s,i,j)
+---@param range number[]
+---@param contains_range number[]
+---@param inclusive boolean?
+---@return boolean
+function M.range_in_range(range,contains_range,inclusive)
+    local crange=contains_range
+    --TODO: if crange is zero width then and only then have inclusive influence the result
+    --So [f(oo)] is always true and [foo()] is true depending on if inclusive is set
+    if inclusive then
+        return (range[1]<crange[1] or (range[1]==crange[1] and range[2]<=crange[2])) and
+            (range[3]>crange[3] or (range[3]==crange[3] and range[4]>=crange[4]))
+    end
+    return (range[1]<crange[1] or (range[1]==crange[1] and range[2]<crange[2])) and
+        (range[3]>crange[3] or (range[3]==crange[3] and range[4]>crange[4]))
 end
 return M

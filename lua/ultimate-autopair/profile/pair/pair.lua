@@ -5,6 +5,7 @@ local M={}
 ---@param o ua.info
 ---@return ua.actions|nil
 function M.run_start(o)
+    o._lsave={} --TODO: temp
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     local last_char=info.start_pair:sub(-1+vim.str_utf_start(info.start_pair,#info.start_pair))
     if o.line:sub(o.col-#info.start_pair+#last_char,o.col-1)~=info.start_pair:sub(0,-1-#last_char) then return end
@@ -27,9 +28,10 @@ end
 ---@param o ua.info
 ---@return ua.actions|nil
 function M.run_end(o)
+    o._lsave={} --TODO: temp
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
-    if not utils.run_filters(info.end_pair_filter,o,0,#info.end_pair) then
+    if not utils.run_filters(info.end_pair_filter,o,0,-#info.end_pair) then
         return
     end
     if info.start_pair~=info.end_pair then
@@ -58,10 +60,10 @@ function M.init(pair)
         multiline=pair.multiline,
         _filter={ --TODO:TEMP
             start_pair_filter=function (o)
-                return utils.run_filters(pair.start_pair_filter,o,#start_pair-1)
+                return utils.run_filters(pair.start_pair_filter,o,#start_pair-1,-1)
             end,
             end_pair_filter=function (o)
-                return utils.run_filters(pair.end_pair_filter,o,#end_pair-1)
+                return utils.run_filters(pair.end_pair_filter,o,#end_pair-1,-1)
             end
         },
         end_pair_filter=pair.end_pair_filter,

@@ -25,7 +25,17 @@ return {
       cond={p=-1},
       escape={},
       filetype={nft={'TelescopePrompt'},detect_after=true},
-      tsnode={p=-2,lang_detect_after=true},
+      tsnode={p=-2,lang_detect_after=true,separate={'comment','string','char','character',
+      'raw_string', --fish/bash/sh
+      'char_literal','string_literal', --c/cpp
+      'string_value', --css
+      'str_lit','char_lit', --clojure/commonlisp
+      'interpreted_string_literal','raw_string_literal','rune_literal', --go
+      'quoted_attribute_value', --html
+      'template_string', --javascript
+      'LINESTRING','STRINGLITERALSINGLE','CHAR_LITERAL', --zig
+      'string_literals','character_literal','line_comment','block_comment','nesting_block_comment' --d #62
+      }},
     },
     extension={
       surround={},

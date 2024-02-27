@@ -1,34 +1,45 @@
+local utils=require'ultimate-autopair.utils'
 local query=require'ultimate-autopair._lib.query'
 local M={}
+M.id={}
+---@param o ua.filter
+---@param trange number[]
+---@return boolean?
+function M.filter(o,trange)
+    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
+    if utils.range_in_range(trange,range,true) then
+        return true
+    end
+end
 ---@param o ua.filter
 ---@return boolean?
 function M.call(o)
     local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
     local parser=o.source.get_parser()
     if not parser then return true end
-    local nodes=query.find_all_node_types(parser,{})
-    for _,node in ipairs(nodes) do
-        local trange={node:range()}
-        if (trange[1]<range[1] or (trange[1]==range[1] and trange[2]<range[2])) and
-            (trange[3]>range[3] or (trange[3]==range[3] and trange[4]>range[4])) then
-            return false
+    if o.conf.separate and o.lsave then
+        if o.lsave[M.id]==false then
+            local nodes=query.find_all_node_types(parser,o.conf.separate)
+            for _,node in ipairs(nodes) do
+                local trange={node:range()}
+                if utils.range_in_range(trange,range,true) then
+                    return false
+                end
+            end
+        elseif o.lsave[M.id] then
+            if not M.filter(o,o.lsave[M.id]) then return end
+        else
+            local nodes=query.find_all_node_types(parser,o.conf.separate)
+            o.lsave[M.id]=false
+            for _,node in ipairs(nodes) do
+                local trange={node:range()}
+                if utils.range_in_range(trange,range,false) then
+                    o.lsave[M.id]=trange
+                    break
+                end
+            end
         end
     end
     return true
-end
----@param o ua.filter
----@return table?
-function M.pre_call(o)
-    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
-    local parser=o.source.get_parser()
-    if not parser then return end
-    local nodes=query.find_all_node_types(parser,{})
-    for _,node in ipairs(nodes) do
-        local trange={node:range()}
-        if (trange[1]<range[1] or (trange[1]==range[1] and trange[2]<range[2])) and
-            (trange[3]>range[3] or (trange[3]==range[3] and trange[4]>range[4])) then
-            return {node=node}
-        end
-    end
 end
 return M
