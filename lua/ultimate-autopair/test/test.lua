@@ -91,10 +91,10 @@ return {
         --{'(|)aøe,','','(|aøe),',{interactive=true}}, --faswarp
         --{'(|aáa),','','|aáa,',{interactive=true}}, --backspace
         --{'|"¿qué?",','(','(|"¿qué?"),',{interactive=true}}, --ext.surround
-        --{"ä|,","'","ä'|,",{interactive=true}}, --ext.alpha
+        {"ä|,","'","ä'|,"}, --ext.alpha
         {'"ě""|",','<bs>','"ě"|,',{ft='lua'}}, --backspace
-        --{"'ø',|","'","'ø','|'",{ts=true,interactive=true}}, --treesitter
-        --{"{'ø',{}|}",'{',"{'ø',{}{|}}",{ts=true,interactive=true}}
+        {"'ø',|","'","'ø','|'",{ft='lua'}}, --treesitter
+        {"{'ø',{}|}",'{',"{'ø',{}{|}}",{ft='lua'}}
     },
     filter_alpha={
         {'don|t',"'","don'|t"},
