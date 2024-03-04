@@ -45,31 +45,32 @@ end
 ---@param col number
 ---@param row number?
 ---@return string
-function M.key_pos_nodot(col,row,cmd)
+function M.key_pos_nodot(col,row)
     if not row then return M.I.key_i_ctrl_o..col..'|' end
     return M.I.key_i_ctrl_o..row..'gg'..M.I.key_i_ctrl_o..col..'|'
 end
 M.tslang2lang={
     markdown_inline='markdown',
-    bash='sh',
-    javascript='javascript',
+    --These treesitter languages have multiple filetypes
     markdown='markdown',
-    html='html',
-    xml='xml',
-    scala='scala',
-    latex='tex',
-    ini='ini',
     glimmer='handlebars',
-    verilog='verilog',
-    tsx='typescriptreact',
+    html='html',
+    ini='ini',
+    javascript='javascript',
+    make='make',
     muttrc='muttrc',
+    scala='scala',
     sql='sql',
     tcl='tcl',
+    tsx='typescriptreact',
+    xml='xml',
+    verilog='verilog',
 }
+M._tslang2lang_single={markdown_inline=true}
 ---@param o ua.filter
 ---@return string
 function M.get_filetype(o)
-    ---@param ltree LanguageTree
+    ---@param ltree vim.treesitter.LanguageTree
     local function lang_for_range(ltree,range)
         local query=vim.treesitter.query.get(ltree:lang(),'injections')
         if not query then return ltree:lang() end

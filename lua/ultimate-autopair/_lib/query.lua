@@ -1,12 +1,12 @@
 ---@alias ua.query.langs {[1]:string,[2]:TSNode}
 local M={}
----@param root_parser LanguageTree
+---@param root_parser vim.treesitter.LanguageTree
 ---@return ua.query.langs
 function M.get_lang_root_nodes(root_parser)
     local children={root_parser}
     local ret={}
     while true do
-        ---@type LanguageTree
+        ---@type vim.treesitter.LanguageTree
         local parser=table.remove(children,1)
         if not parser then return ret end
         local lang=parser:lang()
@@ -45,7 +45,7 @@ M._cache_query=vim.defaulttable(function(lang)
         return vim.treesitter.query.parse(lang,query_str)
     end)
 end)
----@param parser LanguageTree
+---@param parser vim.treesitter.LanguageTree
 ---@param node_types string[]
 function M.find_all_node_types(parser,node_types)
     local cache_query=vim.defaulttable(function (lang)

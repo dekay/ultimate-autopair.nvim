@@ -29,17 +29,17 @@ function M.check_unique_lang_to_ft()
     local tree_langs=vim.tbl_map(function (x)
         return vim.fn.fnamemodify(x,':t:r')
     end,vim.api.nvim_get_runtime_file('parser/*',true))
-    local done=require'ultimate-autopair.utils'.tslang2lang
+    local done=vim.deepcopy(require'ultimate-autopair.utils'.tslang2lang)
+    local single=require'ultimate-autopair.utils'._tslang2lang_single
     for _,tree_lang in ipairs(tree_langs) do
+        if done[tree_lang]=='' then goto continue end
         local filetypes=vim.treesitter.language.get_filetypes(tree_lang)
+        local ft=done[tree_lang]
         if done[tree_lang] then
-            local ft=done[tree_lang]
-            if ft~='' and not vim.tbl_contains(filetypes,ft) and not vim.tbl_contains(tree_langs,ft) then
-                utils.warning(('filetype `%s` in `utils.tslang2lang` may be incorrect'):format(ft))
+            if not vim.tbl_contains(filetypes,ft) and not single[tree_lang] then
+                utils.warning(('filetype `%s` in `utils.tslang2lang["%s"]` may be incorrect'):format(ft,tree_lang))
             end
-            goto continue
-        end
-        if #filetypes>1 then
+        elseif #filetypes>1 then
             utils.warning('Found multiple languages for '..tree_lang..': '..vim.inspect(filetypes))
         end
         done[tree_lang]=''
