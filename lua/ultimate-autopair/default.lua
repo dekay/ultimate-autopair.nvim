@@ -54,7 +54,10 @@ return {
         end
         return true
       end
-    }
+    },
+    space={
+      enable=false
+    },
   },
   --TODO:
   --tex={
