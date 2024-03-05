@@ -14,7 +14,7 @@ return {
     {'{','}'},
     {'"','"',multiline=false},
     {"'","'",start_pair={alpha={before=true,py_fstr=true}},multiline=false},
-    {'`','`',cond={cond=in_lisp},multiline=false},
+    {'`','`',filter={filter=in_lisp},multiline=false},
     {'```','```',ft={'markdown'}},
     {'<!--','-->',ft={'markdown','html'}},
     {'"""','"""',ft={'python'}},
@@ -22,7 +22,7 @@ return {
     filter={
       alpha={},
       cmdtype={skip={'/','?','@',''}},
-      cond={p=-1},
+      filter={p=-1},
       escape={},
       filetype={nft={'TelescopePrompt'},detect_after=true},
       tsnode={p=-2,lang_detect_after=true,separate={'comment','string','char','character',
