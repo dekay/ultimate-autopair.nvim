@@ -19,7 +19,7 @@ end
 ---@param type string
 ---@param key string
 ---@param conf table<string,string>?
----@return string
+---@return ua.hook.hash
 function M.to_hash(type,key,conf)
     local confstrs={}
     for k,v in vim.spairs(conf or {}) do
@@ -33,7 +33,7 @@ function M.create_o_wrapper()
     local buf=vim.api.nvim_get_current_buf()
     local row=vim.fn.line'.'
     local col=vim.fn.col'.'
-    local has_parsed={_type='unique_string',_name='has_parsed'}
+    local has_parsed={}
     local source
     ---@type ua.source
     source={

@@ -83,4 +83,15 @@ function M.prev_open_start_pair(o)
     end
     return open_pair.count_start_pair(o,true,0,true)
 end
+---@param key string
+---@param modes string[]
+---@return ua.hook.hash[]
+function M.create_hooks(key,modes)
+    local hookutils=require'ultimate-autopair.hook.utils'
+    local hooks={}
+    for _,mode in ipairs(modes) do
+        table.insert(hooks,hookutils.to_hash('map',key,{mode=mode}))
+    end
+    return hooks
+end
 return M
