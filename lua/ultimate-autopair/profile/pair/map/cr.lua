@@ -31,7 +31,7 @@ end
 function M.init(somepairs)
     --TODO: each pair may have it's own backspace config defined
     return {
-        hooks={hookutils.to_hash('map','<cr>',{mode='i'})},
+        hooks=putils.create_hooks('<cr>',{'i'}),
         docs='autopairs newline',
         run=M.run,
         info={

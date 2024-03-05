@@ -37,7 +37,7 @@ function M.init(somepairs)
     --TODO: each pair may have it's own space config defined
     --TODO: how to do the autocmd stuff... (should only need to change the hook, no other config neceserry (will carry over to make autopair after alpha insert possible))
     return {
-        hooks={hookutils.to_hash('map','<Space>',{mode='i'})},
+        hooks=putils.create_hooks('<space>',{'i'}),
         docs='autopairs backspace',
         run=M.run,
         info={

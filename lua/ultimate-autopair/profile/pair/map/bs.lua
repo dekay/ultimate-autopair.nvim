@@ -1,4 +1,3 @@
-local hookutils=require'ultimate-autopair.hook.utils'
 local putils=require'ultimate-autopair.profile.pair.utils'
 ---@class ua.prof.def.bs.info
 ---@field pairs ua.prof.def.pair[]
@@ -48,7 +47,7 @@ end
 function M.init(somepairs)
     --TODO: each pair may have it's own backspace config defined
     return {
-        hooks={hookutils.to_hash('map','<bs>',{mode='i'})},
+        hooks=putils.create_hooks('<bs>',{'i'}),
         docs='autopairs backspace',
         run=M.run,
         info={
