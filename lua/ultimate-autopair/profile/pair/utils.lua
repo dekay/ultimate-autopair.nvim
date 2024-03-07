@@ -94,4 +94,15 @@ function M.create_hooks(key,modes)
     end
     return hooks
 end
+---@param conf {p:number?,map:string|table,modes:string[]}
+---@return ua.object
+function M.create_obj(conf)
+    if type(conf.map)=='table' then
+        error('Not implemented')
+    end
+    return {
+        p=conf.p,
+        hooks=M.create_hooks(conf.map --[[@as string]],conf.modes)
+    }
+end
 return M

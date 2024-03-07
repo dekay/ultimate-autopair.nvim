@@ -46,6 +46,7 @@ return {
       endwise={},
     },
     backspace={
+      map='<bs>',
       overjump=function (_,obj)
         local info=obj.info
         --If pair is ambiguous then don't overjump

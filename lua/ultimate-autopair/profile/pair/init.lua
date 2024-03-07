@@ -11,6 +11,10 @@
 ---@field info ua.prof.def.pair.info
 ---@alias ua.prof.pair.conf table
 ---@alias ua.prof.pair.conf.pair table
+---@class ua.prof.def.map
+---@field modes string[]
+---@field map string|table
+---@field p? number
 
 local M={}
 ---@param conf ua.prof.pair.conf
@@ -19,12 +23,12 @@ function M.init(conf,objects)
     local somepairs={}
     M.init_pairs(somepairs,conf,conf)
     M.pair_sort_len(somepairs)
-    M.init_maps(objects,somepairs)
+    M.init_maps(objects,somepairs,conf)
     for _,v in ipairs(somepairs) do
         table.insert(objects,v)
     end
 end
----@param somepairs ua.prof.def.pair
+---@param somepairs ua.prof.def.pair[]
 function M.pair_sort_len(somepairs)
     local len={}
     for _,v in ipairs(somepairs) do
@@ -42,7 +46,7 @@ function M.pair_sort_len(somepairs)
 end
 ---@param objects ua.instance
 ---@param conf ua.prof.conf
----@param somepairs ua.prof.def.pair
+---@param somepairs ua.prof.def.pair[]
 function M.init_pairs(objects,conf,somepairs)
     for _,pair in ipairs(somepairs or {}) do
         for _,module in ipairs(M.init_pair(conf,pair)) do
@@ -58,8 +62,9 @@ function M.init_pair(conf,pair)
     return require('ultimate-autopair.profile.pair.pair').init(p)
 end
 ---@param objects ua.instance
----@param somepairs ua.prof.def.pair
-function M.init_maps(objects,somepairs)
-    require('ultimate-autopair.profile.pair.map').init(objects,somepairs)
+---@param somepairs ua.prof.def.pair[]
+---@param conf ua.prof.pair.conf
+function M.init_maps(objects,somepairs,conf)
+    require('ultimate-autopair.profile.pair.map').init(objects,somepairs,conf)
 end
 return M
