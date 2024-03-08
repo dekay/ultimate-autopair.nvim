@@ -4,6 +4,7 @@ local putils=require'ultimate-autopair.profile.pair.utils'
 ---@field pairs ua.prof.def.pair[]
 ---@class ua.prof.def.space:ua.object
 ---@field info ua.prof.def.space.info
+---@class ua.prof.def.space.conf:ua.prof.def.map
 
 local M={}
 ---@param o ua.info
@@ -32,17 +33,16 @@ function M.run(o)
     end
 end
 ---@param somepairs ua.prof.def.pair
----@return ua.prof.def.bs
-function M.init(somepairs)
+---@param conf ua.prof.def.space.conf
+---@return ua.prof.def.space
+function M.init(somepairs,conf)
     --TODO: each pair may have it's own space config defined
     --TODO: how to do the autocmd stuff... (should only need to change the hook, no other config neceserry (will carry over to make autopair after alpha insert possible))
-    return {
-        hooks=putils.create_hooks('<space>',{'i'}),
-        docs='autopairs backspace',
-        run=M.run,
-        info={
-            pairs=somepairs
-        },
-    }
+    local obj=putils.create_obj({modes={'i'},map=conf.map})
+    ---@cast obj ua.prof.def.space
+    obj.run=M.run
+    obj.info={pairs=somepairs}
+    obj.doc='autopairs space'
+    return obj
 end
 return M

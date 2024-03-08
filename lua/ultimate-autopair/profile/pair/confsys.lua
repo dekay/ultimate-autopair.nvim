@@ -118,6 +118,8 @@ function M.merge_configs(def,conf)
     merge_idx('extension')
     merge_idx('integration')
     merge_idx('backspace')
+    merge_idx('newline')
+    merge_idx('space')
     vim.list_extend(out,M.merge_list(def,conf))
     local pairs=vim.defaulttable(function() return {} end)
     for k,v in ipairs(out) do

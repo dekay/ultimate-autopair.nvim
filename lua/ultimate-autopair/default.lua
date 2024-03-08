@@ -46,6 +46,7 @@ return {
       endwise={},
     },
     backspace={
+      enable=true,
       map='<bs>',
       overjump=function (_,obj)
         local info=obj.info
@@ -56,8 +57,13 @@ return {
         return true
       end
     },
+    newline={
+      enable=true,
+      map='<cr>',
+    },
     space={
-      enable=false
+      enable=false,
+      map='<space>',
     },
   },
   --TODO:

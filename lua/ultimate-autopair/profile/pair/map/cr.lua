@@ -4,6 +4,7 @@ local putils=require'ultimate-autopair.profile.pair.utils'
 ---@field pairs ua.prof.def.pair[]
 ---@class ua.prof.def.cr:ua.object
 ---@field info ua.prof.def.cr.info
+---@class ua.prof.def.cr.conf:ua.prof.def.map
 
 local M={}
 ---@param o ua.info
@@ -27,16 +28,15 @@ function M.run(o)
     end
 end
 ---@param somepairs ua.prof.def.pair
----@return ua.prof.def.bs
-function M.init(somepairs)
+---@param conf ua.prof.def.cr.conf
+---@return ua.prof.def.cr
+function M.init(somepairs,conf)
     --TODO: each pair may have it's own backspace config defined
-    return {
-        hooks=putils.create_hooks('<cr>',{'i'}),
-        docs='autopairs newline',
-        run=M.run,
-        info={
-            pairs=somepairs
-        },
-    }
+    local obj=putils.create_obj({modes={'i'},map=conf.map})
+    ---@cast obj ua.prof.def.cr
+    obj.run=M.run
+    obj.info={pairs=somepairs}
+    obj.doc='autopairs newline'
+    return obj
 end
 return M
