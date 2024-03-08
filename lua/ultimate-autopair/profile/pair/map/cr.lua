@@ -32,11 +32,11 @@ end
 ---@return ua.prof.def.cr
 function M.init(somepairs,conf)
     --TODO: each pair may have it's own backspace config defined
-    local obj=putils.create_obj({modes={'i'},map=conf.map})
-    ---@cast obj ua.prof.def.cr
-    obj.run=M.run
-    obj.info={pairs=somepairs}
-    obj.doc='autopairs newline'
-    return obj
+    ---@type ua.prof.def.cr
+    return putils.create_obj({modes={'i'},map=conf.map,enable=conf.enable},{
+        run=M.run,
+        info={pairs=somepairs},
+        doc='autopairs newline',
+    })
 end
 return M

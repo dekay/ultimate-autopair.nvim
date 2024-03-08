@@ -94,15 +94,17 @@ function M.create_hooks(key,modes)
     end
     return hooks
 end
----@param conf {p:number?,map:string|table,modes:string[]}
----@return ua.object
-function M.create_obj(conf)
+---@param conf {p:number?,map:string|table,modes:string[],enable:boolean?}
+---@param obj table
+---@return ua.object?
+function M.create_obj(conf,obj)
     if type(conf.map)=='table' then
         error('Not implemented')
     end
-    return {
+    if not conf.enable then return end
+    return vim.tbl_extend('error',{
         p=conf.p,
         hooks=M.create_hooks(conf.map --[[@as string]],conf.modes)
-    }
+    },obj)
 end
 return M

@@ -254,7 +254,7 @@ return {
         --{'(function()|)','<cr>','(function()\n|\nend)',{req='endwise'}},
     },
     map_space={
-        {'[|]',' ','[ |]',{skip=true}},
+        {'[|]',' ','[ |]'},
         {'[|]',' ','[ | ]',{c={space={enable=true}}}},
         {'[|foo]',' ','[ |foo ]',{c={space={enable=true}}}},
         {'[|foo ]',' ','[ |foo ]',{c={space={enable=true}}}},

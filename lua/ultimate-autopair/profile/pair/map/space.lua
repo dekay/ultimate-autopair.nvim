@@ -38,11 +38,11 @@ end
 function M.init(somepairs,conf)
     --TODO: each pair may have it's own space config defined
     --TODO: how to do the autocmd stuff... (should only need to change the hook, no other config neceserry (will carry over to make autopair after alpha insert possible))
-    local obj=putils.create_obj({modes={'i'},map=conf.map})
-    ---@cast obj ua.prof.def.space
-    obj.run=M.run
-    obj.info={pairs=somepairs}
-    obj.doc='autopairs space'
-    return obj
+    ---@type ua.prof.def.space
+    return putils.create_obj({modes={'i'},map=conf.map,enable=conf.enable},{
+        run=M.run,
+        info={pairs=somepairs},
+        doc='autopairs space',
+    })
 end
 return M

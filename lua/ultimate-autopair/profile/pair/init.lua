@@ -15,6 +15,7 @@
 ---@field modes string[]
 ---@field map string|table
 ---@field p? number
+---@field enable? boolean
 
 local M={}
 ---@param conf ua.prof.pair.conf

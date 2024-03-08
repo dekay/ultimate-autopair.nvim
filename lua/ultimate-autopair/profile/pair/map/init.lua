@@ -9,7 +9,10 @@ M.maps={
 ---@param conf ua.prof.pair.conf
 function  M.init(objects,somepairs,conf)
     for mapname,confname in pairs(M.maps) do
-        table.insert(objects,require('ultimate-autopair.profile.pair.map.'..mapname).init(somepairs,conf[confname]))
+        local mapobj=require('ultimate-autopair.profile.pair.map.'..mapname).init(somepairs,conf[confname])
+        if mapobj then
+            table.insert(objects,mapobj)
+        end
     end
 end
 
