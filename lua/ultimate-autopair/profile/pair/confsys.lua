@@ -4,11 +4,8 @@ local in_lisp=function (fn)
 end
 M.conf={ --TODO
     _t='t',
-    map_modes={_v={'i','c'},_vc={},_t='t',full_mode={false}},
-    pair_map_modes={_v=nil,_vc={_t='s'},_t='t',fallback=function (conf) return conf.map_modes end}, --TODO: _fallbacks should be calculated after the whole config is initialized
-    _v={
-        {'(',')'},
-    },
+    map_modes={_v={'i','c'},_t='s[]',full_mode={false}},
+    pair_map_modes={_v=nil,_t='s[]',_fallback=function (conf) return conf.map_modes end}, --TODO: _fallbacks should be calculated after the whole config is initialized
     _i={'pairs',{
         {'(',')'},
     }},
