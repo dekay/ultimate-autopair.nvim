@@ -4,6 +4,7 @@ local utils=require'ultimate-autopair.utils'
 ---@return boolean?
 function M.call(o)
     if not o.conf.skip then return true end
+    if o.source.mode~='c' then return true end
     return not vim.tbl_contains(o.conf.skip,o.source.cmdtype)
 end
 M.conf={

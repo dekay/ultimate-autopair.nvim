@@ -151,11 +151,6 @@ function M.run_filters(filters,o,_coloff,_coloffe)
     end
     return true
 end
----@param o ua.filter
----@return boolean
-function M.incmd(o)
-    return o.source.cmdtype~=nil
-end
 ---@param ft string
 ---@param option string
 function M.ft_get_option(ft,option)

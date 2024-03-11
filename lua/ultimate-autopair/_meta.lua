@@ -35,6 +35,7 @@
 ---@class ua.source
 ---@field o table<string,any>
 ---@field cmdtype string|nil
+---@field mode string
 ---@field get_parser fun():vim.treesitter.LanguageTree?
 ---@field source number|string
 ---@field _cache table<function|table,any>

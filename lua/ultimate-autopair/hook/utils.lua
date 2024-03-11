@@ -39,6 +39,7 @@ function M.create_o_wrapper()
     source={
         source=buf,
         o=vim.bo[buf],
+        mode=vim.fn.mode(),
         get_parser=function ()
             local s,parser=pcall(vim.treesitter.get_parser,buf)
             if not s then return end
@@ -60,6 +61,7 @@ function M.create_o_wrapper()
             source=cmdline,
             o=setmetatable({filetype='vim',buftype='prompt'},{__index=vim.bo[buf]}),
             cmdtype=cmdtype,
+            mode='c',
             get_parser=function ()
                 local s,parser=pcall(vim.treesitter.get_string_parser,cmdline,'vim')
                 if not s then return end

@@ -10,7 +10,7 @@ local M={}
 ---@param o ua.info
 ---@return ua.actions|nil
 function M.run(o)
-    if o.source.cmdtype~=nil then return end
+    if o.source.mode=='c' then return end
     local m=o.m --[[@as ua.prof.def.cr]]
     local info=m.info
     local spairs=putils.backwards_get_start_pairs(o,info.pairs)
