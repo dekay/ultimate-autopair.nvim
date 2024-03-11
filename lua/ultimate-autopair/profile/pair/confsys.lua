@@ -1,4 +1,77 @@
 local M={}
+--DEFAULT VALUES SHOULD ONLY BE USED ONCE (once implemented into the specification), OTHERWISE ASSERT AN ERROR
+M.config_specification={
+    main={
+        is_arrayish=true,
+        inherit_keys={'maps'},
+        key_value={
+            map_modes='modes',
+            pair_map_modes='modes',
+            multiline='boolean',
+        },
+        array_value='pair',
+    },
+    pair={
+        inherit_keys={'basepair'},
+        key_value={
+            --TODO: specify that some values need to be set, while others are optional
+            [1]='string',
+            [2]='string',
+            start_pair='basepair',
+            end_pair='basepair',
+        },
+    },
+    basepair={ --OOP lets gooo
+        inherit_keys={'maps'},
+        key_value={
+            --TODO: specify that some values need to be set, while others are optional
+            modes='modes',
+            ft='array_of_strings',
+            nft='array_of_strings',
+        }
+    },
+    maps={
+        key_value={
+            backspace='backspace',
+            newline='newline',
+            space='space',
+        }
+    },
+    backspace={
+        inherit_keys={'map'},
+    },
+    space={
+        inherit_keys={'map'},
+    },
+    newline={
+        inherit_keys={'map'},
+    },
+    map={
+        key_value={
+            modes='modes',
+        }
+    },
+    modes={
+        is_enum_array=true,
+        enum_values={'n','v','x','s','o','!','i','l','c','t',''},
+    },
+    boolean={ --Should be inlined
+        is_enum=true,
+        enum_values={true,false},
+    },
+    string={ --Should be inlined
+        is_type=true,
+        validator=function (x) return type(x)=='string' end
+    },
+    number={ --Should be inlined
+        is_type=true,
+        validator=function (x) return type(x)=='number' end
+    },
+    array_of_strings={
+        is_arrayish=true,
+        array_value='string',
+    }
+}
 function M.merge_val(origin,new)
     assert(type(origin)~='table')
     assert(type(new)~='table')
