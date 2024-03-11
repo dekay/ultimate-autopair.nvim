@@ -10,6 +10,7 @@ local M={}
 ---@param o ua.info
 ---@return ua.actions|nil
 function M.run(o)
+    if o.source.cmdtype~=nil then return end
     local m=o.m --[[@as ua.prof.def.cr]]
     local info=m.info
     local spairs=putils.backwards_get_start_pairs(o,info.pairs)
@@ -33,7 +34,7 @@ end
 function M.init(somepairs,conf)
     --TODO: each pair may have it's own backspace config defined
     ---@type ua.prof.def.cr
-    return putils.create_obj({modes={'i'},map=conf.map,enable=conf.enable},{
+    return putils.create_obj(conf,{
         run=M.run,
         info={pairs=somepairs},
         doc='autopairs newline',

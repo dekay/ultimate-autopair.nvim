@@ -1,38 +1,4 @@
 local M={}
-local in_lisp=function (fn)
-    return not fn.in_lisp() or fn.in_string() or fn.in_comment()
-end
-M.conf={ --TODO
-    _t='t',
-    map_modes={_v={'i','c'},_t='s[]',full_mode={false}},
-    pair_map_modes={_v=nil,_t='s[]',_fallback=function (conf) return conf.map_modes end}, --TODO: _fallbacks should be calculated after the whole config is initialized
-    _i={'pairs',{
-        {'(',')'},
-    }},
-    _objects={
-        pair_1={
-            _t='t',
-        },
-        pairs_2={
-            _vc={
-                _t='t',
-                [1]={nil,_t='s',_r=true},
-                [2]={nil,_t='s',_r=true},
-                _i={'filters',nil},
-                start_pair={
-                    _i={'filters',nil},
-                },
-                end_pair={
-                    _i={'filters',nil},
-                },
-            },
-        },
-    },
-    change={
-        _t='t',
-        _i={'pairs',{}},
-    },
-}
 function M.merge_val(origin,new)
     assert(type(origin)~='table')
     assert(type(new)~='table')
@@ -93,13 +59,27 @@ end
 ---@param def ua.prof.pair.conf
 ---@param conf ua.prof.pair.conf?
 function M.merge_configs(def,conf)
-    if conf==nil then
-        if def.pair_map_modes==nil then --TODO
-            def.pair_map_modes=def.map_modes
+    local function last(c)
+        local out=setmetatable({},{__index=c})
+        for k,v in ipairs(c) do
+            out[k]=M.pair_init(c,v)
         end
-        return def
+        return out
     end
-    if conf.merge==false then return conf end
+    if conf==nil then
+        local out=setmetatable({},{__index=def})
+        if out.pair_map_modes==nil then
+            out.pair_map_modes=def.map_modes
+        end
+        for k,v in ipairs(def) do
+            out[k]=M.pair_init(out,v)
+        end
+        for _,v in pairs(require'ultimate-autopair.profile.pair.map'.maps) do
+            out[v]=setmetatable({modes=def.map_modes},{__index=def[v]})
+        end
+        return out
+    end
+    if conf.merge==false then return last(conf) end
     assert(conf.profile==nil or conf.profile=='default' or conf.profile=='pair')
     assert(def.profile==nil or def.profile=='default' or def.profile=='pair')
     local out={}
@@ -114,9 +94,10 @@ function M.merge_configs(def,conf)
     merge_idx('filter')
     merge_idx('extension')
     merge_idx('integration')
-    merge_idx('backspace')
-    merge_idx('newline')
-    merge_idx('space')
+    for _,v in pairs(require'ultimate-autopair.profile.pair.map'.maps) do
+        merge_idx(v)
+        out[v].modes=M.merge_list(out[v].modes,out.map_modes)
+    end
     vim.list_extend(out,M.merge_list(def,conf))
     local pairs=vim.defaulttable(function() return {} end)
     for k,v in ipairs(out) do
@@ -133,7 +114,7 @@ function M.merge_configs(def,conf)
     for _,v in ipairs(_G.UA_DEV and def.change or {}) do
         assert(pairs[v[1]:gsub(';',';;')..';-'..v[2]])
     end
-    return out
+    return last(out)
 end
 ---@param conf ua.prof.pair.conf
 ---@param pair ua.prof.pair.conf.pair

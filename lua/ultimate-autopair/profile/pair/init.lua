@@ -22,7 +22,7 @@ local M={}
 ---@param objects ua.instance
 function M.init(conf,objects)
     local somepairs={}
-    M.init_pairs(somepairs,conf,conf)
+    M.init_pairs(somepairs,conf)
     M.pair_sort_len(somepairs)
     M.init_maps(objects,somepairs,conf)
     for _,v in ipairs(somepairs) do
@@ -46,21 +46,18 @@ function M.pair_sort_len(somepairs)
     end
 end
 ---@param objects ua.instance
----@param conf ua.prof.conf
 ---@param somepairs ua.prof.def.pair[]
-function M.init_pairs(objects,conf,somepairs)
+function M.init_pairs(objects,somepairs)
     for _,pair in ipairs(somepairs or {}) do
-        for _,module in ipairs(M.init_pair(conf,pair)) do
+        for _,module in ipairs(M.init_pair(pair)) do
             table.insert(objects,module)
         end
     end
 end
----@param conf ua.prof.pair.conf
 ---@param pair ua.prof.pair.conf.pair
 ---@return ua.prof.def.pair[]
-function M.init_pair(conf,pair)
-    local p=require'ultimate-autopair.profile.pair.confsys'.pair_init(conf,pair)
-    return require('ultimate-autopair.profile.pair.pair').init(p)
+function M.init_pair(pair)
+    return require('ultimate-autopair.profile.pair.pair').init(pair)
 end
 ---@param objects ua.instance
 ---@param somepairs ua.prof.def.pair[]
