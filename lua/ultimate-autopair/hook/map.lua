@@ -29,6 +29,9 @@ function M.expr_set(hash)
     for _,obj in ipairs(objs) do
         table.insert(desc,obj.doc)
     end
+    if info.key:find'\0' then
+        error('Null byte found in pair, exiting before a crash can happen')
+    end
     vim.keymap.set(conf.mode,info.key,function ()
         local act,subconf=hookutils.get_act(hash,conf.mode)
         return hookutils.act_to_keys(act,conf.mode,subconf)
