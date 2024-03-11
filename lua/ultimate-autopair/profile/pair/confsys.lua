@@ -62,13 +62,13 @@ M.config_specification={
     cmdtype={
         inherit_keys={'basefilter'},
         key_value={
-            py_fstr='array_of_strings',
+            skip='array_of_strings',
         }
     },
     escape={
         inherit_keys={'basefilter'},
         key_value={
-            escapechar='string?'
+            escapechar='string'
         }
     },
     filetype={
@@ -98,7 +98,9 @@ M.config_specification={
     },
     backspace={
         inherit_keys={'basemap'},
-        overjump='boolean',
+        key_value={
+            overjump='boolean',
+        }
     },
     space={
         inherit_keys={'basemap'},
@@ -117,9 +119,13 @@ M.config_specification={
     map={
         is_special=true,
     },
-    modes={
-        is_enum_array=true,
+    mode={
+        is_enum=true,
         enum_values={'n','v','x','s','o','!','i','l','c','t',''},
+    },
+    modes={
+        is_arrayish=true,
+        array_value='mode',
     },
     boolean={ --Should be inlined
         is_enum=true,
@@ -138,6 +144,44 @@ M.config_specification={
         array_value='string',
     }
 }
+function M.validate(conf,_t)
+    local spec=M.config_specification[_t]
+    if spec.is_type then
+        assert(spec.validator(conf))
+        return
+    elseif spec.is_special then
+        return
+    elseif spec.is_enum then
+        assert(vim.tbl_contains(spec.enum_values,conf))
+        return
+    end
+    local keys=vim.tbl_keys(conf)
+    local tokeys=vim.deepcopy(spec.key_value) or {}
+    local toinherit=vim.deepcopy(spec.inherit_keys or {})
+    tokeys.merge='boolean'
+    while #toinherit>0 do
+        local i_t=table.remove(toinherit)
+        local ispec=M.config_specification[i_t]
+        if ispec.inherit_keys then
+            vim.list_extend(toinherit,ispec.inherit_keys)
+        end
+        for k,v in pairs(ispec.key_value) do
+            tokeys[k]=v
+        end
+    end
+    if spec.is_arrayish then
+        for idx,k in pairs(keys) do
+            if type(k)=='number' then
+                M.validate(conf[k],spec.array_value)
+                keys[idx]=nil
+            end
+        end
+    end
+    for _,k in pairs(keys) do
+        assert(tokeys[k])
+        M.validate(conf[k],tokeys[k])
+    end
+end
 function M.merge_val(origin,new)
     assert(type(origin)~='table')
     assert(type(new)~='table')
