@@ -201,7 +201,7 @@ return {
         {'[ ]|','<bs>','|',{skip=true}},
         {'|','<C-r>="(a<left><bs>\r','a|',{skip=true}}, --TODO
         {'(|)','H','|',{c={backspace={map='H'}}}},
-        {'(|)','<bs>','|)',{c={backspace={modes={'c'}}},skip=true}}, --TODO
+        {'(|)','<bs>','|)',{c={backspace={modes={'c'}}}}},
         --{'(|)','H','|',{c={backspace={map={'<bs>','H'}}}}},
         --{'[ |foo ]','','[|foo]',},
         --{[["'"'|']],'',[["'"|]],{ts=true}},

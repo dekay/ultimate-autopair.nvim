@@ -45,6 +45,9 @@ function M.merge_list(origin,new)
     if new.merge==false or origin==nil then
         return new
     end
+    if new.merge~=true and origin.merge==false then
+        return new
+    end
     local out={}
     local has={}
     for _,v in ipairs(origin) do
@@ -60,11 +63,10 @@ end
 ---@param conf ua.prof.pair.conf?
 function M.merge_configs(def,conf)
     local function last(c)
-        local out=setmetatable({},{__index=c})
         for k,v in ipairs(c) do
-            out[k]=M.pair_init(c,v)
+            c[k]=M.pair_init(c,v)
         end
-        return out
+        return c
     end
     if conf==nil then
         local out=setmetatable({},{__index=def})
@@ -79,7 +81,7 @@ function M.merge_configs(def,conf)
         end
         return out
     end
-    if conf.merge==false then return last(conf) end
+    if conf.merge==false then return last(setmetatable({},{__index=conf})) end
     assert(conf.profile==nil or conf.profile=='default' or conf.profile=='pair')
     assert(def.profile==nil or def.profile=='default' or def.profile=='pair')
     local out={}
@@ -96,7 +98,7 @@ function M.merge_configs(def,conf)
     merge_idx('integration')
     for _,v in pairs(require'ultimate-autopair.profile.pair.map'.maps) do
         merge_idx(v)
-        out[v].modes=M.merge_list(out[v].modes,out.map_modes)
+        out[v]=setmetatable({modes=M.merge_list(out.map_modes,out[v].modes)},{__index=out[v]})
     end
     vim.list_extend(out,M.merge_list(def,conf))
     local pairs=vim.defaulttable(function() return {} end)
