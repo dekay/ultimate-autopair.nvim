@@ -8,6 +8,8 @@ M.config_specification={
             map_modes='modes',
             pair_map_modes='modes',
             multiline='boolean',
+            p='number',
+            filter='filters',
         },
         array_value='pair',
     },
@@ -22,12 +24,14 @@ M.config_specification={
         },
     },
     basepair={ --OOP lets gooo
-        inherit_keys={'maps'},
+        inherit_keys={'maps','filters'},
         key_value={
             --TODO: specify that some values need to be set, while others are optional
             modes='modes',
             ft='array_of_strings',
             nft='array_of_strings',
+            multiline='boolean',
+            p='number',
         }
     },
     maps={
@@ -37,19 +41,81 @@ M.config_specification={
             space='space',
         }
     },
-    backspace={
-        inherit_keys={'map'},
+    filters={
+        key_value={
+            alpha='alpha',
+            cmdtype='cmdtype',
+            filter='filter',
+            escape='escape',
+            filetype='filetype',
+            tsnode='tsnode',
+        },
     },
-    space={
-        inherit_keys={'map'},
+    alpha={
+        inherit_keys={'basefilter'},
+        key_value={
+            before='boolean',
+            after='boolean',
+            py_fstr='boolean',
+        }
     },
-    newline={
-        inherit_keys={'map'},
+    cmdtype={
+        inherit_keys={'basefilter'},
+        key_value={
+            py_fstr='array_of_strings',
+        }
     },
-    map={
+    escape={
+        inherit_keys={'basefilter'},
+        key_value={
+            escapechar='string?'
+        }
+    },
+    filetype={
+        inherit_keys={'basefilter'},
+        key_value={
+            ft='array_of_strings',
+            nft='array_of_strings',
+            detect_after='boolean',
+        }
+    },
+    filter={
+        inherit_keys={'basefilter'},
+    },
+    tsnode={
+        inherit_keys={'basefilter'},
+        key_value={
+            p='number',
+            lang_detect_after='boolean',
+            separate='array_of_strings',
+        }
+    },
+    basefilter={
         key_value={
             modes='modes',
+            p='number',
         }
+    },
+    backspace={
+        inherit_keys={'basemap'},
+        overjump='boolean',
+    },
+    space={
+        inherit_keys={'basemap'},
+    },
+    newline={
+        inherit_keys={'basemap'},
+    },
+    basemap={
+        key_value={
+            modes='modes',
+            p='number',
+            enable='boolean',
+            map='map',
+        }
+    },
+    map={
+        is_special=true,
     },
     modes={
         is_enum_array=true,
