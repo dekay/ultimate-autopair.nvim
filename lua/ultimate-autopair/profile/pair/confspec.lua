@@ -115,16 +115,36 @@ M.conf_spec={
         __array_value='string',
     }
 }
-function M.validate(conf,spec_name)
+function M.validate(conf,spec_name,traceback)
     local spec=M.conf_spec[spec_name]
     if spec.__type=='type' then
-        assert(type(conf)==spec.__data)
+        assert(type(conf)==spec.__data,('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option `%s` has the value `%s`, which has the type `%s`.
+        However, that option should have the type `%s`.
+        ]]..'\n'):format(traceback,conf,type(conf),spec.__data))
         return
     elseif spec.__type=='enum' then
-        assert(vim.tbl_contains(spec.__data --[[@as table]],conf))
-        return
+        for _,v in ipairs(spec.__data --[[@as table]]) do
+            if v==conf then
+                return
+            end
+        end
+        error(('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option `%s` contains the value `%s`.
+        However, that option should be one of `%s`.
+        ]]..'\n'):format(traceback,conf,vim.inspect(spec.__data)))
     elseif spec.__type=='special' then
         return
+    end
+    if type(conf)~='table' then
+        error(('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option `%s` has the value `%s`, which has the type `%s`.
+        However, the option should be a table.
+        ]]..'\n'):format(traceback,vim.inspect(conf),type(conf)))
+
     end
     local tspec=setmetatable({merge='boolean'},{__index=spec})
     local inherit=vim.deepcopy(tspec.__inherit_keys or {})
@@ -143,9 +163,18 @@ function M.validate(conf,spec_name)
             tspec[k]=tspec.__array_value
         end
     end
+    local function convert(t)
+        if type(t)=='number' then
+            return ('[%s]'):format(t)
+        end
+        return t
+    end
     for k,v in pairs(conf) do
-        assert(tspec[k])
-        M.validate(v,tspec[k])
+        assert(tspec[k],('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option '%s' is set, but it should not be set.
+        ]]..'\n'):format(traceback and traceback..'.'..convert(k) or convert(k)))
+        M.validate(v,tspec[k],traceback and traceback..'.'..convert(k) or convert(k))
     end
 end
 function M.generate_random(spec_name)
@@ -195,7 +224,7 @@ function M.generate_random(spec_name)
     return out
 end
 function M.test() --TODO: run this when testing
-    M.validate(require'ultimate-autopair.default')
+    M.validate(require'ultimate-autopair.default','main')
     M.validate(M.generate_random('main'),'main')
 end
 return M
