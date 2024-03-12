@@ -148,4 +148,54 @@ function M.validate(conf,spec_name)
         M.validate(v,tspec[k])
     end
 end
+function M.generate_random(spec_name)
+    local out={}
+    local spec=M.conf_spec[spec_name]
+    if spec.__type=='type' then
+        if spec.__data=='string' then
+            local str=''
+            for _=1,math.random(1,5) do
+                str=str..string.char(math.random(33,126))
+            end
+            return str
+        elseif spec.__data=='number' then
+            return math.random(1,20)
+        elseif spec.__data=='boolean' then
+            return math.random(0,1)==0
+        else
+            error''
+        end
+    elseif spec.__type=='enum' then
+        return spec.__data[math.random(#spec.__data)]
+    elseif spec.__type=='special' then
+        return 'S'
+    end
+    local tspec=setmetatable({merge='boolean'},{__index=spec})
+    local inherit=vim.deepcopy(tspec.__inherit_keys or {})
+    while #inherit>0 do
+        local i_spec_name=table.remove(inherit)
+        local ispec=M.conf_spec[i_spec_name]
+        if ispec.__inherit_keys then
+            vim.list_extend(inherit,ispec.__inherit_keys)
+        end
+        for k,v in pairs(ispec) do
+            tspec[k]=tspec[k] or v
+        end
+    end
+    if tspec.__array_value then
+        for k=1,math.random(1,5) do
+            tspec[k]=tspec.__array_value
+        end
+    end
+    for k,v in pairs(tspec) do
+        if type(k)=='number' or not k:find'^__' then
+            out[k]=M.generate_random(v)
+        end
+    end
+    return out
+end
+function M.test() --TODO: run this when testing
+    M.validate(require'ultimate-autopair.default')
+    M.validate(M.generate_random('main'),'main')
+end
 return M
