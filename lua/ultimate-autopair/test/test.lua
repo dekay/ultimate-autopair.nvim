@@ -161,6 +161,9 @@ return {
         {'|\n")"','(','(|)\n")"',{ft='lua'}},
         {'"|"\n)','(','"(|)"\n)',{ft='lua'}},
         {"'''|'","'","''''|",{ft='lua'}},
+        {'local a=| }','{','local a={|} }',{ft='lua',c={filter={tsnode={separate={'table_constructor'},detect_after="{"}}}}},
+        {"let a: Vec<|a>;","'","let a: Vec<'|a>;",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}}}}, --TODO: only do on insertion, not on general filtering
+        {"|","'","'|'",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}}}},
         --{[["'"|"'"]],'"',[["'""|""'"]],{ft='lua'}},
         --{[['"' '"' |]],"'",[['"' '"' '|']],{ts=true}},
         --{"f'|","'","f''|",{ts=true,ft='lua'}},

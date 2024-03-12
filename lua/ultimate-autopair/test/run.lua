@@ -126,12 +126,20 @@ function M.run_tests(tests)
         M.chan_exec('set all&')
         M.chan_exec('startinsert')
         M.set_lines_and_pos(v[1],conf.cursor)
-        if conf.cmd then M.chan_exec(conf.cmd) end
+        if conf.cmd then
+            M.chan_exec(conf.cmd)
+        end
         if conf.ft then
             M.chan_exec('setf '..conf.ft)
             M.chan_exec_lua('pcall(vim.treesitter.start)')
         end
+        if conf.ft=='rust' then
+            M.chan_exec(('set rtp+=%s'):format('/home/user/.local/share/nvim/lazy/nvim-treesitter')) --TODO: HACK, somehow find other parsers somewhere else.
+        end
         local errmsg=M.feed(v[2])
+        if conf.ft=='rust' then
+            M.chan_exec(('set rtp-=%s'):format('/home/user/.local/share/nvim/lazy/nvim-treesitter')) --TODO: HACK, somehow find other parsers somewhere else.
+        end
         if errmsg==false then
             utils.error(('test(%s) went wrong:\nThe input could not be processed\nPossible reason: An unmatched `<` may be in the input, replace all unmatched `<` with `<lt>`\n%s'):format(category,M._create_mess(v)))
         elseif errmsg~='' then
