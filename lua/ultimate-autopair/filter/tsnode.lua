@@ -17,14 +17,7 @@ function M.call(o)
     local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
     local parser
     if o.conf.detect_after then
-        local lines={}
-        for k,v in ipairs(o.source._lines) do
-            lines[k]=v
-        end
-        lines[o.rows]=o.line:sub(1,o.cols-1)..o.conf.detect_after..o.line:sub(o.cols)
-        o.cole=o.cole+1
-        parser=vim.treesitter.get_string_parser(table.concat(lines,'\n'),vim.treesitter.language.get_lang(o.source.o.filetype) or o.source.o.filetype)
-        parser:parse({o.rows-1,o.rowe-1})
+        parser=utils._HACK_parser_get_after_insert(o,o.conf.detect_after)
     else
         parser=o.source.get_parser()
     end

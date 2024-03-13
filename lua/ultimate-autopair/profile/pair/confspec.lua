@@ -60,7 +60,8 @@ M.conf_spec={
         __inherit_keys={'basefilter'},
         ft='array_of_strings',
         nft='array_of_strings',
-        detect_after='boolean',
+        detect_after='TODO',
+        lang_detect_after='TODO',
     },
     filter={
         filter='TODO',
@@ -69,7 +70,9 @@ M.conf_spec={
     tsnode={
         __inherit_keys={'basefilter'},
         p='number',
-        lang_detect_after='boolean',
+        lang_detect_after='TODO',
+        detect_after='TODO',
+        node_detect_after='TODO',
         separate='array_of_strings',
     },
     basefilter={

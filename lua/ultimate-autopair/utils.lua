@@ -52,6 +52,7 @@ end
 M.tslang2lang={
     markdown_inline='markdown',
     --These treesitter languages have multiple filetypes
+    ---Category 1
     markdown='markdown',
     glimmer='handlebars',
     html='html',
@@ -65,11 +66,15 @@ M.tslang2lang={
     tsx='typescriptreact',
     xml='xml',
     verilog='verilog',
+    ---Category 2
+    latex='tex',
 }
 M._tslang2lang_single={markdown_inline=true}
 ---@param o ua.filter
+---@param opt {parser:vim.treesitter.LanguageTree?}?
 ---@return string
-function M.get_filetype(o)
+function M.get_filetype(o,opt)
+    opt=opt or {}
     ---@param ltree vim.treesitter.LanguageTree
     local function lang_for_range(ltree,range)
         local query=vim.treesitter.query.get(ltree:lang(),'injections')
@@ -84,6 +89,7 @@ function M.get_filetype(o)
                     if name=='injection.language' then
                         lang=vim.treesitter.get_node_text(node,o.source.source)
                     elseif name=='injection.content' then
+                        ---@diagnostic disable-next-line: undefined-field
                         trange={node:range()}
                     end
                 end
@@ -102,7 +108,7 @@ function M.get_filetype(o)
     end
     local tree=true --TODO: local tree=o.opt.treesitter
     if not tree then return o.source.o.filetype end
-    local parser=o.source.get_parser()
+    local parser=opt.parser or o.source.get_parser()
     if not parser then return o.source.o.filetype end
     local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
     local tslang,childlang=lang_for_range(parser,range)
@@ -174,5 +180,16 @@ function M.range_in_range(range,contains_range,inclusive)
     end
     return (range[1]<crange[1] or (range[1]==crange[1] and range[2]<crange[2])) and
         (range[3]>crange[3] or (range[3]==crange[3] and range[4]>crange[4]))
+end
+---@param o ua.filter
+---@param str string
+function M._HACK_parser_get_after_insert(o,str)
+    local lines={}
+    vim.list_extend(lines,o.source._lines)
+    lines[o.rowe]=o.line:sub(1,o.cole-1)..str..o.line:sub(o.cole)
+    o.cole=o.cole+1
+    local parser=vim.treesitter.get_string_parser(table.concat(lines,'\n'),vim.treesitter.language.get_lang(o.source.o.filetype) or o.source.o.filetype)
+    parser:parse({o.rows-1,o.rowe})
+    return parser
 end
 return M

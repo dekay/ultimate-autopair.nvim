@@ -138,8 +138,8 @@ return {
         {'<!-|','-','<!--|-->',{ft='markdown'}},
         {'|','(','(|',{ft='TelescopePrompt'}},
         {'```java\n|\n```','<lt>',"```java\n<|>\n```",{ft='markdown',c={{'<','>',ft={'java'}}}}},
-        {'$|$','<lt>','$<|>$',{ft='markdown',c={{'<','>',ft={'tex'}}},skip=true}},
-        {'$|$','<lt>','$<|$',{ft='markdown',c={{'<','>',ft={'tex'},filetype={detect_after=false}}},skip=true}},
+        {'$|$','<lt>','$<|>$',{ft='markdown',c={{'<','>',ft={'tex',detect_after='\a'}}},skip=true}},
+        {'$|$','<lt>','$<|$',{ft='markdown',c={{'<','>',ft={'tex',detect_after='\a'},filetype={detect_after=false}}},skip=true}},
         {'|','<lt>','<|',{ft='lua',c={{'<','>',nft={'lua'}}}}},
     },
     filter_cmdtype={
@@ -161,7 +161,7 @@ return {
         {'|\n")"','(','(|)\n")"',{ft='lua'}},
         {'"|"\n)','(','"(|)"\n)',{ft='lua'}},
         {"'''|'","'","''''|",{ft='lua'}},
-        {'local a=| }','{','local a={|} }',{ft='lua',c={filter={tsnode={separate={'table_constructor'},detect_after="{"}}}}},
+        {'local a=| }','{','local a={|} }',{ft='lua',c={filter={tsnode={separate={'table_constructor'},detect_after="{"}}},skip=true}}, --TODO: make detect_after only run on insert
         {"let a: Vec<|a>;","'","let a: Vec<'|a>;",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}}, --TODO: only do on insertion, not on general filtering
         {"|","'","'|'",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}},
         --{[["'"|"'"]],'"',[["'""|""'"]],{ft='lua'}},

@@ -24,7 +24,7 @@ return {
       cmdtype={skip={'/','?','@'}},
       filter={p=-1},
       escape={},
-      filetype={nft={'TelescopePrompt'},detect_after=true},
+      filetype={nft={'TelescopePrompt'},lang_detect_after=true},
       tsnode={p=-2,lang_detect_after=true,separate={'comment','string','char','character',
       'raw_string', --fish/bash/sh
       'char_literal','string_literal', --c/cpp
