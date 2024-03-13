@@ -28,6 +28,7 @@ M.conf_spec={
         nft='array_of_strings',
         multiline='boolean',
         p='number',
+        insert='filter',
     },
     maps={
         backspace='backspace',
