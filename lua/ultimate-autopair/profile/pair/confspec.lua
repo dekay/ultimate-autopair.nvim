@@ -6,9 +6,11 @@ M.conf_spec={
         __array_value='pair',
         map_modes='modes',
         pair_map_modes='modes',
-        filter='filters',
         multiline='boolean',
         p='number',
+        filter='filters',
+        extension='TODO',
+        integration='TODO',
     },
     pair={
         __inherit_keys={'basepair'},
@@ -61,6 +63,7 @@ M.conf_spec={
         detect_after='boolean',
     },
     filter={
+        filter='TODO',
         __inherit_keys={'basefilter'},
     },
     tsnode={
@@ -75,7 +78,7 @@ M.conf_spec={
     },
     backspace={
         __inherit_keys={'basemap'},
-        overjump='boolean',
+        overjump='TODO',
     },
     space={
         __inherit_keys={'basemap'},
@@ -113,6 +116,9 @@ M.conf_spec={
     },
     array_of_strings={ --Should be inlined
         __array_value='string',
+    },
+    TODO={
+        __type='special',
     }
 }
 function M.validate(conf,spec_name,traceback)
@@ -222,9 +228,5 @@ function M.generate_random(spec_name)
         end
     end
     return out
-end
-function M.test() --TODO: run this when testing
-    M.validate(require'ultimate-autopair.default','main')
-    M.validate(M.generate_random('main'),'main')
 end
 return M
