@@ -33,6 +33,7 @@ function M.check_unique_lang_to_ft()
     local single=require'ultimate-autopair.utils'._tslang2lang_single
     for _,tree_lang in ipairs(tree_langs) do
         if done[tree_lang]=='' then goto continue end
+        vim.treesitter.language.add(tree_lang)
         local filetypes=vim.treesitter.language.get_filetypes(tree_lang)
         local ft=done[tree_lang]
         if done[tree_lang] then

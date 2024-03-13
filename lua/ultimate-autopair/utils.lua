@@ -50,8 +50,12 @@ function M.key_pos_nodot(col,row)
     return M.I.key_i_ctrl_o..row..'gg'..M.I.key_i_ctrl_o..col..'|'
 end
 M.tslang2lang={
-    markdown_inline='markdown',
     --These treesitter languages have multiple filetypes
+    ---Category 0
+    markdown_inline='markdown',
+    haskell_persistent='haskell',
+    ocaml_interface='ocaml',
+    surface='elixir',
     ---Category 1
     markdown='markdown',
     glimmer='handlebars',
@@ -68,8 +72,41 @@ M.tslang2lang={
     verilog='verilog',
     ---Category 2
     latex='tex',
+    bash='sh',
+    bibtex='bib',
+    commonlisp='lisp',
+    devicetree='dts',
+    c_sharp='cs',
+    diff='diff',
+    eex='eelixir',
+    embedded_template='eruby',
+    facility='fsd',
+    faust='dsp',
+    gdshader='gdshader',
+    git_config='gitconfig',
+    git_rebase='gitrebase',
+    godot_resource='gdresource',
+    janet_simple='janet',
+    linkerscript='ld',
+    m68k='asm68k',
+    poe_filter='poefilter',
+    properties='jproperties',
+    qmljs='qml',
+    slang='slang',
+    ssh_config='ssh_config',
+    starlark='bzl',
+    tlaplus='tla',
+    udev='udevrules',
+    uxntal='tal',
+    v='v',
+    vhs='tape',
 }
-M._tslang2lang_single={markdown_inline=true}
+M._tslang2lang_single={
+    markdown_inline=true,
+    haskell_persistent=true,
+    ocaml_interface=true,
+    surface=true,
+}
 ---@param o ua.filter
 ---@param opt {parser:vim.treesitter.LanguageTree?}?
 ---@return string
