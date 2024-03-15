@@ -1,5 +1,6 @@
 local hookmem=require'ultimate-autopair.hook.mem'
 local maphook=require'ultimate-autopair.hook.map'
+local userhook=require'ultimate-autopair.hook.user'
 local hookutils=require'ultimate-autopair.hook.utils'
 local M={}
 ---@param objects ua.instance
@@ -62,6 +63,8 @@ function M.update()
         if #v==0 then
             if info.type=='map' then
                 maphook.del(hash)
+            elseif info.type=='user' then
+                userhook.del(hash)
             else
                 error(('hook type `%s` can not be unregistered'):format(info.type))
             end
@@ -71,6 +74,8 @@ function M.update()
         hookutils.stable_sort(hookmem[hash])
         if info.type=='map' then
             maphook.set(hash)
+        elseif info.type=='user' then
+            userhook.set(hash)
         else
             error(('hook type `%s` can not be registered'):format(info.type))
         end

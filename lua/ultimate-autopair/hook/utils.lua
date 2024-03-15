@@ -39,7 +39,7 @@ function M.create_o_wrapper()
     source={
         source=buf,
         o=vim.bo[buf],
-        mode=vim.fn.mode(),
+        mode=M.getmode(),
         get_parser=function ()
             local s,parser=pcall(vim.treesitter.get_parser,buf)
             if not s then return end
@@ -185,5 +185,10 @@ function M.act_to_keys(act,mode,conf)
         return M.activate_abbrev(buf:tostring())
     end
     return buf:tostring()
+end
+---@return string
+function M.getmode()
+    --TODO: what about mode()=>R should be insert mode
+    return vim.fn.mode()
 end
 return M

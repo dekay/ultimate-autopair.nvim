@@ -290,6 +290,12 @@ return {
     profile_map={
         {'|','a','bb|',{c={profile='map',{'i','a','bb'}}}},
     },
+    hook_user={
+        --TODO
+    },
+    hook_map={
+        --TODO
+    },
     DEV_run={
         {'foo\nbar|baz\nfizzbuzz','vim','foo\nbarvim|baz\nfizzbuzz'},
         {'foo\n|bar\n','<bs>','foo|bar\n'},

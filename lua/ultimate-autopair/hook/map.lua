@@ -7,6 +7,9 @@ function M.del(hash)
     assert(info.type=='map')
     local conf=info.conf
     assert(type(conf.mode)=='string')
+    if _G.UA_DEV then
+        assert(vim.fn.mapcheck(info.key,conf.mode)~='')
+    end
     vim.keymap.del(conf.mode,info.key)
 end
 ---@param hash ua.hook.hash
@@ -24,6 +27,9 @@ function M.expr_set(hash)
     assert(info.type=='map')
     local conf=info.conf
     assert(type(conf.mode)=='string')
+    if _G.UA_DEV then
+        assert(vim.fn.mapcheck(info.key,conf.mode)=='')
+    end
     local objs=hookmem[hash]
     local desc={}
     for _,obj in ipairs(objs) do
