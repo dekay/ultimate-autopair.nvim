@@ -71,7 +71,7 @@ function M.update()
             hookmem[hash]=nil
             goto continue
         end
-        hookutils.stable_sort(hookmem[hash])
+        hookutils.stable_sort(v)
         if info.type=='map' then
             maphook.set(hash)
         elseif info.type=='user' then
