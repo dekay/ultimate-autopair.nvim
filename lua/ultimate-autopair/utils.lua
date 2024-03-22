@@ -100,6 +100,7 @@ M.tslang2lang={
     uxntal='tal',
     v='v',
     vhs='tape',
+    vento='vento',
 }
 M._tslang2lang_single={
     markdown_inline=true,
