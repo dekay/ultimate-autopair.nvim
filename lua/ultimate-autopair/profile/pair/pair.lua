@@ -8,6 +8,8 @@ function M.run_start(o)
     o._lsave={} --TODO: temp
     local info=(o.m --[[@as ua.prof.def.pair]]).info
     local last_char=info.start_pair:sub(-1+vim.str_utf_start(info.start_pair,#info.start_pair))
+    local ret=putils.run_extension(info.extension,o)
+    if ret then return ret end
     if o.line:sub(o.col-#info.start_pair+#last_char,o.col-1)~=info.start_pair:sub(0,-1-#last_char) then return end
     if not utils.run_filters(info.start_pair_filter,o,#info.start_pair-1) then
         return
@@ -30,6 +32,8 @@ end
 function M.run_end(o)
     o._lsave={} --TODO: temp
     local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local ret=putils.run_extension(info.extension,o)
+    if ret then return ret end
     if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
     if not utils.run_filters(info.end_pair_filter,o,0,-#info.end_pair) then
         return
@@ -55,6 +59,7 @@ function M.init(pair)
     local end_pair=pair[2]
 
     local info_mt={
+        extension=pair.extension,
         start_pair=start_pair,
         end_pair=end_pair,
         multiline=pair.multiline,

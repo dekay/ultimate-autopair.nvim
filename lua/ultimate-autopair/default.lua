@@ -38,8 +38,8 @@ return {
       }},
     },
     extension={
-      surround={},
-      fly={},
+      --surround={},
+      --fly={},
     },
     integration={
       autotag={},

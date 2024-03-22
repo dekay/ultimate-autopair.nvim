@@ -107,4 +107,17 @@ function M.create_obj(conf,obj)
         hooks=M.create_hooks(conf.map --[[@as string]],conf.modes)
     },obj)
 end
+---@param extensions table<string,table>
+---@param o ua.info
+---@return ua.actions?
+function M.run_extension(extensions,o)
+    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    for extname,conf in pairs(extensions) do
+        local ext=require('ultimate-autopair.profile.pair.extension.'..extname)
+        if info.type==ext.type then
+            local ret=ext.run(o,conf)
+            if ret then return ret end
+        end
+    end
+end
 return M

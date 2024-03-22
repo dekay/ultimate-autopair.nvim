@@ -138,6 +138,14 @@ function M.pair_init(conf,pair,_sub)
         filters.filetype=setmetatable({nft=M.merge_list(filters.filetype.nft or {},pair.nft)},{__index=filters.filetype})
     end
     out.filter=filters
+
+    local extension={}
+    for k,_ in pairs(conf.extension or {}) do
+        extension[k]=pair[k]
+    end
+    extension=M.merge_tbl(conf.extension,extension) or {}
+    out.extension=extension
+
     if _sub then
         return out
     end

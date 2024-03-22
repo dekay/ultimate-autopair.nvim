@@ -6,6 +6,7 @@
 ---@field multiline? boolean
 ---@field start_pair_filter table
 ---@field end_pair_filter table
+---@field extension table
 ---@field type "start"|"end"
 ---@class ua.prof.def.pair:ua.object
 ---@field info ua.prof.def.pair.info
