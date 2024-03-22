@@ -294,6 +294,10 @@ return {
         {'|','a','bb|',{c={profile='raw',{{'map','a',{mode='i'}},function () return {'bb'} end}}}},
         {'|','a','bb|',{c={profile='raw',{hooks={{'map','a',{mode='i'}}},run=function () return {'bb'} end}}}},
     },
+    profile_cond={
+        {'|','a','bb|',{c={profile='cond',filter={filetype={nft={'lua'}}},{profile='map',{'i','a','bb'}}}}},
+        {'|','a','a|',{ft='lua',c={profile='cond',filter={filetype={nft={'lua'}}},{profile='map',{'i','a','bb'}}}}},
+    },
     hook_user={
         --TODO
     },
