@@ -51,7 +51,7 @@ M.conf_spec={
     },
     cmdtype={
         __inherit_keys={'basefilter'},
-        skip='array_of_strings',
+        skip={__not_table=true,__array_value={__type='enum',__data={'',':','>','/','?','@','-','='}}},
     },
     escape={
         __inherit_keys={'basefilter'},
@@ -77,7 +77,7 @@ M.conf_spec={
         separate='array_of_strings',
     },
     basefilter={
-        modes='modes',
+        --modes='modes',
         p='number',
     },
     backspace={
@@ -104,6 +104,10 @@ M.conf_spec={
         __data={'n','v','x','s','o','!','i','l','c','t',''},
     },
     modes={
+        __not_table=true,
+        --TODO: modes (and other similars configs) should not be treated as table but as values
+        --So instead of merge({'n'},{'v'}) becoming {'n','v'}, it becomes {'v'}
+        --Similar to how merge('n','v') doesn't become 'nv', but 'v'
         __array_value='mode',
     },
     boolean={ --Should be inlined
@@ -126,14 +130,16 @@ M.conf_spec={
     }
 }
 function M.validate(conf,spec_name,traceback)
-    local spec=M.conf_spec[spec_name]
+    local spec=type(spec_name)=='table' and spec_name or M.conf_spec[spec_name]
     if spec.__type=='type' then
-        assert(type(conf)==spec.__data,('\n\n\n'..[[
+        if type(conf)==spec.__data then
+            return
+        end
+        error(('\n\n\n'..[[
         Configuration for the plugin 'ultimate-autopair' is incorrect.
         The option `%s` has the value `%s`, which has the type `%s`.
         However, that option should have the type `%s`.
         ]]..'\n'):format(traceback,conf,type(conf),spec.__data))
-        return
     elseif spec.__type=='enum' then
         for _,v in ipairs(spec.__data --[[@as table]]) do
             if v==conf then
@@ -145,8 +151,14 @@ function M.validate(conf,spec_name,traceback)
         The option `%s` contains the value `%s`.
         However, that option should be one of `%s`.
         ]]..'\n'):format(traceback,conf,vim.inspect(spec.__data)))
+    elseif spec.__type=='enum_array' then
+        spec={
+            __array_value={}, --TODO
+        }
     elseif spec.__type=='special' then
         return
+    elseif spec.__type and _G.UA_DEV then
+        error('confspec.validate')
     end
     if type(conf)~='table' then
         error(('\n\n\n'..[[
@@ -154,7 +166,6 @@ function M.validate(conf,spec_name,traceback)
         The option `%s` has the value `%s`, which has the type `%s`.
         However, the option should be a table.
         ]]..'\n'):format(traceback,vim.inspect(conf),type(conf)))
-
     end
     local tspec=setmetatable({merge='boolean'},{__index=spec})
     local inherit=vim.deepcopy(tspec.__inherit_keys or {})
@@ -170,6 +181,7 @@ function M.validate(conf,spec_name,traceback)
     end
     if tspec.__array_value then
         for k,_ in ipairs(conf) do
+            ---@diagnostic disable-next-line: assign-type-mismatch
             tspec[k]=tspec.__array_value
         end
     end
@@ -180,16 +192,21 @@ function M.validate(conf,spec_name,traceback)
         return t
     end
     for k,v in pairs(conf) do
-        assert(tspec[k],('\n\n\n'..[[
+        if not tspec[k] then
+            error(('\n\n\n'..[[
         Configuration for the plugin 'ultimate-autopair' is incorrect.
-        The option '%s' is set, but it should not be set.
+        The option `%s` is set, but it should not be set.
         ]]..'\n'):format(traceback and traceback..'.'..convert(k) or convert(k)))
+        end
         M.validate(v,tspec[k],traceback and traceback..'.'..convert(k) or convert(k))
     end
 end
 function M.generate_random(spec_name)
     local out={}
-    local spec=M.conf_spec[spec_name]
+    local spec=type(spec_name)=='table' and spec_name or M.conf_spec[spec_name]
+    if type(spec_name)=='table' then
+        spec_name='foo'
+    end
     if spec.__type=='type' then
         if spec.__data=='string' then
             local str=''
@@ -208,8 +225,10 @@ function M.generate_random(spec_name)
         return spec.__data[math.random(#spec.__data)]
     elseif spec.__type=='special' then
         return 'S'
+    elseif spec.__type and _G.UA_DEV then
+        error('confspec.generate_random')
     end
-    local tspec=setmetatable({merge='boolean'},{__index=spec})
+    local tspec=vim.tbl_extend('error',{merge='boolean'},spec)
     local inherit=vim.deepcopy(tspec.__inherit_keys or {})
     while #inherit>0 do
         local i_spec_name=table.remove(inherit)
