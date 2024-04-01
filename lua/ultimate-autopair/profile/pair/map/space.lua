@@ -1,16 +1,16 @@
 local hookutils=require'ultimate-autopair.hook.utils'
 local putils=require'ultimate-autopair.profile.pair.utils'
----@class ua.prof.def.space.info
----@field pairs ua.prof.def.pair[]
----@class ua.prof.def.space:ua.object
----@field info ua.prof.def.space.info
----@class ua.prof.def.space.conf:ua.prof.def.map
+---@class ua.prof.pair.space.info
+---@field pairs ua.prof.pair.pair[]
+---@class ua.prof.pair.space:ua.object
+---@field info ua.prof.pair.space.info
+---@class ua.prof.pair.space.conf:ua.prof.pair.map.conf
 
 local M={}
 ---@param o ua.info
 ---@return ua.actions|nil
 function M.run(o)
-    local m=o.m --[[@as ua.prof.def.space]]
+    local m=o.m --[[@as ua.prof.pair.space]]
     local info=m.info
     local first_col=o.line:sub(1,o.col-1):find(' *$')
     local total=o.col-first_col
@@ -32,13 +32,13 @@ function M.run(o)
         ::continue::
     end
 end
----@param somepairs ua.prof.def.pair
----@param conf ua.prof.def.space.conf
----@return ua.prof.def.space
+---@param somepairs ua.prof.pair.pair
+---@param conf ua.prof.pair.space.conf
+---@return ua.prof.pair.space
 function M.init(somepairs,conf)
     --TODO: each pair may have it's own space config defined
     --TODO: how to do the autocmd stuff... (should only need to change the hook, no other config neceserry (will carry over to make autopair after alpha insert possible))
-    ---@type ua.prof.def.space
+    ---@type ua.prof.pair.space
     return putils.create_obj(conf,{
         run=M.run,
         info={pairs=somepairs},

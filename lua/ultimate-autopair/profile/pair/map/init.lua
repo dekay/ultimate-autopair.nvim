@@ -5,7 +5,7 @@ M.maps={
     space='space',
 }
 ---@param objects ua.instance
----@param somepairs ua.prof.def.pair[]
+---@param somepairs ua.prof.pair.pair[]
 ---@param conf ua.prof.pair.conf
 function  M.init(objects,somepairs,conf)
     for mapname,confname in pairs(M.maps) do

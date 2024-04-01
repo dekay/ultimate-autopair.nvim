@@ -6,7 +6,7 @@ local M={}
 ---@return ua.actions|nil
 function M.run_start(o)
     o._lsave={} --TODO: temp
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     local last_char=info.start_pair:sub(-1+vim.str_utf_start(info.start_pair,#info.start_pair))
     local ret=putils.run_extension(info.extension,o)
     if ret then return ret end
@@ -31,7 +31,7 @@ end
 ---@return ua.actions|nil
 function M.run_end(o)
     o._lsave={} --TODO: temp
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     local ret=putils.run_extension(info.extension,o)
     if ret then return ret end
     if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
@@ -52,7 +52,7 @@ function M.run_end(o)
     }
 end
 ---@param pair ua.prof.pair.conf.pair
----@return ua.prof.def.pair[]
+---@return ua.prof.pair.pair[]
 function M.init(pair)
     ---TODO: pair may include hook options, so follow that
     local start_pair=pair[1]

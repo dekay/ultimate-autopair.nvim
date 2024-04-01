@@ -1,4 +1,4 @@
----@class ua.prof.def.pair.info
+---@class ua.prof.pair.pair.info
 ---@field start_pair string
 ---@field _filter table --TODO: the problem: extension.tsnode can be initialized for specific positions, which means that filter may change, MAYBE?: have a filter initialize function which initializes the filters for a position
 ---@field end_pair string
@@ -8,11 +8,11 @@
 ---@field end_pair_filter table
 ---@field extension table
 ---@field type "start"|"end"
----@class ua.prof.def.pair:ua.object
----@field info ua.prof.def.pair.info
+---@class ua.prof.pair.pair:ua.object
+---@field info ua.prof.pair.pair.info
 ---@alias ua.prof.pair.conf table
 ---@alias ua.prof.pair.conf.pair table
----@class ua.prof.def.map
+---@class ua.prof.pair.map.conf
 ---@field modes string[]
 ---@field map string|table
 ---@field p? number
@@ -30,7 +30,7 @@ function M.init(conf,objects)
         table.insert(objects,v)
     end
 end
----@param somepairs ua.prof.def.pair[]
+---@param somepairs ua.prof.pair.pair[]
 function M.pair_sort_len(somepairs)
     local len={}
     for _,v in ipairs(somepairs) do
@@ -47,7 +47,7 @@ function M.pair_sort_len(somepairs)
     end
 end
 ---@param objects ua.instance
----@param somepairs ua.prof.def.pair[]
+---@param somepairs ua.prof.pair.pair[]
 function M.init_pairs(objects,somepairs)
     for _,pair in ipairs(somepairs or {}) do
         for _,module in ipairs(M.init_pair(pair)) do
@@ -56,12 +56,12 @@ function M.init_pairs(objects,somepairs)
     end
 end
 ---@param pair ua.prof.pair.conf.pair
----@return ua.prof.def.pair[]
+---@return ua.prof.pair.pair[]
 function M.init_pair(pair)
     return require('ultimate-autopair.profile.pair.pair').init(pair)
 end
 ---@param objects ua.instance
----@param somepairs ua.prof.def.pair[]
+---@param somepairs ua.prof.pair.pair[]
 ---@param conf ua.prof.pair.conf
 function M.init_maps(objects,somepairs,conf)
     require('ultimate-autopair.profile.pair.map').init(objects,somepairs,conf)

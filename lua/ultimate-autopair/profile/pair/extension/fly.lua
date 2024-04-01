@@ -3,7 +3,7 @@ local M={}
 ---@param conf table
 ---@return ua.actions?
 function M.run(o,conf)
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     local no=setmetatable({},{__index=o})
     while true do
         if no.line:sub(no.col,no.col+#info.end_pair)==info.end_pair then

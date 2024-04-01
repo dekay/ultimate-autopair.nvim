@@ -2,8 +2,8 @@ local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:make user be ab
 local utils=require'ultimate-autopair.utils'
 local M={}
 ---@param o ua.info
----@param somepairs ua.prof.def.pair[]
----@return ua.prof.def.pair[]
+---@param somepairs ua.prof.pair.pair[]
+---@return ua.prof.pair.pair[]
 function M.backwards_get_start_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
@@ -17,8 +17,8 @@ function M.backwards_get_start_pairs(o,somepairs)
     return ret
 end
 ---@param o ua.info
----@param somepairs ua.prof.def.pair[]
----@return ua.prof.def.pair[]
+---@param somepairs ua.prof.pair.pair[]
+---@return ua.prof.pair.pair[]
 function M.backwards_get_end_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
@@ -34,7 +34,7 @@ end
 ---@param o ua.info
 ---@return boolean
 function M.pair_balansed_start(o)
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     if info.start_pair==info.end_pair then
         return not open_pair.count_ambiguous_pair(o,'both')
     end
@@ -44,7 +44,7 @@ end
 ---@param o ua.info
 ---@return boolean
 function M.pair_balansed_end(o)
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     if info.start_pair==info.end_pair then
         return not open_pair.count_ambiguous_pair(o,'both')
     end
@@ -55,19 +55,19 @@ end
 ---@param col number?
 function M.run_end_pair_filter(o,col)
     col=col or o.col
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     return utils.run_filters(info.end_pair_filter,o,nil,-#info.end_pair)
 end
 ---@param o ua.info
 function M.run_start_pair_filter(o)
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     return utils.run_filters(info.start_pair_filter,o,nil,-#info.start_pair)
 end
 ---@param o ua.info
 ---@return number?
 ---@return number?
 function M.next_open_end_pair(o)
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     if info.start_pair==info.end_pair then
         return open_pair.count_ambiguous_pair(o,true,0,true)
     end
@@ -77,7 +77,7 @@ end
 ---@return number?
 ---@return number?
 function M.prev_open_start_pair(o)
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     if info.start_pair==info.end_pair then
         return open_pair.count_ambiguous_pair(o,false,0,true)
     end
@@ -111,7 +111,7 @@ end
 ---@param o ua.info
 ---@return ua.actions?
 function M.run_extension(extensions,o)
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     for extname,conf in pairs(extensions) do
         local ext=require('ultimate-autopair.profile.pair.extension.'..extname)
         if info.type==ext.type then

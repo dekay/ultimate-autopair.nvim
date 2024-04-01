@@ -7,7 +7,7 @@ local M={}
 ---@return number?
 function M.count_start_pair(o,gotostart,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     local start_pair=info.start_pair
     local end_pair=info.end_pair
     local multiline=info.multiline
@@ -63,7 +63,7 @@ end
 ---@return number?
 function M.count_end_pair(o,gotoend,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     local start_pair=info.start_pair
     local end_pair=info.end_pair
     local multiline=info.multiline
@@ -117,7 +117,7 @@ end
 ---@return number?
 function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
-    local info=(o.m --[[@as ua.prof.def.pair]]).info
+    local info=(o.m --[[@as ua.prof.pair.pair]]).info
     assert(info.start_pair==info.end_pair)
     local pair=info.start_pair
     local multiline=info.multiline
