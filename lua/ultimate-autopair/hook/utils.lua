@@ -177,7 +177,7 @@ function M.act_to_keys(act,mode,conf)
             else
                 buf:put(utils.key_pos_nodot(v[2],v[3]))
             end
-        elseif v[1]=='delete' then
+        elseif v[1]=='delete' then --TODO: utf8 pairs
             buf:put(utils.key_del(v[2],v[3]))
         end
     end

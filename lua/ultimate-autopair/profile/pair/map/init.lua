@@ -3,6 +3,7 @@ M.maps={
     bs='backspace',
     cr='newline',
     space='space',
+    fastwarp='fastwarp',
 }
 ---@param objects ua.instance
 ---@param somepairs ua.prof.pair.pair[]

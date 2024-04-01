@@ -32,6 +32,21 @@ function M.backwards_get_end_pairs(o,somepairs)
     return ret
 end
 ---@param o ua.info
+---@param somepairs ua.prof.pair.pair[]
+---@return ua.prof.pair.pair[]
+function M.forward_get_end_pairs(o,somepairs)
+    local ret={}
+    for _,v in ipairs(somepairs) do
+        if v.info.type=='end'
+            and v.info.end_pair==o.line:sub(o.col,o.col+#v.info.end_pair-1)
+            and M.run_end_pair_filter(setmetatable({m=v,col=o.col},{__index=o}))
+        then
+            table.insert(ret,v)
+        end
+    end
+    return ret
+end
+---@param o ua.info
 ---@return boolean
 function M.pair_balansed_start(o)
     local info=(o.m --[[@as ua.prof.pair.pair]]).info
@@ -52,9 +67,7 @@ function M.pair_balansed_end(o)
     return not open_pair.count_end_pair(o,true,count,true)
 end
 ---@param o ua.info
----@param col number?
-function M.run_end_pair_filter(o,col)
-    col=col or o.col
+function M.run_end_pair_filter(o)
     local info=(o.m --[[@as ua.prof.pair.pair]]).info
     return utils.run_filters(info.end_pair_filter,o,nil,-#info.end_pair)
 end

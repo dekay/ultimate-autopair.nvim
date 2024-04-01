@@ -34,6 +34,7 @@ M.conf_spec={
         backspace='backspace',
         newline='newline',
         space='space',
+        fastwarp='fastwarp',
     },
     filters={
         alpha='alpha',
@@ -88,6 +89,9 @@ M.conf_spec={
         __inherit_keys={'basemap'},
     },
     newline={
+        __inherit_keys={'basemap'},
+    },
+    fastwarp={
         __inherit_keys={'basemap'},
     },
     basemap={

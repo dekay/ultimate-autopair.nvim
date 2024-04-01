@@ -36,7 +36,7 @@ end
 ---@param conf ua.prof.pair.space.conf
 ---@return ua.prof.pair.space
 function M.init(somepairs,conf)
-    --TODO: each pair may have it's own space config defined
+    --TODO: each pair may have it's own space config defined (!which may include disabling space!)
     --TODO: how to do the autocmd stuff... (should only need to change the hook, no other config neceserry (will carry over to make autopair after alpha insert possible))
     ---@type ua.prof.pair.space
     return putils.create_obj(conf,{

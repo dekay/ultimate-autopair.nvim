@@ -65,6 +65,10 @@ return {
       enable=false,
       map='<space>',
     },
+    fastwarp={
+      enable=true,
+      map='<C-e>',
+    }
   },
   --TODO:
   --tex={
