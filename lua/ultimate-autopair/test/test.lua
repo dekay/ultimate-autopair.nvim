@@ -137,7 +137,7 @@ return {
         {'""|','"','"""|"'},
         {'<!-|','-','<!--|-->',{ft='markdown'}},
         {'|','(','(|',{ft='TelescopePrompt'}},
-        {'```java\n|\n```','<lt>',"```java\n<|>\n```",{ft='markdown',c={{'<','>',ft={'java'}}}}},
+        {'```lua\n|\n```','<lt>',"```lua\n<|>\n```",{ft='markdown',c={{'<','>',ft={'lua'}}}}},
         {'$|$','<lt>','$<|>$',{ft='markdown',c={{'<','>',ft={'tex',detect_after='\a'}}},skip=true}},
         {'$|$','<lt>','$<|$',{ft='markdown',c={{'<','>',ft={'tex',detect_after='\a'},filetype={detect_after=false}}},skip=true}},
         {'|','<lt>','<|',{ft='lua',c={{'<','>',nft={'lua'}}}}},

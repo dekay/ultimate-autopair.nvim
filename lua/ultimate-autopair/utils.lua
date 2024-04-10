@@ -113,31 +113,15 @@ M._tslang2lang_single={
 ---@return string
 function M.get_filetype(o,opt)
     opt=opt or {}
+    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
     ---@param ltree vim.treesitter.LanguageTree
-    local function lang_for_range(ltree,range)
-        local query=vim.treesitter.query.get(ltree:lang(),'injections')
-        if not query then return ltree:lang() end
-        for _,tree in pairs(ltree:trees()) do
-            for _,match,metadata in query:iter_matches(tree:root(),o.source.source,0,-1) do
-                local lang=metadata['injection.language']
-                if metadata['injection.parent'] then lang=ltree:lang() end
-                local trange
-                for id, node in pairs(match) do
-                    local name=query.captures[id]
-                    if name=='injection.language' then
-                        lang=vim.treesitter.get_node_text(node,o.source.source)
-                    elseif name=='injection.content' then
-                        ---@diagnostic disable-next-line: undefined-field
-                        trange={node:range()}
-                    end
-                end
-                if (trange[1]<range[1] or (trange[1]==range[1] and trange[2]<=range[2])) and
-                    (trange[3]>range[3] or (trange[3]==range[3] and trange[4]>=range[4])) then
-                    local child=ltree:children()[lang]
-                    if child then
-                        return lang_for_range(child,range),true
-                    else
-                        return lang,true
+    local function lang_for_range(ltree)
+        for _,child in pairs(ltree:children()) do
+            for _,tree in pairs(child:trees()) do
+                for _,trange in pairs(tree:included_ranges(false)) do
+                    if (trange[1]<range[1] or (trange[1]==range[1] and trange[2]<=range[2])) and
+                        (trange[3]>range[3] or (trange[3]==range[3] and trange[4]>=range[4])) then
+                        return lang_for_range(child),true
                     end
                 end
             end
@@ -148,8 +132,7 @@ function M.get_filetype(o,opt)
     if not tree then return o.source.o.filetype end
     local parser=opt.parser or o.source.get_parser()
     if not parser then return o.source.o.filetype end
-    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
-    local tslang,childlang=lang_for_range(parser,range)
+    local tslang,childlang=lang_for_range(parser)
     if not childlang then return o.source.o.filetype end
     return M.tslang2lang[tslang] or vim.treesitter.language.get_filetypes(tslang)[1] or tslang
 end
