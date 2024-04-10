@@ -63,7 +63,7 @@ function M.create_o_wrapper()
             cmdtype=cmdtype,
             mode='c',
             get_parser=function ()
-                local s,parser=pcall(vim.treesitter.get_string_parser,cmdline,'vim')
+                local s,parser=pcall(vim.treesitter.get_string_parser,cmdline..'\n','vim')
                 if not s then return end
                 if not source._cache[has_parsed] then
                     parser:parse(true)

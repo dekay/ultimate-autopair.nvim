@@ -209,7 +209,7 @@ function M._HACK_parser_get_after_insert(o,str)
     vim.list_extend(lines,o.source._lines)
     lines[o.rowe]=o.line:sub(1,o.cole-1)..str..o.line:sub(o.cole)
     o.cole=o.cole+1
-    local parser=vim.treesitter.get_string_parser(table.concat(lines,'\n'),vim.treesitter.language.get_lang(o.source.o.filetype) or o.source.o.filetype)
+    local parser=vim.treesitter.get_string_parser(table.concat(lines,'\n')..'\n',vim.treesitter.language.get_lang(o.source.o.filetype) or o.source.o.filetype)
     parser:parse({o.rows-1,o.rowe})
     return parser
 end
