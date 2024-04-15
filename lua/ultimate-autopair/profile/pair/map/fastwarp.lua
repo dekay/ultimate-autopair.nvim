@@ -14,9 +14,9 @@ M.act={
             ind=ind+1
         end
         return {
-            {'delete',0,#p},
+            {'delete',0,p},
             {'pos',ind-1},
-            p,{'left',#p},
+            p,{'left',p},
         }
     end,
     function (o,ind,p,first)
@@ -24,9 +24,9 @@ M.act={
         local next_spair=putils.forward_get_start_pairs(o,o.m.info.pairs)
         if #next_spair==0 then return end
         return {
-            {'delete',0,#p},
+            {'delete',0,p},
             {'pos',ind-1},
-            p,{'left',#p},
+            p,{'left',p},
         }
     end
 }
@@ -47,7 +47,7 @@ function M.run(o)
         end
         if o.col~=#o.line then
             return {
-                {'delete',0,#epair.info.end_pair},
+                {'delete',0,epair.info.end_pair},
                 {'pos',#o.line},
                 epair.info.end_pair,
                 {'pos',o.col},

@@ -40,7 +40,9 @@ end
 ---@param pos? number
 ---@return string
 function M.key_del(pre,pos)
-    return M.I.key_bs:rep(pre or 1)..M.I.key_del:rep(pos or 0)
+    pre=type(pre)=='string' and M.I.len(pre) or pre or 1
+    pos=type(pos)=='string' and M.I.len(pos) or pos or 0
+    return M.I.key_bs:rep(pre)..M.I.key_del:rep(pos)
 end
 ---@param col number
 ---@param row number?

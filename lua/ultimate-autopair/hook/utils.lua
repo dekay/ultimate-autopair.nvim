@@ -168,8 +168,14 @@ function M.act_to_keys(act,mode,conf)
             if not mode:match'[ic]' then error() end
             buf:put(v[2])
         elseif v[1]=='left' then
+            --if _G.UA_DEV then --TODO
+            --    assert(type(v[2])~='number')
+            --end
             buf:put(utils.key_left(v[2],conf.dot and mode=='i'))
         elseif v[1]=='right' then
+            --if _G.UA_DEV then
+            --    assert(type(v[2])~='number')
+            --end
             buf:put(utils.key_right(v[2],conf.dot and mode=='i'))
         elseif v[1]=='pos' then
             if conf.true_dot then
@@ -178,6 +184,10 @@ function M.act_to_keys(act,mode,conf)
                 buf:put(utils.key_pos_nodot(v[2],v[3]))
             end
         elseif v[1]=='delete' then --TODO: utf8 pairs
+            --if _G.UA_DEV then
+            --    assert(type(v[2])~='number')
+            --    assert(type(v[3])~='number')
+            --end
             buf:put(utils.key_del(v[2],v[3]))
         end
     end
