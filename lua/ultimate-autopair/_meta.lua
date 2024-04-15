@@ -1,3 +1,4 @@
+---@class ua.config #TODO
 ---@class ua.instance
 ---@field [number] ua.object
 ---@field disabled boolean?

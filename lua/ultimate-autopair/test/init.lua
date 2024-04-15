@@ -54,9 +54,16 @@ function M.check_default_config()
     s,err=pcall(confspec.validate,confspec.generate_random('main'),'main')
     if not s then utils.error(err) end
 end
+function M.check_config()
+    local confspec=require'ultimate-autopair.profile.pair.confspec'
+    local config=require'ultimate-autopair'['~get_config']()
+    if not config then return end
+    confspec.validate(config,'main')
+end
 function M.start()
     local lua_path=vim.api.nvim_get_runtime_file('lua/ultimate-autopair',false)[1]
     local plugin_path=vim.fn.fnamemodify(lua_path,':h:h')
+    M.check_config()
     if _G.UA_DEV then
         M.check_not_allowed_string(lua_path)
         M.check_unique_lang_to_ft()

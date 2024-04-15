@@ -1,8 +1,10 @@
 local M={_id=0}
 ---@type table<ua.id,ua.instance>
 local instances={}
----@return table<ua.id,ua.instance>
 M['~get_instances']=function() return instances end
+---@type ua.config?
+local _config
+M['~get_config']=function() return _config end
 local default=require'ultimate-autopair.default'
 local prof=require'ultimate-autopair.profile'
 local hook=require'ultimate-autopair.hook'
@@ -10,6 +12,7 @@ local hook=require'ultimate-autopair.hook'
 ---@param id ua.id?
 function M.setup(conf,id)
     if vim.fn.has('nvim-0.9.0')~=1 then error('Requires at least version nvim-0.9.0') end
+    _config=conf
     M.init({M.extend_default(conf)},id)
 end
 ---@param configs ua.prof.conf[]

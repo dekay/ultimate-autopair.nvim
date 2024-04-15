@@ -199,8 +199,8 @@ function M.validate(conf,spec_name,traceback)
         if not tspec[k] then
             error(('\n\n\n'..[[
         Configuration for the plugin 'ultimate-autopair' is incorrect.
-        The option `%s` is set, but it should not be set.
-        ]]..'\n'):format(traceback and traceback..'.'..convert(k) or convert(k)))
+        The option `%s` is set (to `%s`), but it should not be set.
+        ]]..'\n'):format(traceback and traceback..'.'..convert(k) or convert(k),vim.inspect(v)))
         end
         M.validate(v,tspec[k],traceback and traceback..'.'..convert(k) or convert(k))
     end
