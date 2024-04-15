@@ -101,6 +101,8 @@ M.tslang2lang={
     v='v',
     vhs='tape',
     vento='vento',
+    t32='trace32',
+    textproto='pbtxt',
 }
 M._tslang2lang_single={
     markdown_inline=true,
