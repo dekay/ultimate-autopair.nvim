@@ -118,11 +118,10 @@ function M.get_filetype(o,opt)
     local function lang_for_range(ltree)
         for _,child in pairs(ltree:children()) do
             for _,tree in pairs(child:trees()) do
-                for _,trange in pairs(tree:included_ranges(false)) do
-                    if (trange[1]<range[1] or (trange[1]==range[1] and trange[2]<=range[2])) and
-                        (trange[3]>range[3] or (trange[3]==range[3] and trange[4]>=range[4])) then
-                        return lang_for_range(child),true
-                    end
+                local tranges=tree:included_ranges(false)
+                local trange={tranges[1][1],tranges[1][2],tranges[#tranges][3],tranges[#tranges][4]}
+                if M.range_in_range(trange,range,true) then
+                    return lang_for_range(child),true
                 end
             end
         end
