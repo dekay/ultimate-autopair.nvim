@@ -88,7 +88,9 @@ return {
         {'a´´b´|´c','´','a´´b´´|´c',{c={{'´´','´´'}},skip=true}},
         {'print("§",|)','"','print("§","|")',{ft='lua'}},
         {"'á|',","'","'á'|,"},
-        --{'(|)aøe,','','(|aøe),',{interactive=true}}, --faswarp
+        {',(|)aøe,','<C-e>',',(|aøe),',{skip=true}}, --fastwarp
+        {',««|»»aøe,','<C-e>',',««|aøe»»,',{c={{'««','»»'}},skip=true}}, --fastwarp
+        {',´´|´´aøe,','<C-e>',',´´|aøe´´,',{c={{'´´','´´'}},skip=true}}, --fastwarp
         --{'(|aáa),','','|aáa,',{interactive=true}}, --backspace
         --{'|"¿qué?",','(','(|"¿qué?"),',{interactive=true}}, --ext.surround
         {"ä|,","'","ä'|,"}, --ext.alpha
