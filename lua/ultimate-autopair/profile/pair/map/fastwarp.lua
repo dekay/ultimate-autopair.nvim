@@ -37,11 +37,9 @@ function M.run(o)
     local info=m.info
     local epairs=putils.forward_get_end_pairs(o,info.pairs)
     for _,epair in ipairs(epairs) do
-        local count=0 --TODO: better input for if first
         for col=o.col+#epair.info.end_pair,#o.line do
-            count=count+1
             for _,v in ipairs(M.act) do
-                local ret=v(setmetatable({col=col},{__index=o}),col,epair.info.end_pair,count==1)
+                local ret=v(setmetatable({col=col},{__index=o}),col,epair.info.end_pair,col==o.col+#epair.info.end_pair)
                 if ret then return ret end
             end
         end
