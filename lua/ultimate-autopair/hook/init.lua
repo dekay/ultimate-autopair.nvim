@@ -26,7 +26,7 @@ function M.unregister_hook(obj,hash)
             return
         end
     end
-    if _G.UA_DEV then error('hook.unregister_hook') end
+    if _G.UA_DEV then error'' end
 end
 ---@param objects ua.instance
 function M.register(objects)

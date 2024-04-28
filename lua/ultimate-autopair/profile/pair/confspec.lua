@@ -162,7 +162,7 @@ function M.validate(conf,spec_name,traceback)
     elseif spec.__type=='special' then
         return
     elseif spec.__type and _G.UA_DEV then
-        error('confspec.validate')
+        error''
     end
     if type(conf)~='table' then
         error(('\n\n\n'..[[
@@ -230,7 +230,7 @@ function M.generate_random(spec_name)
     elseif spec.__type=='special' then
         return 'S'
     elseif spec.__type and _G.UA_DEV then
-        error('confspec.generate_random')
+        error''
     end
     local tspec=vim.tbl_extend('error',{merge='boolean'},spec)
     local inherit=vim.deepcopy(tspec.__inherit_keys or {})
