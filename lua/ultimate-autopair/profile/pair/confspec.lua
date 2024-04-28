@@ -133,8 +133,20 @@ M.conf_spec={
         __type='special',
     }
 }
+M.conf_spec_cache=vim.defaulttable(function (spec_name)
+    if not M.conf_spec[spec_name].__inherit_keys then
+        return M.conf_spec[spec_name]
+    end
+    local spec=vim.tbl_extend('error',{},M.conf_spec[spec_name])
+    for _,ispec in ipairs(M.conf_spec[spec_name].__inherit_keys) do
+        for k,v in pairs(M.conf_spec_cache[ispec]) do
+            spec[k]=spec[k] or v
+        end
+    end
+    return spec
+end)
 function M.validate(conf,spec_name,traceback)
-    local spec=type(spec_name)=='table' and spec_name or M.conf_spec[spec_name]
+    local spec=type(spec_name)=='table' and spec_name or M.conf_spec_cache[spec_name]
     if spec.__type=='type' then
         if type(conf)==spec.__data then
             return
@@ -155,10 +167,6 @@ function M.validate(conf,spec_name,traceback)
         The option `%s` contains the value `%s`.
         However, that option should be one of `%s`.
         ]]..'\n'):format(traceback,conf,vim.inspect(spec.__data)))
-    elseif spec.__type=='enum_array' then
-        spec={
-            __array_value={}, --TODO
-        }
     elseif spec.__type=='special' then
         return
     elseif spec.__type and _G.UA_DEV then
@@ -172,17 +180,6 @@ function M.validate(conf,spec_name,traceback)
         ]]..'\n'):format(traceback,vim.inspect(conf),type(conf)))
     end
     local tspec=setmetatable({merge='boolean'},{__index=spec})
-    local inherit=vim.deepcopy(tspec.__inherit_keys or {})
-    while #inherit>0 do
-        local i_spec_name=table.remove(inherit)
-        local ispec=M.conf_spec[i_spec_name]
-        if ispec.__inherit_keys then
-            vim.list_extend(inherit,ispec.__inherit_keys)
-        end
-        for k,v in pairs(ispec) do
-            tspec[k]=tspec[k] or v
-        end
-    end
     if tspec.__array_value then
         for k,_ in ipairs(conf) do
             ---@diagnostic disable-next-line: assign-type-mismatch
@@ -207,10 +204,7 @@ function M.validate(conf,spec_name,traceback)
 end
 function M.generate_random(spec_name)
     local out={}
-    local spec=type(spec_name)=='table' and spec_name or M.conf_spec[spec_name]
-    if type(spec_name)=='table' then
-        spec_name='foo'
-    end
+    local spec=type(spec_name)=='table' and spec_name or M.conf_spec_cache[spec_name]
     if spec.__type=='type' then
         if spec.__data=='string' then
             local str=''
@@ -233,17 +227,6 @@ function M.generate_random(spec_name)
         error''
     end
     local tspec=vim.tbl_extend('error',{merge='boolean'},spec)
-    local inherit=vim.deepcopy(tspec.__inherit_keys or {})
-    while #inherit>0 do
-        local i_spec_name=table.remove(inherit)
-        local ispec=M.conf_spec[i_spec_name]
-        if ispec.__inherit_keys then
-            vim.list_extend(inherit,ispec.__inherit_keys)
-        end
-        for k,v in pairs(ispec) do
-            tspec[k]=tspec[k] or v
-        end
-    end
     if tspec.__array_value then
         for k=1,math.random(1,5) do
             tspec[k]=tspec.__array_value
@@ -252,6 +235,40 @@ function M.generate_random(spec_name)
     for k,v in pairs(tspec) do
         if type(k)=='number' or not k:find'^__' then
             out[k]=M.generate_random(v)
+        end
+    end
+    return out
+end
+function M.merge(origin,new,merge,spec_name)
+    local out={}
+    local spec=type(spec_name)=='table' and spec_name or M.conf_spec_cache[spec_name]
+    if spec.__type=='type' or spec.__type=='enum' or spec.__type=='special' or spec.__not_table then
+        if new~=nil or merge==false then return new end
+        return origin
+    end
+    if new and new.merge==false then merge=false
+    elseif new and new.merge==true then merge=true
+    end
+    if origin==nil or merge==false then return new end
+    if new==nil then return origin end
+    local tspec=setmetatable({merge='boolean'},{__index=spec})
+    for k,v in pairs(spec) do
+        if type(k)=='number' or not k:find'^__' and (origin[k] or new[k]) then
+            out[k]=M.merge(origin[k],new[k],merge,v)
+        end
+    end
+    if tspec.__array_value then
+        local has={}
+        for k,v in pairs(origin) do
+            if type(k)=='number' then
+                has[v]=true
+                table.insert(out,v)
+            end
+        end
+        for k,v in pairs(new) do
+            if type(k)=='number' then
+                if not has[v] then table.insert(out,v) end
+            end
         end
     end
     return out
