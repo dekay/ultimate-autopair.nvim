@@ -29,7 +29,6 @@ function M.to_hash(type,key,conf)
 end
 ---@return fun(ua.object):ua.info
 function M.create_o_wrapper()
-    local cmdtype=vim.fn.getcmdtype()
     local buf=vim.api.nvim_get_current_buf()
     local row=vim.fn.line'.'
     local col=vim.fn.col'.'
@@ -52,15 +51,15 @@ function M.create_o_wrapper()
         _lines=vim.api.nvim_buf_get_lines(buf,0,-1,true),
         _cache={}
     }
-    if cmdtype~='' then
+    if M.getmode()=='c' then
+        local cmdtype=vim.fn.getcmdtype()
         row=1
         col=vim.fn.getcmdpos()
         local cmdline=vim.fn.getcmdline()
         ---@type ua.source
         source={
             source=cmdline,
-            o=setmetatable({filetype='vim',buftype='prompt'},{__index=vim.bo[buf]}),
-            cmdtype=cmdtype,
+            o=setmetatable({filetype='vim',buftype='prompt',cmdtype=cmdtype},{__index=vim.bo[buf]}),
             mode='c',
             get_parser=function ()
                 local s,parser=pcall(vim.treesitter.get_string_parser,cmdline..'\n','vim')

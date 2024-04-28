@@ -47,4 +47,10 @@ M.conf={
     after='boolean',
     py_fstr='boolean',
 }
+M.clear_cache={
+    'textchange',
+    'opt:iskeyword',
+    'opt:lisp',
+    'opt:filetype',
+}
 return M

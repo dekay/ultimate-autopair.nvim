@@ -15,4 +15,7 @@ end
 M.conf={
     escapechar='string?'
 }
+M.clear_cache={
+    'textchange',
+}
 return M

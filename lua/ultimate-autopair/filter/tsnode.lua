@@ -17,7 +17,7 @@ function M.call(o)
     local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
     local parser
     if o.conf.detect_after then
-        parser=utils._HACK_parser_get_after_insert(o,o.conf.detect_after)
+        parser=utils._HACK_parser_get_after_insert(o,o.conf.detect_after) --TODO: detect if treesitter enabled before this
     else
         parser=o.source.get_parser()
     end
@@ -52,4 +52,8 @@ function M.call(o)
     end
     return true
 end
+M.clear_cache={
+    'textchange',
+    'treechange',
+}
 return M

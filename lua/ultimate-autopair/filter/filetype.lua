@@ -19,4 +19,8 @@ M.conf={
     ft='string[]',
     nft='string[]',
 }
+M.clear_cache={
+    'textchange',
+    'opt:filetype',
+}
 return M

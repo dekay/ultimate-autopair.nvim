@@ -5,9 +5,11 @@ local utils=require'ultimate-autopair.utils'
 function M.call(o)
     if not o.conf.skip then return true end
     if o.source.mode~='c' then return true end
-    return not vim.tbl_contains(o.conf.skip,o.source.cmdtype)
+    return not vim.tbl_contains(o.conf.skip,o.source.o.cmdtype)
 end
 M.conf={
     skip='string[]',
+}
+M.clear_cache={
 }
 return M
