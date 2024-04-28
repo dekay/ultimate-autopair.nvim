@@ -11,7 +11,7 @@ local hook=require'ultimate-autopair.hook'
 ---@param conf ua.prof.conf?
 ---@param id ua.id?
 function M.setup(conf,id)
-    if vim.fn.has('nvim-0.9.0')~=1 then error('Requires at least version nvim-0.9.0') end
+    if vim.fn.has('nvim-0.9.2')~=1 then error('Requires at least version nvim-0.9.2') end
     _config=conf
     M.init({M.extend_default(conf)},id)
 end
@@ -27,6 +27,7 @@ end
 function M.deinit(id)
     id=id or M._id
     if instances[id] then hook.unregister(instances[id]) end
+    instances[id]=nil
 end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf
