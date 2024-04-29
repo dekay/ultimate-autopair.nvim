@@ -168,8 +168,6 @@ function M.run_filters(filters,o,_coloff,_coloffe)
         rows=o.row,
         rowe=o.row,
         source=o.source,
-        lsave=o._lsave,
-        _o=o, --TODO: temp (only for debugging)
     }
     for filter,conf in pairs(filters) do
         filter=filter:gsub('_*%d*$','')
