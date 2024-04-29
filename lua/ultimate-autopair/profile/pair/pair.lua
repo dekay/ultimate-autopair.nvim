@@ -5,6 +5,7 @@ local M={}
 ---@param o ua.info
 ---@return ua.actions|nil
 function M.run_start(o)
+    o.lsave={}
     local info=(o.m --[[@as ua.prof.pair.pair]]).info
     local last_char=info.start_pair:sub(-1+vim.str_utf_start(info.start_pair,#info.start_pair))
     local ret=putils.run_extension(info.extension,o)
@@ -29,6 +30,7 @@ end
 ---@param o ua.info
 ---@return ua.actions|nil
 function M.run_end(o)
+    o.lsave={}
     local info=(o.m --[[@as ua.prof.pair.pair]]).info
     local ret=putils.run_extension(info.extension,o)
     if ret then return ret end

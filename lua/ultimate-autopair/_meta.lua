@@ -11,6 +11,7 @@
 ---@field row number
 ---@field col number
 ---@field source ua.source
+---@field lsave? table
 ---@class ua.act
 ---@field [1] 'left'|'right'|'ins'|'pos'|'delete'
 ---@field [number] any
