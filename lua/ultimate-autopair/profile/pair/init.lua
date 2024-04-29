@@ -47,12 +47,12 @@ function M.pair_sort_len(somepairs)
         end
     end
 end
----@param objects ua.instance
 ---@param somepairs ua.prof.pair.pair[]
-function M.init_pairs(objects,somepairs)
-    for _,pair in ipairs(somepairs or {}) do
+---@param conf ua.prof.pair.conf
+function M.init_pairs(somepairs,conf)
+    for _,pair in ipairs(conf) do
         for _,module in ipairs(M.init_pair(pair)) do
-            table.insert(objects,module)
+            table.insert(somepairs,module)
         end
     end
 end
