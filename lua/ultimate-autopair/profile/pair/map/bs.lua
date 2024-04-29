@@ -1,6 +1,6 @@
 local putils=require'ultimate-autopair.profile.pair.utils'
 ---@class ua.prof.pair.bs.info
----@field pairs ua.prof.pair.pair[]
+---@field get_pairs fun():ua.prof.pair.pair[]
 ---@class ua.prof.pair.bs:ua.object
 ---@field info ua.prof.pair.bs.info
 ---@class ua.prof.pair.bs.conf:ua.prof.pair.map.conf
@@ -11,7 +11,7 @@ local M={}
 function M.run(o)
     local m=o.m --[[@as ua.prof.pair.bs]]
     local info=m.info
-    local spairs=putils.backwards_get_start_pairs(o,info.pairs)
+    local spairs=putils.backwards_get_start_pairs(o,info.get_pairs())
     for _,p in ipairs(spairs) do
         local opair=setmetatable({m=p},{__index=o})
         if o.line:sub(o.col,o.col+#p.info.end_pair-1)==p.info.end_pair
@@ -32,7 +32,7 @@ function M.run(o)
             }
         end
     end
-    local epairs=putils.backwards_get_end_pairs(o,info.pairs)
+    local epairs=putils.backwards_get_end_pairs(o,info.get_pairs())
     for _,p in ipairs(epairs) do
         local opair=setmetatable({m=p},{__index=o})
         if o.line:sub(o.col-#p.info.end_pair-#p.info.start_pair,o.col-#p.info.end_pair-1)==p.info.start_pair
@@ -43,15 +43,15 @@ function M.run(o)
         end
     end
 end
----@param somepairs ua.prof.pair.pair[]
+---@param objects ua.instance
 ---@param conf ua.prof.pair.bs.conf
 ---@return ua.prof.pair.bs
-function M.init(somepairs,conf)
+function M.init(objects,conf)
     --TODO: each pair may have it's own backspace config defined
     ---@type ua.prof.pair.bs
     return putils.create_obj(conf,{
         run=M.run,
-        info={pairs=somepairs},
+        info={get_pairs=function () return putils.get_pairs(objects) end},
         doc='autopairs backspace',
     })
 end

@@ -75,13 +75,13 @@ function M.init(pair)
     return {
         {
             run=M.run_end,
-            info=setmetatable({main_pair=end_pair,type='end'},{__index=info_mt}),
+            info=setmetatable({ispair=true,main_pair=end_pair,type='end'},{__index=info_mt}),
             hooks=putils.create_hooks(end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),pair.map_modes),
             doc=('autopairs end pair: %s,%s'):format(start_pair,end_pair),
         },
         {
             run=M.run_start,
-            info=setmetatable({main_pair=start_pair,type='start'},{__index=info_mt}),
+            info=setmetatable({ispair=true,main_pair=start_pair,type='start'},{__index=info_mt}),
             hooks=putils.create_hooks(start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),pair.map_modes),
             doc=('autopairs start pair: %s,%s'):format(start_pair,end_pair)
         }

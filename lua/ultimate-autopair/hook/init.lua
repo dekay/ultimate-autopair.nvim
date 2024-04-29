@@ -6,6 +6,7 @@ local M={}
 ---@param objects ua.instance
 function M.unregister(objects)
     objects.hooked='half'
+    objects._cache=nil
     for _,obj in ipairs(objects) do
         for _,v in pairs(obj.hooks) do
             M.unregister_hook(obj,v)
@@ -31,6 +32,7 @@ end
 ---@param objects ua.instance
 function M.register(objects)
     objects.hooked='half'
+    objects._cache={}
     for _,obj in ipairs(objects) do
         for _,v in ipairs(obj.hooks) do
             M.register_hook(obj,v)

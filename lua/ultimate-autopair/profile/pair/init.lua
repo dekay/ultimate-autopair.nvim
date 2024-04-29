@@ -8,6 +8,7 @@
 ---@field end_pair_filter table
 ---@field extension table
 ---@field type "start"|"end"
+---@field ispair true
 ---@class ua.prof.pair.pair:ua.object
 ---@field info ua.prof.pair.pair.info
 ---@alias ua.prof.pair.conf table
@@ -25,7 +26,7 @@ function M.init(conf,objects)
     local somepairs={}
     M.init_pairs(somepairs,conf)
     M.pair_sort_len(somepairs)
-    M.init_maps(objects,somepairs,conf)
+    M.init_maps(objects,conf)
     for _,v in ipairs(somepairs) do
         table.insert(objects,v)
     end
@@ -61,9 +62,8 @@ function M.init_pair(pair)
     return require('ultimate-autopair.profile.pair.pair').init(pair)
 end
 ---@param objects ua.instance
----@param somepairs ua.prof.pair.pair[]
 ---@param conf ua.prof.pair.conf
-function M.init_maps(objects,somepairs,conf)
-    require('ultimate-autopair.profile.pair.map').init(objects,somepairs,conf)
+function M.init_maps(objects,conf)
+    require('ultimate-autopair.profile.pair.map').init(objects,conf)
 end
 return M

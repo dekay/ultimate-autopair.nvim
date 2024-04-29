@@ -3,6 +3,7 @@
 ---@field [number] ua.object
 ---@field disabled boolean?
 ---@field hooked 'half'|boolean? --if hooked is not `false`, then your not allowed to modify the instance
+---@field _cache table?
 ---@class ua.info
 ---@field m ua.object
 ---@field line string --Special, is calculated from lines[row], do not set

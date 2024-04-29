@@ -1,6 +1,6 @@
 local putils=require'ultimate-autopair.profile.pair.utils'
 ---@class ua.prof.pair.fastwarp.info
----@field pairs ua.prof.pair.pair[]
+---@field get_pairs fun():ua.prof.pair.pair[]
 ---@class ua.prof.pair.fastwarp:ua.object
 ---@field info ua.prof.pair.fastwarp.info
 ---@class ua.prof.pair.fastwarp.conf:ua.prof.pair.map.conf
@@ -21,7 +21,7 @@ M.act={
     end,
     function (o,ind,p,first)
         if first then return end
-        local next_spair=putils.forward_get_start_pairs(o,o.m.info.pairs)
+        local next_spair=putils.forward_get_start_pairs(o,o.m.info.get_pairs())
         if #next_spair==0 then return end
         return {
             {'delete',0,p},
@@ -35,7 +35,7 @@ M.act={
 function M.run(o,_rec)
     local m=o.m --[[@as ua.prof.pair.fastwarp]]
     local info=m.info
-    local spairs=putils.backwards_get_start_pairs(o,info.pairs)
+    local spairs=putils.backwards_get_start_pairs(o,info.get_pairs())
     for _,spair in ipairs(_rec and {} or spairs) do
         local opair=setmetatable({m=spair},{__index=o})
         local col,row=putils.next_open_end_pair(opair)
@@ -50,7 +50,7 @@ function M.run(o,_rec)
             end
         end
     end
-    local epairs=putils.forward_get_end_pairs(o,info.pairs)
+    local epairs=putils.forward_get_end_pairs(o,info.get_pairs())
     for _,epair in ipairs(epairs) do
         for col=o.col+#epair.info.end_pair,#o.line do
             for _,v in ipairs(M.act) do
@@ -73,14 +73,14 @@ function M.run(o,_rec)
     end
 end
 
----@param somepairs ua.prof.pair.pair
+---@param objects ua.instance
 ---@param conf ua.prof.pair.fastwarp.conf
 ---@return ua.prof.pair.fastwarp
-function M.init(somepairs,conf)
+function M.init(objects,conf)
     ---@type ua.prof.pair.fastwarp
     return putils.create_obj(conf,{
         run=M.run,
-        info={pairs=somepairs},
+        info={get_pairs=function () return putils.get_pairs(objects) end},
         doc='autopairs fastwarp',
     })
 end

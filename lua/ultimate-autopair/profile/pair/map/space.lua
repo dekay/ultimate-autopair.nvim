@@ -1,7 +1,7 @@
 local hookutils=require'ultimate-autopair.hook.utils'
 local putils=require'ultimate-autopair.profile.pair.utils'
 ---@class ua.prof.pair.space.info
----@field pairs ua.prof.pair.pair[]
+---@field get_pairs fun():ua.prof.pair.pair[]
 ---@class ua.prof.pair.space:ua.object
 ---@field info ua.prof.pair.space.info
 ---@class ua.prof.pair.space.conf:ua.prof.pair.map.conf
@@ -14,7 +14,7 @@ function M.run(o)
     local info=m.info
     local first_col=o.line:sub(1,o.col-1):find(' *$')
     local total=o.col-first_col
-    local spairs=putils.backwards_get_start_pairs(setmetatable({col=first_col},{__index=o}),info.pairs)
+    local spairs=putils.backwards_get_start_pairs(setmetatable({col=first_col},{__index=o}),info.get_pairs())
     for _,spair in ipairs(spairs) do
         local opair=setmetatable({m=spair},{__index=o})
         local col,row=putils.next_open_end_pair(opair)
@@ -32,16 +32,16 @@ function M.run(o)
         ::continue::
     end
 end
----@param somepairs ua.prof.pair.pair
+---@param objects ua.object[]
 ---@param conf ua.prof.pair.space.conf
 ---@return ua.prof.pair.space
-function M.init(somepairs,conf)
+function M.init(objects,conf)
     --TODO: each pair may have it's own space config defined (!which may include disabling space!)
     --TODO: how to do the autocmd stuff... (should only need to change the hook, no other config neceserry (will carry over to make autopair after alpha insert possible))
     ---@type ua.prof.pair.space
     return putils.create_obj(conf,{
         run=M.run,
-        info={pairs=somepairs},
+        info={get_pairs=function () return putils.get_pairs(objects) end},
         doc='autopairs space',
     })
 end

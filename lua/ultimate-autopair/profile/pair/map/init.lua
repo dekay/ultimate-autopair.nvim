@@ -6,11 +6,10 @@ M.maps={
     fastwarp='fastwarp',
 }
 ---@param objects ua.instance
----@param somepairs ua.prof.pair.pair[]
 ---@param conf ua.prof.pair.conf
-function  M.init(objects,somepairs,conf)
+function  M.init(objects,conf)
     for mapname,confname in pairs(M.maps) do
-        local mapobj=require('ultimate-autopair.profile.pair.map.'..mapname).init(somepairs,conf[confname])
+        local mapobj=require('ultimate-autopair.profile.pair.map.'..mapname).init(objects,conf[confname])
         if mapobj then
             table.insert(objects,mapobj)
         end

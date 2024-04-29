@@ -148,4 +148,21 @@ function M.run_extension(extensions,o)
         end
     end
 end
+---@param objects ua.instance
+---@return ua.prof.pair.pair[]
+function M.get_pairs(objects)
+    assert(objects._cache)
+    if objects._cache[M.get_pairs] then
+        return objects._cache[M.get_pairs]
+    end
+    local ret={}
+    for _,obj in ipairs(objects) do
+        ---@cast obj ua.prof.pair.pair
+        if obj.info and obj.info.ispair then
+            table.insert(ret,obj)
+        end
+    end
+    objects._cache[M.get_pairs]=ret
+    return ret
+end
 return M
