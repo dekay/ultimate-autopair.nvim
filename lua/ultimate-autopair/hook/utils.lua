@@ -153,8 +153,12 @@ function M.act_to_keys(act,mode,conf)
         if type(v)=='string' then v={'ins',v} end
         if not v then
         elseif v[1]=='ins' then
-            if not mode:match'[ic]' then error() end
-            buf:put(v[2])
+            if not mode:match'[ic]' then
+                buf:put(utils._to_cmd("vim.api.nvim_put({%s},'c',false,true)",{'string',v[2]}))
+            else
+                --TODO: always use nvim_put for `ins` and set the default action to `raw`
+                buf:put(v[2])
+            end
         elseif v[1]=='left' then
             --if _G.UA_DEV then --TODO
             --    assert(type(v[2])~='number')

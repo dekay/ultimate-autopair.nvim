@@ -51,6 +51,19 @@ function M.key_pos_nodot(col,row)
     if not row then return M.I.key_i_ctrl_o..col..'|' end
     return M.I.key_i_ctrl_o..row..'gg'..M.I.key_i_ctrl_o..col..'|'
 end
+---@param cmd string
+---@return string
+function M._to_cmd(cmd,...)
+    local arg={}
+    for _,v in ipairs{...} do
+        if v[1]=='string' then
+            local str=''
+            while v[2]:find(']'..str..']') do str=str..'=' end
+            table.insert(arg,('[%s[%s]%s]'):format(str,v[2],str))
+        end
+    end
+    return M.keycode'<cmd>lua '..cmd:format(unpack(arg))..'\r'
+end
 M.tslang2lang={
     --These treesitter languages have multiple filetypes
     ---Category 0
