@@ -57,9 +57,7 @@ function M._to_cmd(cmd,...)
     local arg={}
     for _,v in ipairs{...} do
         if v[1]=='string' then
-            local str=''
-            while v[2]:find(']'..str..']') do str=str..'=' end
-            table.insert(arg,('[%s[%s]%s]'):format(str,v[2],str))
+            table.insert(arg,('%q'):format(v[2]))
         end
     end
     return M.keycode'<cmd>lua '..cmd:format(unpack(arg))..'\r'
