@@ -6,6 +6,7 @@ function M.create_map(map)
     local modes=type(map[1])=='string' and {map[1]} or map[1] --[[@as string[] ]]
     local lhs=map[2]
     local rhs=map[3]
+    local keycode=map.keycode~=false
     local hooks={}
     for _,mode in ipairs(modes) do
         table.insert(hooks,hookutils.to_hash('map',lhs,mode))
@@ -14,9 +15,16 @@ function M.create_map(map)
         run=function (o)
             --TODO: test
             --TODO: add action `raw` which inputs the characters as is
-            --TODO: maybe pass it through nvim_replace_termcodes if option not set
-            if type(rhs)=='function' then return {(rhs(o))} end
-            return {rhs}
+            local ret=''
+            if type(rhs)=='function' then
+                ret=rhs(o)
+            else
+                ret=rhs
+            end
+            if ret and keycode then
+                ret=vim.api.nvim_replace_termcodes(ret,true,true,true)
+            end
+            return {ret}
         end,
         hooks=hooks,
         doc=('map %s to %s'):format(vim.inspect(lhs),vim.inspect(rhs))
