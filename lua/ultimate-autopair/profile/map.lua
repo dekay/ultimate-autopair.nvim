@@ -12,6 +12,9 @@ function M.create_map(map)
     end
     return {
         run=function (o)
+            --TODO: test
+            --TODO: add action `raw` which inputs the characters as is
+            --TODO: maybe pass it through nvim_replace_termcodes if option not set
             if type(rhs)=='function' then return {(rhs(o))} end
             return {rhs}
         end,
