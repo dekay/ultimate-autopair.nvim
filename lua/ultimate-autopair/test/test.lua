@@ -373,8 +373,8 @@ return {
         {'|','a','bb|',{c={profile='map',{'i','a','bb'}}}},
     },
     profile_raw={
-        {'|','a','bb|',{c={profile='raw',{{'map','a',{mode='i'}},function () return {'bb'} end}}}},
-        {'|','a','bb|',{c={profile='raw',{hooks={{'map','a',{mode='i'}}},run=function () return {'bb'} end}}}},
+        {'|','a','bb|',{c={profile='raw',{{'map','a','i'},function () return {'bb'} end}}}},
+        {'|','a','bb|',{c={profile='raw',{hooks={{'map','a','i'}},run=function () return {'bb'} end}}}},
     },
     profile_cond={
         {'|','a','bb|',{c={profile='cond',filter={filetype={nft={'lua'}}},{profile='map',{'i','a','bb'}}}}},

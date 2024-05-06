@@ -8,7 +8,7 @@ function M.create_map(map)
     local rhs=map[3]
     local hooks={}
     for _,mode in ipairs(modes) do
-        table.insert(hooks,hookutils.to_hash('map',lhs,{mode=mode}))
+        table.insert(hooks,hookutils.to_hash('map',lhs,mode))
     end
     return {
         run=function (o)

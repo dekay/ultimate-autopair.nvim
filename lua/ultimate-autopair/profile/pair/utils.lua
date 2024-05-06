@@ -118,7 +118,7 @@ function M.create_hooks(key,modes)
     local hookutils=require'ultimate-autopair.hook.utils'
     local hooks={}
     for _,mode in ipairs(modes) do
-        table.insert(hooks,hookutils.to_hash('map',key,{mode=mode}))
+        table.insert(hooks,hookutils.to_hash('map',key,mode))
     end
     return hooks
 end

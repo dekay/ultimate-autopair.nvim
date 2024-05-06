@@ -6,11 +6,11 @@ function M.del(hash)
     local info=hookutils.get_hash_info(hash)
     assert(info.type=='map')
     local conf=info.conf
-    assert(type(conf.mode)=='string')
+    assert(type(conf)=='string')
     if _G.UA_DEV then
-        assert(vim.fn.mapcheck(info.key,conf.mode)~='')
+        assert(vim.fn.mapcheck(info.key,conf)~='')
     end
-    vim.keymap.del(conf.mode,info.key)
+    vim.keymap.del(conf,info.key)
 end
 ---@param hash ua.hook.hash
 ---@param conf ua.hook.conf?
@@ -26,9 +26,9 @@ function M.expr_set(hash)
     local info=hookutils.get_hash_info(hash)
     assert(info.type=='map')
     local conf=info.conf
-    assert(type(conf.mode)=='string')
+    assert(type(conf)=='string')
     if _G.UA_DEV then
-        assert(vim.fn.mapcheck(info.key,conf.mode)=='')
+        assert(vim.fn.mapcheck(info.key,conf)=='')
     end
     local objs=hookmem[hash]
     local desc={}
@@ -38,9 +38,9 @@ function M.expr_set(hash)
     if info.key:find'\0' then
         error('Null byte found in pair, exiting before a crash can happen')
     end
-    vim.keymap.set(conf.mode,info.key,function ()
-        local act,subconf=hookutils.get_act(hash,conf.mode)
-        return hookutils.act_to_keys(act,conf.mode,subconf)
+    vim.keymap.set(conf,info.key,function ()
+        local act,subconf=hookutils.get_act(hash,conf)
+        return hookutils.act_to_keys(act,conf,subconf)
     end,{noremap=true,expr=true,replace_keycodes=false,desc=table.concat(desc,'\n\t\t ')})
 end
 return M
