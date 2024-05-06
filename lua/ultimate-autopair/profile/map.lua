@@ -13,7 +13,7 @@ function M.create_map(map)
     end
     return {
         run=function (o)
-            --TODO: test
+            --TODO: test for non insert/cmdline mode map
             --TODO: add action `raw` which inputs the characters as is
             local ret=''
             if type(rhs)=='function' then
