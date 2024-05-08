@@ -11,8 +11,7 @@ function M.del(hash)
     M.hooks[info.key]=nil
 end
 ---@param hash ua.hook.hash
----@param _ ua.hook.conf?
-function M.set(hash,_)
+function M.set(hash)
     local info=hookutils.get_hash_info(hash)
     if _G.UA_DEV then
         assert(not M.hooks[info.key])

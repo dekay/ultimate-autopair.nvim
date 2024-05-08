@@ -43,18 +43,11 @@ function M.register(objects)
 end
 ---@param obj ua.object
 ---@param hash ua.hook.hash
----@param conf ua.hook.conf? --TODO
-function M.register_hook(obj,hash,conf)
+function M.register_hook(obj,hash)
     if not hookmem[hash] then hookmem[hash]={} end
     local mem=hookmem[hash]
     if vim.tbl_contains(mem,obj) then return end
     mem.dirty=true
-    if conf then
-        if #mem>0 and conf~=mem.conf then
-            error'tried to register hook with different configs'
-        end
-        mem.conf=conf
-    end
     table.insert(mem,obj)
 end
 function M.update()

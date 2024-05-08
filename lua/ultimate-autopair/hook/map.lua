@@ -14,16 +14,7 @@ function M.del(hash)
     vim.keymap.del(conf,info.key)
 end
 ---@param hash ua.hook.hash
----@param conf ua.hook.conf?
-function M.set(hash,conf)
-    if conf=='expr' or not conf then
-        M.expr_set(hash)
-    else
-        error()
-    end
-end
----@param hash ua.hook.hash
-function M.expr_set(hash)
+function M.set(hash)
     local info=hookutils.get_hash_info(hash)
     assert(info.type=='map')
     local conf=info.conf
