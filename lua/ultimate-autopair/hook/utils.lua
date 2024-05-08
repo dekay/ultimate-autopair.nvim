@@ -194,6 +194,7 @@ end
 ---@return string
 function M.getmode()
     --TODO: what about mode()=>R should be insert mode
+    --TODO: what about cmdline replace mode
     return vim.fn.mode()
 end
 return M
