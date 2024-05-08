@@ -22,6 +22,11 @@ M.I.key_i_ctrl_o=M.keycode'<C-\\><C-o>'
 function M.new_str_buf(minsize)
     return require'string.buffer'.new(minsize)
 end
+---@param str string
+---@return string
+function M.key_normalize(str)
+    return vim.fn.keytrans(M.keycode(str))
+end
 ---@param len string|number|nil
 ---@param noundo boolean?
 ---@return string

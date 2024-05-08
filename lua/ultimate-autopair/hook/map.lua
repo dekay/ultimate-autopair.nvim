@@ -1,5 +1,6 @@
 local hookmem=require'ultimate-autopair.hook.mem'
 local hookutils=require'ultimate-autopair.hook.utils'
+local utils=require'ultimate-autopair.utils'
 local M={}
 ---@param hash ua.hook.hash
 function M.del(hash)
@@ -29,6 +30,7 @@ function M.expr_set(hash)
     assert(type(conf)=='string')
     if _G.UA_DEV then
         assert(vim.fn.mapcheck(info.key,conf)=='')
+        assert(utils.key_normalize(info.key)==info.key)
     end
     local objs=hookmem[hash]
     local desc={}

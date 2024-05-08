@@ -14,6 +14,9 @@ end
 ---@param conf string?
 ---@return ua.hook.hash
 function M.to_hash(type,key,conf)
+    if type=='map' then --TODO: maybe move somewhere else
+        key=utils.key_normalize(key)
+    end
     return type..M.HASH_SEP1..(conf or '')..M.HASH_SEP2..key
 end
 ---@return fun(ua.object):ua.info
