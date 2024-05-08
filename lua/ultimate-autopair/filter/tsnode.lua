@@ -28,7 +28,7 @@ function M.call(o)
             local nodes=query.find_all_node_types(parser,o.conf.separate)
             for _,node in ipairs(nodes) do
                 local trange={node:range()}
-                if utils.range_in_range(trange,range,true) then
+                if utils.range_in_range(trange,range,false) then
                     return false
                 end
             end

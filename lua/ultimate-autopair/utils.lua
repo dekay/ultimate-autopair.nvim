@@ -210,15 +210,15 @@ end
 ---@param inclusive boolean?
 ---@return boolean
 function M.range_in_range(range,contains_range,inclusive)
-    local crange=contains_range
-    --TODO: if crange is zero width then and only then have inclusive influence the result
+    --If crange is zero width then and only then inclusive influence the result
     --So [f(oo)] is always true and [foo()] is true depending on if inclusive is set
-    if inclusive then
-        return (range[1]<crange[1] or (range[1]==crange[1] and range[2]<=crange[2])) and
-            (range[3]>crange[3] or (range[3]==crange[3] and range[4]>=crange[4]))
+    local crange=contains_range
+    if not inclusive and crange[1]==crange[3] and crange[2]==crange[4] then
+        return (range[1]<crange[1] or (range[1]==crange[1] and range[2]<crange[2])) and
+            (range[3]>crange[3] or (range[3]==crange[3] and range[4]>crange[4]))
     end
-    return (range[1]<crange[1] or (range[1]==crange[1] and range[2]<crange[2])) and
-        (range[3]>crange[3] or (range[3]==crange[3] and range[4]>crange[4]))
+    return (range[1]<crange[1] or (range[1]==crange[1] and range[2]<=crange[2])) and
+        (range[3]>crange[3] or (range[3]==crange[3] and range[4]>=crange[4]))
 end
 ---@param o ua.filter
 ---@param str string
