@@ -15,7 +15,7 @@ function M.run(o)
         local opair=setmetatable({m=p},{__index=o})
         if o.line:sub(o.col,o.col+#p.end_pair-1)==p.end_pair
             and putils.run_end_pair_filter(opair)
-            and putils.pair_balansed_start(opair)
+            --and putils.pair_balansed_start(opair) --Not needed: it doesn't modify the pairs
         then
             return {
                 '\n',

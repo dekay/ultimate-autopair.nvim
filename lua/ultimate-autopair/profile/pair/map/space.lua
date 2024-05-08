@@ -15,18 +15,18 @@ function M.run(o)
     for _,spair in ipairs(spairs) do
         local opair=setmetatable({m=spair},{__index=o})
         local col,row=putils.next_open_end_pair(opair)
-        if not row or not col then goto continue end
-        local ototal=#o.line:sub(o.col,col-1):reverse():match('^ *')
-        if ototal>total then goto continue end
-        if putils.pair_balansed_end(opair) then
-            return {
-                ' ',
-                {'pos',col+1,row},
-                (' '):rep(total-ototal+1),
-                {'pos',o.col+1,o.row},
-            }
+        if row and col then
+            local ototal=#o.line:sub(o.col,col-1):reverse():match('^ *')
+            if not (ototal>total) then
+                --and putils.pair_balansed_end(opair) --Not needed: it doesn't modify the pairs
+                return {
+                    ' ',
+                    {'pos',col+1,row},
+                    (' '):rep(total-ototal+1),
+                    {'pos',o.col+1,o.row},
+                }
+            end
         end
-        ::continue::
     end
 end
 ---@param objects ua.object[]

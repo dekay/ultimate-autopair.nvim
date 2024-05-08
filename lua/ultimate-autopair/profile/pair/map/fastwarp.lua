@@ -37,7 +37,7 @@ function M.run(o,_rec)
         local opair=setmetatable({m=spair},{__index=o})
         local col,row=putils.next_open_end_pair(opair)
         if col and row
-            and putils.pair_balansed_start(opair)
+            --and putils.pair_balansed_start(opair) --Not needed: it doesn't modify the pairs distribution
         then
             local act=M.run(setmetatable({col=col,row=row},{__index=o}),true)
             if act then
