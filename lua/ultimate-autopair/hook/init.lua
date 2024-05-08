@@ -46,6 +46,9 @@ end
 function M.register_hook(obj,hash)
     if not hookmem[hash] then hookmem[hash]={} end
     local mem=hookmem[hash]
+    if UA_DEV then
+        assert(not vim.tbl_contains(mem,obj))
+    end
     if vim.tbl_contains(mem,obj) then return end
     mem.dirty=true
     table.insert(mem,obj)
