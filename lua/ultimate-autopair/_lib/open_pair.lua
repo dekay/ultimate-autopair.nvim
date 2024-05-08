@@ -1,3 +1,4 @@
+local utils=require'ultimate-autopair.utils'
 local M={}
 ---@param o ua.info
 ---@param gotostart? boolean|"both"
@@ -12,12 +13,12 @@ function M.count_start_pair(o,gotostart,initial_count,return_pos)
     local end_pair=m.end_pair
     local multiline=m.multiline
     local start_pair_filter=function (row,col)
-        local no=setmetatable({row=row,col=col+#start_pair-1},{__index=o})
-        return m._filter.start_pair_filter(no)
+        local no=setmetatable({row=row,col=col},{__index=o})
+        return utils.run_filters(m.start_pair_filter,no,0,-#start_pair)
     end
     local end_pair_filter=function (row,col)
-        local no=setmetatable({row=row,col=col+#end_pair-1},{__index=o})
-        return m._filter.end_pair_filter(no)
+        local no=setmetatable({row=row,col=col},{__index=o})
+        return utils.run_filters(m.end_pair_filter,no,0,-#end_pair)
     end
 
     start_pair=start_pair:reverse()
@@ -68,12 +69,12 @@ function M.count_end_pair(o,gotoend,initial_count,return_pos)
     local end_pair=m.end_pair
     local multiline=m.multiline
     local start_pair_filter=function (row,col)
-        local no=setmetatable({row=row,col=col+#start_pair-1},{__index=o})
-        return m._filter.start_pair_filter(no)
+        local no=setmetatable({row=row,col=col},{__index=o})
+        return utils.run_filters(m.start_pair_filter,no,0,-#start_pair)
     end
     local end_pair_filter=function (row,col)
-        local no=setmetatable({row=row,col=col+#end_pair-1},{__index=o})
-        return m._filter.end_pair_filter(no)
+        local no=setmetatable({row=row,col=col},{__index=o})
+        return utils.run_filters(m.end_pair_filter,no,0,-#end_pair)
     end
 
     local lines={o.line}
@@ -122,12 +123,12 @@ function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
     local pair=m.start_pair
     local multiline=m.multiline
     local start_pair_filter=function (row,col)
-        local no=setmetatable({row=row,col=col+#pair-1},{__index=o})
-        return m._filter.start_pair_filter(no)
+        local no=setmetatable({row=row,col=col},{__index=o})
+        return utils.run_filters(m.start_pair_filter,no,0,-#pair)
     end
     local end_pair_filter=function (row,col)
-        local no=setmetatable({row=row,col=col+#pair-1},{__index=o})
-        return m._filter.end_pair_filter(no)
+        local no=setmetatable({row=row,col=col},{__index=o})
+        return utils.run_filters(m.end_pair_filter,no,0,-#pair)
     end
 
     local count=initial_count or 0

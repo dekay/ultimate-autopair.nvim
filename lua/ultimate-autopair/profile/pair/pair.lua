@@ -4,7 +4,6 @@ local putils=require'ultimate-autopair.profile.pair.utils'
 
 ---@class ua.prof.pair.pair:ua.object
 ---@field start_pair string
----@field _filter table --TODO: the problem: extension.tsnode can be initialized for specific positions, which means that filter may change, MAYBE?: have a filter initialize function which initializes the filters for a position
 ---@field end_pair string
 ---@field main_pair? string
 ---@field multiline? boolean
@@ -77,14 +76,6 @@ function M.init(pair)
         start_pair=start_pair,
         end_pair=end_pair,
         multiline=pair.multiline,
-        _filter={ --TODO:TEMP
-            start_pair_filter=function (o)
-                return utils.run_filters(pair.start_pair_filter,o,#start_pair-1,-1)
-            end,
-            end_pair_filter=function (o)
-                return utils.run_filters(pair.end_pair_filter,o,#end_pair-1,-1)
-            end
-        },
         end_pair_filter=pair.end_pair_filter,
         start_pair_filter=pair.start_pair_filter,
         ispair=true,
