@@ -7,9 +7,9 @@ local M={}
 function M.backwards_get_start_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
-        if v.info.type=='start'
-            and v.info.start_pair==o.line:sub(o.col-#v.info.start_pair,o.col-1)
-            and M.run_start_pair_filter(setmetatable({m=v,col=o.col-#v.info.start_pair},{__index=o}))
+        if v.type=='start'
+            and v.start_pair==o.line:sub(o.col-#v.start_pair,o.col-1)
+            and M.run_start_pair_filter(setmetatable({m=v,col=o.col-#v.start_pair},{__index=o}))
         then
             table.insert(ret,v)
         end
@@ -22,9 +22,9 @@ end
 function M.backwards_get_end_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
-        if v.info.type=='end'
-            and v.info.end_pair==o.line:sub(o.col-#v.info.end_pair,o.col-1)
-            and M.run_end_pair_filter(setmetatable({m=v,col=o.col-#v.info.end_pair},{__index=o}))
+        if v.type=='end'
+            and v.end_pair==o.line:sub(o.col-#v.end_pair,o.col-1)
+            and M.run_end_pair_filter(setmetatable({m=v,col=o.col-#v.end_pair},{__index=o}))
         then
             table.insert(ret,v)
         end
@@ -37,8 +37,8 @@ end
 function M.forward_get_end_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
-        if v.info.type=='end'
-            and v.info.end_pair==o.line:sub(o.col,o.col+#v.info.end_pair-1)
+        if v.type=='end'
+            and v.end_pair==o.line:sub(o.col,o.col+#v.end_pair-1)
             and M.run_end_pair_filter(setmetatable({m=v,col=o.col},{__index=o}))
         then
             table.insert(ret,v)
@@ -52,8 +52,8 @@ end
 function M.forward_get_start_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
-        if v.info.type=='start'
-            and v.info.start_pair==o.line:sub(o.col,o.col+#v.info.start_pair-1)
+        if v.type=='start'
+            and v.start_pair==o.line:sub(o.col,o.col+#v.start_pair-1)
             and M.run_start_pair_filter(setmetatable({m=v,col=o.col},{__index=o}))
         then
             table.insert(ret,v)
@@ -64,8 +64,8 @@ end
 ---@param o ua.info
 ---@return boolean
 function M.pair_balansed_start(o)
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    if info.start_pair==info.end_pair then
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    if m.start_pair==m.end_pair then
         return not open_pair.count_ambiguous_pair(o,'both')
     end
     local count=open_pair.count_start_pair(o)
@@ -74,8 +74,8 @@ end
 ---@param o ua.info
 ---@return boolean
 function M.pair_balansed_end(o)
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    if info.start_pair==info.end_pair then
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    if m.start_pair==m.end_pair then
         return not open_pair.count_ambiguous_pair(o,'both')
     end
     local count=open_pair.count_end_pair(o)
@@ -83,20 +83,20 @@ function M.pair_balansed_end(o)
 end
 ---@param o ua.info
 function M.run_end_pair_filter(o)
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    return utils.run_filters(info.end_pair_filter,o,nil,-#info.end_pair)
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    return utils.run_filters(m.end_pair_filter,o,nil,-#m.end_pair)
 end
 ---@param o ua.info
 function M.run_start_pair_filter(o)
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    return utils.run_filters(info.start_pair_filter,o,nil,-#info.start_pair)
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    return utils.run_filters(m.start_pair_filter,o,nil,-#m.start_pair)
 end
 ---@param o ua.info
 ---@return number?
 ---@return number?
 function M.next_open_end_pair(o)
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    if info.start_pair==info.end_pair then
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    if m.start_pair==m.end_pair then
         return open_pair.count_ambiguous_pair(o,true,0,true)
     end
     return open_pair.count_end_pair(o,true,0,true)
@@ -105,8 +105,8 @@ end
 ---@return number?
 ---@return number?
 function M.prev_open_start_pair(o)
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    if info.start_pair==info.end_pair then
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    if m.start_pair==m.end_pair then
         return open_pair.count_ambiguous_pair(o,false,0,true)
     end
     return open_pair.count_start_pair(o,true,0,true)
@@ -139,10 +139,10 @@ end
 ---@param o ua.info
 ---@return ua.actions?
 function M.run_extension(extensions,o)
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
+    local m=o.m --[[@as ua.prof.pair.pair]]
     for extname,conf in pairs(extensions) do
         local ext=require('ultimate-autopair.profile.pair.extension.'..extname)
-        if info.type==ext.type then
+        if m.type==ext.type then
             local ret=ext.run(o,conf)
             if ret then return ret end
         end
@@ -158,7 +158,7 @@ function M.get_pairs(objects)
     local ret={}
     for _,obj in ipairs(objects) do
         ---@cast obj ua.prof.pair.pair
-        if obj.info and obj.info.ispair then
+        if obj.ispair then
             table.insert(ret,obj)
         end
     end

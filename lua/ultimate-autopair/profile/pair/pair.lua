@@ -6,15 +6,15 @@ local M={}
 ---@return ua.actions|nil
 function M.run_start(o)
     o.lsave={}
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    local last_char=info.start_pair:sub(-1+vim.str_utf_start(info.start_pair,#info.start_pair))
-    local ret=putils.run_extension(info.extension,o)
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    local last_char=m.start_pair:sub(-1+vim.str_utf_start(m.start_pair,#m.start_pair))
+    local ret=putils.run_extension(m.extension,o)
     if ret then return ret end
-    if o.line:sub(o.col-#info.start_pair+#last_char,o.col-1)~=info.start_pair:sub(0,-1-#last_char) then return end
-    if not utils.run_filters(info.start_pair_filter,o,#info.start_pair-1) then
+    if o.line:sub(o.col-#m.start_pair+#last_char,o.col-1)~=m.start_pair:sub(0,-1-#last_char) then return end
+    if not utils.run_filters(m.start_pair_filter,o,#m.start_pair-1) then
         return
     end
-    if info.start_pair~=info.end_pair then
+    if m.start_pair~=m.end_pair then
         local count=open_pair.count_end_pair(o)
         if open_pair.count_end_pair(o,true,count,true) then return end
     else
@@ -22,8 +22,8 @@ function M.run_start(o)
     end
     return {
         last_char,
-        info.end_pair,
-        {'left',info.end_pair},
+        m.end_pair,
+        {'left',m.end_pair},
     }
 end
 
@@ -31,14 +31,14 @@ end
 ---@return ua.actions|nil
 function M.run_end(o)
     o.lsave={}
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    local ret=putils.run_extension(info.extension,o)
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    local ret=putils.run_extension(m.extension,o)
     if ret then return ret end
-    if o.line:sub(o.col,o.col+#info.end_pair-1)~=info.end_pair then return end
-    if not utils.run_filters(info.end_pair_filter,o,0,-#info.end_pair) then
+    if o.line:sub(o.col,o.col+#m.end_pair-1)~=m.end_pair then return end
+    if not utils.run_filters(m.end_pair_filter,o,0,-#m.end_pair) then
         return
     end
-    if info.start_pair~=info.end_pair then
+    if m.start_pair~=m.end_pair then
         local count2=open_pair.count_start_pair(o)
         --Same as: count_open_end_pair_after
         local count1=open_pair.count_end_pair(o)
@@ -48,7 +48,7 @@ function M.run_end(o)
         if open_pair.count_ambiguous_pair(o,'both') then return end
     end
     return {
-        {'right',info.end_pair},
+        {'right',m.end_pair},
     }
 end
 ---@param pair ua.prof.pair.conf.pair
@@ -58,7 +58,7 @@ function M.init(pair)
     local start_pair=pair[1]
     local end_pair=pair[2]
 
-    local info_mt={
+    local obj_mt={
         extension=pair.extension,
         start_pair=start_pair,
         end_pair=end_pair,
@@ -73,20 +73,23 @@ function M.init(pair)
         },
         end_pair_filter=pair.end_pair_filter,
         start_pair_filter=pair.start_pair_filter,
+        ispair=true,
     }
     return {
-        {
+        setmetatable({
+            main_pair=end_pair,
+            type='end',
             run=M.run_end,
-            info=setmetatable({ispair=true,main_pair=end_pair,type='end'},{__index=info_mt}),
             hooks=putils.create_hooks(end_pair:sub(1,vim.str_utf_end(end_pair,1)+1),pair.map_modes),
             doc=('autopairs end pair: %s,%s'):format(start_pair,end_pair),
-        },
-        {
+        },{__index=obj_mt}),
+        setmetatable({
             run=M.run_start,
-            info=setmetatable({ispair=true,main_pair=start_pair,type='start'},{__index=info_mt}),
+            main_pair=start_pair,
+            type='start',
             hooks=putils.create_hooks(start_pair:sub(vim.str_utf_start(start_pair,#start_pair)+#start_pair),pair.map_modes),
             doc=('autopairs start pair: %s,%s'):format(start_pair,end_pair)
-        }
+        },{__index=obj_mt}),
     }
 end
 return M

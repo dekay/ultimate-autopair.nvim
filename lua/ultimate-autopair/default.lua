@@ -49,9 +49,8 @@ return {
       enable=true,
       map='<bs>',
       overjump=function (_,obj)
-        local info=obj.info
         --If pair is ambiguous then don't overjump
-        if info and info.main_pair and info.start_pair==info.pair.start_pair then
+        if obj and obj.main_pair and obj.start_pair==obj.pair.start_pair then
           return false
         end
         return true

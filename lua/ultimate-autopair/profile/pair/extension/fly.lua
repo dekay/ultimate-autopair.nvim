@@ -3,11 +3,11 @@ local M={}
 ---@param conf table
 ---@return ua.actions?
 function M.run(o,conf)
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
+    local m=o.m --[[@as ua.prof.pair.pair]]
     local no=setmetatable({},{__index=o})
     while true do
-        if no.line:sub(no.col,no.col+#info.end_pair)==info.end_pair then
-            no.col=no.col+#info.end_pair --TODO: test for utf8 pair
+        if no.line:sub(no.col,no.col+#m.end_pair)==m.end_pair then
+            no.col=no.col+#m.end_pair --TODO: test for utf8 pair
             break
         elseif vim.tbl_contains(conf.jump_other_char or {'}',')'},no.line:sub(no.col,no.col)) then
         else

@@ -7,17 +7,17 @@ local M={}
 ---@return number?
 function M.count_start_pair(o,gotostart,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    local start_pair=info.start_pair
-    local end_pair=info.end_pair
-    local multiline=info.multiline
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    local start_pair=m.start_pair
+    local end_pair=m.end_pair
+    local multiline=m.multiline
     local start_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col+#start_pair-1},{__index=o})
-        return info._filter.start_pair_filter(no)
+        return m._filter.start_pair_filter(no)
     end
     local end_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col+#end_pair-1},{__index=o})
-        return info._filter.end_pair_filter(no)
+        return m._filter.end_pair_filter(no)
     end
 
     start_pair=start_pair:reverse()
@@ -63,17 +63,17 @@ end
 ---@return number?
 function M.count_end_pair(o,gotoend,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    local start_pair=info.start_pair
-    local end_pair=info.end_pair
-    local multiline=info.multiline
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    local start_pair=m.start_pair
+    local end_pair=m.end_pair
+    local multiline=m.multiline
     local start_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col+#start_pair-1},{__index=o})
-        return info._filter.start_pair_filter(no)
+        return m._filter.start_pair_filter(no)
     end
     local end_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col+#end_pair-1},{__index=o})
-        return info._filter.end_pair_filter(no)
+        return m._filter.end_pair_filter(no)
     end
 
     local lines={o.line}
@@ -117,17 +117,17 @@ end
 ---@return number?
 function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
-    local info=(o.m --[[@as ua.prof.pair.pair]]).info
-    assert(info.start_pair==info.end_pair)
-    local pair=info.start_pair
-    local multiline=info.multiline
+    local m=o.m --[[@as ua.prof.pair.pair]]
+    assert(m.start_pair==m.end_pair)
+    local pair=m.start_pair
+    local multiline=m.multiline
     local start_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col+#pair-1},{__index=o})
-        return info._filter.start_pair_filter(no)
+        return m._filter.start_pair_filter(no)
     end
     local end_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col+#pair-1},{__index=o})
-        return info._filter.end_pair_filter(no)
+        return m._filter.end_pair_filter(no)
     end
 
     local count=initial_count or 0

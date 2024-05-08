@@ -1,4 +1,4 @@
----@class ua.prof.pair.pair.info
+---@class ua.prof.pair.pair:ua.object
 ---@field start_pair string
 ---@field _filter table --TODO: the problem: extension.tsnode can be initialized for specific positions, which means that filter may change, MAYBE?: have a filter initialize function which initializes the filters for a position
 ---@field end_pair string
@@ -9,8 +9,6 @@
 ---@field extension table
 ---@field type "start"|"end"
 ---@field ispair true
----@class ua.prof.pair.pair:ua.object
----@field info ua.prof.pair.pair.info
 ---@alias ua.prof.pair.conf table
 ---@alias ua.prof.pair.conf.pair table
 ---@class ua.prof.pair.map.conf
@@ -35,7 +33,7 @@ end
 function M.pair_sort_len(somepairs)
     local len={}
     for _,v in ipairs(somepairs) do
-        local l=-(#v.info.main_pair or -1)
+        local l=-(#v.main_pair or -1)
         if not len[l] then len[l]={} end
         table.insert(len[l],v)
     end

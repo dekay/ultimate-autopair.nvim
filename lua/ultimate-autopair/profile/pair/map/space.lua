@@ -1,9 +1,7 @@
 local hookutils=require'ultimate-autopair.hook.utils'
 local putils=require'ultimate-autopair.profile.pair.utils'
----@class ua.prof.pair.space.info
----@field get_pairs fun():ua.prof.pair.pair[]
 ---@class ua.prof.pair.space:ua.object
----@field info ua.prof.pair.space.info
+---@field get_pairs fun():ua.prof.pair.pair[]
 ---@class ua.prof.pair.space.conf:ua.prof.pair.map.conf
 
 local M={}
@@ -11,10 +9,9 @@ local M={}
 ---@return ua.actions|nil
 function M.run(o)
     local m=o.m --[[@as ua.prof.pair.space]]
-    local info=m.info
     local first_col=o.line:sub(1,o.col-1):find(' *$')
     local total=o.col-first_col
-    local spairs=putils.backwards_get_start_pairs(setmetatable({col=first_col},{__index=o}),info.get_pairs())
+    local spairs=putils.backwards_get_start_pairs(setmetatable({col=first_col},{__index=o}),m.get_pairs())
     for _,spair in ipairs(spairs) do
         local opair=setmetatable({m=spair},{__index=o})
         local col,row=putils.next_open_end_pair(opair)
@@ -41,7 +38,7 @@ function M.init(objects,conf)
     ---@type ua.prof.pair.space
     return putils.create_obj(conf,{
         run=M.run,
-        info={get_pairs=function () return putils.get_pairs(objects) end},
+        get_pairs=function () return putils.get_pairs(objects) end,
         doc='autopairs space',
     })
 end
