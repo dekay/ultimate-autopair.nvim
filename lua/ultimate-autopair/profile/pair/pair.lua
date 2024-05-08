@@ -1,6 +1,20 @@
 local utils=require'ultimate-autopair.utils'
 local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:make user be able to chose the open_pair detector (separately for open_pair/find_pair/...)
 local putils=require'ultimate-autopair.profile.pair.utils'
+
+---@class ua.prof.pair.pair:ua.object
+---@field start_pair string
+---@field _filter table --TODO: the problem: extension.tsnode can be initialized for specific positions, which means that filter may change, MAYBE?: have a filter initialize function which initializes the filters for a position
+---@field end_pair string
+---@field main_pair? string
+---@field multiline? boolean
+---@field start_pair_filter table
+---@field end_pair_filter table
+---@field extension table
+---@field type "start"|"end"
+---@field ispair true
+---@alias ua.prof.pair.conf table
+---@alias ua.prof.pair.conf.pair table
 local M={}
 ---@param o ua.info
 ---@return ua.actions|nil

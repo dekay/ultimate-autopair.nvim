@@ -1,7 +1,7 @@
 ---@class ua.config #TODO
 ---@class ua.instance
 ---@field [number] ua.object
----@field disabled boolean?
+---@field disabled boolean? --TODO: test
 ---@field hooked 'half'|boolean? --if hooked is not `false`, then your not allowed to modify the instance
 ---@field _cache table?
 ---@class ua.info
