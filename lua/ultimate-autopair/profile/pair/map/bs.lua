@@ -11,15 +11,12 @@ function M.run(o)
     local spairs=putils.backwards_get_start_pairs(o,m.get_pairs())
     for _,p in ipairs(spairs) do
         local opair=setmetatable({m=p},{__index=o})
-        if o.line:sub(o.col,o.col+#p.end_pair-1)==p.end_pair
-            and putils.run_end_pair_filter(opair)
-            and putils.pair_balansed_start(opair)
-        then
-            return {{'delete',#p.start_pair,#p.end_pair}}
-        end
+        --TODO: speedup: if text after cursor is pair then run quickly
         local col,row=putils.next_open_end_pair(opair)
+        local overjump=true --TODO: temp
         if col and row
             and putils.pair_balansed_start(opair)
+            and (overjump or (o.col==col and o.row==row))
         then
             return {
                 {'pos',col,row},

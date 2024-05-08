@@ -53,8 +53,8 @@ end
 ---@param row number?
 ---@return string
 function M.key_pos_nodot(col,row)
-    if not row then return M.I.key_i_ctrl_o..col..'|' end
-    return M.I.key_i_ctrl_o..row..'gg'..M.I.key_i_ctrl_o..col..'|'
+    --M.I.key_i_ctrl_o is important because otherwise things break internally (like undo)
+    return M.I.key_i_ctrl_o..M.keycode(('<cmd>call cursor(%s,%s)\r'):format(row or '"."',col))
 end
 ---@param cmd string
 ---@return string
