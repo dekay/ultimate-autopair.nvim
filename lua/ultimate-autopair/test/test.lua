@@ -291,7 +291,7 @@ return {
         --{'<< |>>','foo','<< foo| >>',{interactive=true,c={{'<<','>>',space=true},space2={enable=true}}}},
         --{'<!-- |-->','f','<!-- f| -->',{interactive=true,c={{'<!--','-->',space2=true}}}},
     --},
-    fastwarp={
+    map_fastwarp={
         {'{|}[]','<C-e>','{|[]}'},
         {'{,|},','<C-e>','{,,|}'},
         {'{|}foo','<C-e>','{|foo}'},
@@ -335,7 +335,7 @@ return {
         --{'(|),{},','','(|,{}),',{c={fastwarp={faster=true}}}},
         --{'{|},foo(""),','','{|,foo("")},',{c={fastwarp={faster=true}}}},
     },
-    rfaswarp={
+    map_rfaswarp={
         --{'(foo|)','','(|)foo'},
         --{'(|foo)','','(|)foo'},
         --{'(|)','','(|)'},
