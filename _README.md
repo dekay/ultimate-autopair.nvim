@@ -7,7 +7,7 @@
     + Smart merge with default configuration
     + Smart inherit from parent config
     + Validate that the configuration is correct
-    + Every option which is not a function or static_table option may be a function which get's calculated when it's used
+    + Some options are runtime options and can be set to function to dynamically calculate them
     + Generate a random config (cause why not)
 + Mappings
     + backspace

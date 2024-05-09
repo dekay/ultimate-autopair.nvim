@@ -1,7 +1,9 @@
 local putils=require'ultimate-autopair.profile.pair.utils'
 ---@class ua.prof.pair.bs:ua.object
 ---@field get_pairs fun():ua.prof.pair.pair[]
+---@field conf ua.prof.pair.bs.conf
 ---@class ua.prof.pair.bs.conf:ua.prof.pair.map.conf
+---@field overjump boolean
 
 local M={}
 ---@param o ua.info
@@ -13,10 +15,9 @@ function M.run(o)
         local opair=setmetatable({m=p},{__index=o})
         --TODO: speedup: if text after cursor is pair then run quickly
         local col,row=putils.next_open_end_pair(opair)
-        local overjump=true --TODO: temp
         if col and row
             and putils.pair_balansed_start(opair)
-            and (overjump or (o.col==col and o.row==row))
+            and (putils.get_opt(m.conf.overjump,o,p) or (o.col==col and o.row==row))
         then
             return {
                 {'pos',col,row},
@@ -44,6 +45,7 @@ function M.init(objects,conf)
     --TODO: each pair may have it's own backspace config defined
     ---@type ua.prof.pair.bs
     return putils.create_obj(conf,{
+        conf=conf,
         run=M.run,
         get_pairs=function () return putils.get_pairs(objects) end,
         doc='autopairs backspace',

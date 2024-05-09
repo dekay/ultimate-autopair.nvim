@@ -204,6 +204,7 @@ return {
         {"a''| '",'<bs>',"a'| '",{skip=true}}, --TODO: dont alpha filter
         {'<!--|-->','<bs>','<!-|-->'},
         {'[|foo]','<bs>','|foo'},
+        {'"|foo"','<bs>','|foo"'},
         {'[|\n]','<bs>','|\n'},
         {'[ ]|','<bs>','|',{skip=true}},
         {'|','<C-r>="(a<left><bs>\r','a|',{skip=true}}, --TODO

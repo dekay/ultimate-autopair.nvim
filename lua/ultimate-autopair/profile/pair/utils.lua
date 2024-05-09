@@ -165,4 +165,10 @@ function M.get_pairs(objects)
     objects._cache[M.get_pairs]=ret
     return ret
 end
+function M.get_opt(opt,...)
+    if type(opt)=='function' then
+        return opt(...)
+    end
+    return opt
+end
 return M

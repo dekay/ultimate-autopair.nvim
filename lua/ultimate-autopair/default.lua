@@ -50,7 +50,7 @@ return {
       map='<bs>',
       overjump=function (_,obj)
         --If pair is ambiguous then don't overjump
-        if obj and obj.main_pair and obj.start_pair==obj.pair.start_pair then
+        if obj and obj.ispair and obj.end_pair==obj.start_pair then
           return false
         end
         return true
