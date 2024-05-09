@@ -83,7 +83,7 @@ M.conf_spec={
     },
     backspace={
         __inherit_keys={'basemap'},
-        overjump='TODO',
+        overjump='boolean',
     },
     space={
         __inherit_keys={'basemap'},
@@ -151,12 +151,18 @@ function M.validate(conf,spec_name,traceback)
         if type(conf)==spec.__data then
             return
         end
+        if type(conf)=='function' then
+            return
+        end
         error(('\n\n\n'..[[
         Configuration for the plugin 'ultimate-autopair' is incorrect.
         The option `%s` has the value `%s`, which has the type `%s`.
         However, that option should have the type `%s`.
         ]]..'\n'):format(traceback,conf,type(conf),spec.__data))
     elseif spec.__type=='enum' then
+        if type(conf)=='function' then
+            return
+        end
         for _,v in ipairs(spec.__data --[[@as table]]) do
             if v==conf then
                 return
@@ -171,6 +177,13 @@ function M.validate(conf,spec_name,traceback)
         return
     elseif spec.__type and _G.UA_DEV then
         error''
+    end
+    if type(conf)=='function' then
+        error(('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option `%s` has the value `%s`, which has the type `function`.
+        However, the option is a static_table and thus can't be a function.
+        ]]..'\n'):format(traceback,vim.inspect(conf),type(conf)))
     end
     if type(conf)~='table' then
         error(('\n\n\n'..[[
