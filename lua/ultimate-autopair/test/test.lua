@@ -175,6 +175,21 @@ return {
         ----TODO: test multiline string (python)
         ----TODO: test more injected filter
     },
+    filter={
+        --TODO: test that generic function filters work
+        {'|',"'","'|",{ft='lisp'}},
+        --{'"|"',"'",[["'|'"]],{ts=true,ft='fennel',tsft='lua'}},
+        --{'|','(','(|',{c={extensions={cond={cond=function () return false end}}}}},
+        --{'#|','(','#(|',{c={extensions={cond={cond=function (_,o) return o.line:sub(o.col-1,o.col-1)~='#' end}}}}},
+        --{'|#)','(','(|)#)',{c={extensions={cond={cond=function (_,o)
+        --    return o.line:sub(o.col-1,o.col-1)~='#' end,filter=true}}}}},
+        --{'"|"','(','"(|"',{ts=true,c={extensions={cond={cond=function(fns) return not fns.in_string() end}}}}},
+        --{'--|a','(','--(|a',{ft='lua',ts=true,c={extensions={cond={cond=function (fns) return not fns.in_node('comment') end}}}}},
+        --{'|','(','(|)',{ft='lua',ts=true,c={extensions={cond={cond=function (fns) return not fns.in_node('comment') end}}}}},
+        --{'--|a','(','--(|)a',{ft='lua',ts=true,c={extensions={cond={cond=function (fns) return fns.in_node('comment') end}}}}},
+        --{'|','(','(|',{ft='lua',ts=true,c={extensions={cond={cond=function (fns) return fns.in_node('comment') end}}}}},
+        --{'""|a','(','""(|)a',{ft='lua',ts=true,c={extensions={cond={cond=function (fns) return fns.in_node('string') end}}},skip=true}},
+    },
     map_backspace={
         {'a[|]b','<bs>','a|b'},
         {'a"|"b','<bs>','a|b'},

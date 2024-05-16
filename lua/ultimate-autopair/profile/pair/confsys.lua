@@ -129,6 +129,7 @@ function M.pair_init(conf,pair,_sub)
         filters[k]=pair[k]
     end
     filters=M.merge_tbl(conf.filter,filters) or {}
+    filters=M.merge_tbl(pair.filter,filters) or {}
     if pair.ft and filters.filetype then
         filters=vim.tbl_extend('force',filters,{})
         filters.filetype=setmetatable({ft=M.merge_list(filters.filetype.ft or {},pair.ft)},{__index=filters.filetype})

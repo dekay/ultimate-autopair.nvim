@@ -1,5 +1,6 @@
-local in_lisp=function (fn)
-  return not fn.in_lisp() or fn.in_string() or fn.in_comment()
+local in_lisp=function (o)
+  local fn=require'ultimate-autopair._lib.filter' --TODO: better name
+  return not fn.in_lisp(o) or fn.in_string(o) or fn.in_comment(o)
 end
 --local markdown={
   --ts_not_after={'latex_block','code_span','fenced_code_block'}
@@ -13,19 +14,18 @@ return {
     {'[',']'},
     {'{','}'},
     {'"','"',multiline=false},
-    {"'","'",start_pair={alpha={before=true,py_fstr=true}},multiline=false},
-    {'`','`',filter={filter=in_lisp},multiline=false},
+    {"'","'",start_pair={alpha={before=true,py_fstr=true}},filter={in_lisp},multiline=false},
+    {'`','`',filter={in_lisp},multiline=false},
     {'```','```',ft={'markdown'}},
     {'<!--','-->',ft={'markdown','html'}},
     {'"""','"""',ft={'python'}},
     {"'''","'''",ft={'python'}},
     filter={
-      alpha={},
       cmdtype={skip={'/','?','@'}},
-      filter={p=-1},
       escape={},
-      filetype={nft={'TelescopePrompt'},lang_detect_after=true},
-      tsnode={p=-2,lang_detect_after=true,separate={'comment','string','char','character',
+      alpha={p=-8},
+      filetype={p=-9,nft={'TelescopePrompt'},lang_detect_after=true},
+      tsnode={p=-10,lang_detect_after=true,separate={'comment','string','char','character',
       'raw_string', --fish/bash/sh
       'char_literal','string_literal', --c/cpp
       'string_value', --css

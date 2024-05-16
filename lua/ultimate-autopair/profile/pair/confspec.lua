@@ -22,7 +22,7 @@ M.conf_spec={
         end_pair='basepair',
     },
     basepair={ --OOP lets gooo
-        __inherit_keys={'maps','filters'},
+        __inherit_keys={'maps','filters_nofn'},
         --TODO: specify that some values need to be set, while others are optional
         modes='modes',
         ft='array_of_strings',
@@ -30,6 +30,7 @@ M.conf_spec={
         multiline='boolean',
         p='number',
         insert='filter',
+        filter='filters',
     },
     maps={
         backspace='backspace',
@@ -37,13 +38,16 @@ M.conf_spec={
         space='space',
         fastwarp='fastwarp',
     },
-    filters={
+    filters_nofn={
         alpha='alpha',
         cmdtype='cmdtype',
-        filter='filter',
         escape='escape',
         filetype='filetype',
         tsnode='tsnode',
+    },
+    filters={
+        __array_value='func',
+        __inherit_keys={'filters_nofn'},
     },
     alpha={
         __inherit_keys={'basefilter'},
@@ -126,6 +130,10 @@ M.conf_spec={
     number={ --Should be inlined
         __type='type',
         __data='number',
+    },
+    func={ --Should be inlined
+        __type='type',
+        __data='function', --TODO: somehow encode more info into functions (like how many arguments it has (only on warnerr config check mode))
     },
     array_of_strings={ --Should be inlined
         __array_value='string',
@@ -219,6 +227,8 @@ function M.generate_random(spec_name)
             return math.random(1,20)
         elseif spec.__data=='boolean' then
             return math.random(0,1)==0
+        elseif spec.__data=='function' then
+            return function () end
         else
             error''
         end

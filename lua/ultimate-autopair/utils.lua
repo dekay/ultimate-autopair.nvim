@@ -187,6 +187,12 @@ function M.run_filters(filters,o,_coloff,_coloffe)
         lsave=o.lsave,
     }
     for filter,conf in pairs(filters) do
+        if type(filter)=='number' then
+            if not conf(po) then
+                return false
+            end
+            goto continue
+        end
         filter=filter:gsub('_*%d*$','')
         if conf.filter==false then goto continue end
         if not require('ultimate-autopair.filter.'..filter).call(setmetatable({conf=conf},{__index=po})) then
