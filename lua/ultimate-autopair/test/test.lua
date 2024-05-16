@@ -167,6 +167,7 @@ return {
         {"'''|'","'","''''|",{ft='lua'}},
         {'local a=| }','{','local a={|} }',{ft='lua',c={filter={tsnode={separate={'table_constructor'},detect_after="{"}}},skip=true}}, --TODO: make detect_after only run on insert
         {"let a: Vec<|a>;","'","let a: Vec<'|a>;",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}}, --TODO: only do on insertion, not on general filtering
+        {"let a: Vec<a>;|","'","let a: Vec<'a>;'|'",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}},
         {"|","'","'|'",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}},
         --{[["'"|"'"]],'"',[["'""|""'"]],{ft='lua'}},
         --{[['"' '"' |]],"'",[['"' '"' '|']],{ts=true}},
