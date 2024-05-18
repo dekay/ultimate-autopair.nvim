@@ -48,13 +48,14 @@ function M.create_o_wrapper()
         row=1
         col=vim.fn.getcmdpos()
         local cmdline=vim.fn.getcmdline()
+        local filetype=cmdtype:find('[-:=]') and 'vim' or '' --TODO: test this works
         ---@type ua.source
         source={
             source=cmdline,
-            o=setmetatable({filetype='vim',buftype='prompt',cmdtype=cmdtype},{__index=vim.bo[buf]}),
+            o=setmetatable({filetype=filetype,buftype='prompt',cmdtype=cmdtype},{__index=vim.bo[buf]}),
             mode='c',
             get_parser=function ()
-                local s,parser=pcall(vim.treesitter.get_string_parser,cmdline..'\n','vim')
+                local s,parser=pcall(vim.treesitter.get_string_parser,cmdline..'\n',filetype)
                 if not s then return end
                 if not source._cache[has_parsed] then
                     parser:parse(true)
