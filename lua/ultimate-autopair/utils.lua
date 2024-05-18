@@ -51,10 +51,19 @@ function M.key_del(pre,pos)
 end
 ---@param col number
 ---@param row number?
+---@param mode string
 ---@return string
-function M.key_pos_nodot(col,row)
-    --M.I.key_i_ctrl_o is important because otherwise things break internally (like undo)
-    return M.I.key_i_ctrl_o..M.keycode(('<cmd>call cursor(%s,%s)\r'):format(row or '"."',col))
+function M.key_pos_nodot(col,row,mode)
+    if mode=='i' or mode=='R' then
+        --M.I.key_i_ctrl_o is important because otherwise things break internally (like undo)
+        return M.I.key_i_ctrl_o..M.keycode(('<cmd>call cursor(%s,%s)\r'):format(row or '"."',col))
+    elseif mode=='c' then
+        --TODO: this relies on the cmdline state `getcmdline()`, somehow fix it and make it work in <C-r>=
+        if _G.UA_DEV then assert(row==1) end
+        return M.I.key_home..M.I.key_right:rep(M.I.len(vim.fn.getcmdline():sub(1,col-1)))
+    else
+        return M.keycode(('<cmd>call cursor(%s,%s)\r'):format(row or '"."',col))
+    end
 end
 ---@param cmd string
 ---@return string

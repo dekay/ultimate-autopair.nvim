@@ -176,7 +176,7 @@ function M.act_to_keys(act,mode,conf)
             if conf.true_dot then
                 error('Not implemented')
             else
-                buf:put(utils.key_pos_nodot(v[2],v[3]))
+                buf:put(utils.key_pos_nodot(v[2],v[3],mode))
             end
         elseif v[1]=='delete' then --TODO: utf8 pairs
             --if _G.UA_DEV then
