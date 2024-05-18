@@ -93,7 +93,13 @@ function M.run(plugin_path)
     M.chan_exec_lua[[_G.UA_DEV=true]]
     local conf_tests,skip=M.sort_test_by_conf(list_of_tests)
     for _,tests in pairs(conf_tests) do
-        M.run_tests(tests)
+        if M.run_tests(tests) then
+            utils.warning('Unrecoverable error happened: Prematurely stopping test execution')
+            if vim.fn.jobstop(M.chan)==0 then
+                utils.error('neovim exited abnormally')
+            end
+            return
+        end
     end
     if _G.UA_DEV then
         for _,testopt in ipairs(skip) do
@@ -138,6 +144,9 @@ function M.run_tests(tests)
             utils.error(('test(%s) went wrong:\nThe input could not be processed\nPossible reason: An unmatched `<` may be in the input, replace all unmatched `<` with `<lt>`\n%s'):format(category,M._create_mess(v)))
         elseif errmsg~='' then
             utils.error(('test(%s) errord:\n%s\n%s'):format(category,errmsg,M._create_mess(v)))
+            -- When a test errors, it is slow, and one errord test typically means multiple errord tests
+            -- So we don't stop test execution here so that the test execution doesn't take so long
+            return true
         elseif M.get_lines_and_pos(conf.cursor)~=v[3] then
             utils.error(('test(%s) failed\n%s'):format(category,M._create_mess(v,M.get_lines_and_pos(conf.cursor))))
         end
