@@ -3,8 +3,8 @@ local open_pair=require'ultimate-autopair._lib.open_pair' --TODO:make user be ab
 local putils=require'ultimate-autopair.profile.pair.utils'
 
 ---@class ua.prof.pair.pair:ua.object
----@field start_pair string
----@field end_pair string
+---@field start_pair_old string
+---@field end_pair_old string
 ---@field main_pair? string
 ---@field multiline? boolean
 ---@field start_pair_filter table
@@ -20,14 +20,14 @@ local M={}
 function M.run_start(o)
     o.lsave={}
     local m=o.m --[[@as ua.prof.pair.pair]]
-    local last_char=m.start_pair:sub(-1+vim.str_utf_start(m.start_pair,#m.start_pair))
+    local last_char=m.start_pair_old:sub(-1+vim.str_utf_start(m.start_pair_old,#m.start_pair_old))
     local ret=putils.run_extension(m.extension,o)
     if ret then return ret end
-    if o.line:sub(o.col-#m.start_pair+#last_char,o.col-1)~=m.start_pair:sub(0,-1-#last_char) then return end
-    if not utils.run_filters(m.start_pair_filter,o,#m.start_pair-1) then
+    if o.line:sub(o.col-#m.start_pair_old+#last_char,o.col-1)~=m.start_pair_old:sub(0,-1-#last_char) then return end
+    if not utils.run_filters(m.start_pair_filter,o,#m.start_pair_old-1) then
         return
     end
-    if m.start_pair~=m.end_pair then
+    if m.start_pair_old~=m.end_pair_old then
         local count=open_pair.count_end_pair(o)
         if open_pair.count_end_pair(o,true,count,true) then return end
     else
@@ -35,8 +35,8 @@ function M.run_start(o)
     end
     return {
         last_char,
-        m.end_pair,
-        {'left',m.end_pair},
+        m.end_pair_old,
+        {'left',m.end_pair_old},
     }
 end
 
@@ -47,11 +47,11 @@ function M.run_end(o)
     local m=o.m --[[@as ua.prof.pair.pair]]
     local ret=putils.run_extension(m.extension,o)
     if ret then return ret end
-    if o.line:sub(o.col,o.col+#m.end_pair-1)~=m.end_pair then return end
-    if not utils.run_filters(m.end_pair_filter,o,0,-#m.end_pair) then
+    if o.line:sub(o.col,o.col+#m.end_pair_old-1)~=m.end_pair_old then return end
+    if not utils.run_filters(m.end_pair_filter,o,0,-#m.end_pair_old) then
         return
     end
-    if m.start_pair~=m.end_pair then
+    if m.start_pair_old~=m.end_pair_old then
         local count2=open_pair.count_start_pair(o)
         --Same as: count_open_end_pair_after
         local count1=open_pair.count_end_pair(o)
@@ -61,7 +61,7 @@ function M.run_end(o)
         if open_pair.count_ambiguous_pair(o,'both') then return end
     end
     return {
-        {'right',m.end_pair},
+        {'right',m.end_pair_old},
     }
 end
 ---@param pair ua.prof.pair.conf.pair
@@ -73,8 +73,8 @@ function M.init(pair)
 
     local obj_mt={
         extension=pair.extension,
-        start_pair=start_pair,
-        end_pair=end_pair,
+        start_pair_old=start_pair,
+        end_pair_old=end_pair,
         multiline=pair.multiline,
         end_pair_filter=pair.end_pair_filter,
         start_pair_filter=pair.start_pair_filter,

@@ -9,8 +9,8 @@ local M={}
 function M.count_start_pair(o,gotostart,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
     local m=o.m --[[@as ua.prof.pair.pair]]
-    local start_pair=m.start_pair
-    local end_pair=m.end_pair
+    local start_pair=m.start_pair_old
+    local end_pair=m.end_pair_old
     local multiline=m.multiline
     local start_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col},{__index=o})
@@ -65,8 +65,8 @@ end
 function M.count_end_pair(o,gotoend,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
     local m=o.m --[[@as ua.prof.pair.pair]]
-    local start_pair=m.start_pair
-    local end_pair=m.end_pair
+    local start_pair=m.start_pair_old
+    local end_pair=m.end_pair_old
     local multiline=m.multiline
     local start_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col},{__index=o})
@@ -119,8 +119,8 @@ end
 function M.count_ambiguous_pair(o,gotoend,initial_count,return_pos)
     --TODO(fix): if gotostart=='both' and cursor in pair then dont count pair
     local m=o.m --[[@as ua.prof.pair.pair]]
-    assert(m.start_pair==m.end_pair)
-    local pair=m.start_pair
+    assert(m.start_pair_old==m.end_pair_old)
+    local pair=m.start_pair_old
     local multiline=m.multiline
     local start_pair_filter=function (row,col)
         local no=setmetatable({row=row,col=col},{__index=o})

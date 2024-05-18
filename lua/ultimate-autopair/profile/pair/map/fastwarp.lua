@@ -49,18 +49,18 @@ function M.run(o,_rec)
     end
     local epairs=putils.forward_get_end_pairs(o,m.get_pairs())
     for _,epair in ipairs(epairs) do
-        for col=o.col+#epair.end_pair,#o.line do
+        for col=o.col+#epair.end_pair_old,#o.line do
             for _,v in ipairs(M.act) do
-                local ret=v(setmetatable({col=col},{__index=o}),col,epair.end_pair,col==o.col+#epair.end_pair)
+                local ret=v(setmetatable({col=col},{__index=o}),col,epair.end_pair_old,col==o.col+#epair.end_pair_old)
                 if ret then return ret end
             end
         end
         if o.col~=#o.line then
             return {
-                {'delete',0,epair.end_pair},
+                {'delete',0,epair.end_pair_old},
                 {'pos',#o.line},
-                epair.end_pair,
-                {'left',epair.end_pair},
+                epair.end_pair_old,
+                {'left',epair.end_pair_old},
             }
         else
             return {

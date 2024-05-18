@@ -21,20 +21,20 @@ function M.run(o)
         then
             return {
                 {'pos',col,row},
-                {'delete',0,#p.end_pair},
+                {'delete',0,#p.end_pair_old},
                 {'pos',o.col,o.row},
-                {'delete',#p.start_pair},
+                {'delete',#p.start_pair_old},
             }
         end
     end
     local epairs=putils.backwards_get_end_pairs(o,m.get_pairs())
     for _,p in ipairs(epairs) do
         local opair=setmetatable({m=p},{__index=o})
-        if o.line:sub(o.col-#p.end_pair-#p.start_pair,o.col-#p.end_pair-1)==p.start_pair
-            and putils.run_start_pair_filter(setmetatable({col=o.col-#p.end_pair-#p.start_pair},{__index=opair}))
+        if o.line:sub(o.col-#p.end_pair_old-#p.start_pair_old,o.col-#p.end_pair_old-1)==p.start_pair_old
+            and putils.run_start_pair_filter(setmetatable({col=o.col-#p.end_pair_old-#p.start_pair_old},{__index=opair}))
             and putils.pair_balansed_end(opair)
         then
-            return {{'delete',#p.start_pair+#p.end_pair}}
+            return {{'delete',#p.start_pair_old+#p.end_pair_old}}
         end
     end
 end

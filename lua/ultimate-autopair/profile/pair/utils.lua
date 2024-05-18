@@ -8,8 +8,8 @@ function M.backwards_get_start_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
         if v.type=='start'
-            and v.start_pair==o.line:sub(o.col-#v.start_pair,o.col-1)
-            and M.run_start_pair_filter(setmetatable({m=v,col=o.col-#v.start_pair},{__index=o}))
+            and v.start_pair_old==o.line:sub(o.col-#v.start_pair_old,o.col-1)
+            and M.run_start_pair_filter(setmetatable({m=v,col=o.col-#v.start_pair_old},{__index=o}))
         then
             table.insert(ret,v)
         end
@@ -23,8 +23,8 @@ function M.backwards_get_end_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
         if v.type=='end'
-            and v.end_pair==o.line:sub(o.col-#v.end_pair,o.col-1)
-            and M.run_end_pair_filter(setmetatable({m=v,col=o.col-#v.end_pair},{__index=o}))
+            and v.end_pair_old==o.line:sub(o.col-#v.end_pair_old,o.col-1)
+            and M.run_end_pair_filter(setmetatable({m=v,col=o.col-#v.end_pair_old},{__index=o}))
         then
             table.insert(ret,v)
         end
@@ -38,7 +38,7 @@ function M.forward_get_end_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
         if v.type=='end'
-            and v.end_pair==o.line:sub(o.col,o.col+#v.end_pair-1)
+            and v.end_pair_old==o.line:sub(o.col,o.col+#v.end_pair_old-1)
             and M.run_end_pair_filter(setmetatable({m=v,col=o.col},{__index=o}))
         then
             table.insert(ret,v)
@@ -53,7 +53,7 @@ function M.forward_get_start_pairs(o,somepairs)
     local ret={}
     for _,v in ipairs(somepairs) do
         if v.type=='start'
-            and v.start_pair==o.line:sub(o.col,o.col+#v.start_pair-1)
+            and v.start_pair_old==o.line:sub(o.col,o.col+#v.start_pair_old-1)
             and M.run_start_pair_filter(setmetatable({m=v,col=o.col},{__index=o}))
         then
             table.insert(ret,v)
@@ -65,7 +65,7 @@ end
 ---@return boolean
 function M.pair_balansed_start(o)
     local m=o.m --[[@as ua.prof.pair.pair]]
-    if m.start_pair==m.end_pair then
+    if m.start_pair_old==m.end_pair_old then
         return not open_pair.count_ambiguous_pair(o,'both')
     end
     local count=open_pair.count_start_pair(o)
@@ -75,7 +75,7 @@ end
 ---@return boolean
 function M.pair_balansed_end(o)
     local m=o.m --[[@as ua.prof.pair.pair]]
-    if m.start_pair==m.end_pair then
+    if m.start_pair_old==m.end_pair_old then
         return not open_pair.count_ambiguous_pair(o,'both')
     end
     local count=open_pair.count_end_pair(o)
@@ -84,19 +84,19 @@ end
 ---@param o ua.info
 function M.run_end_pair_filter(o)
     local m=o.m --[[@as ua.prof.pair.pair]]
-    return utils.run_filters(m.end_pair_filter,o,nil,-#m.end_pair)
+    return utils.run_filters(m.end_pair_filter,o,nil,-#m.end_pair_old)
 end
 ---@param o ua.info
 function M.run_start_pair_filter(o)
     local m=o.m --[[@as ua.prof.pair.pair]]
-    return utils.run_filters(m.start_pair_filter,o,nil,-#m.start_pair)
+    return utils.run_filters(m.start_pair_filter,o,nil,-#m.start_pair_old)
 end
 ---@param o ua.info
 ---@return number?
 ---@return number?
 function M.next_open_end_pair(o)
     local m=o.m --[[@as ua.prof.pair.pair]]
-    if m.start_pair==m.end_pair then
+    if m.start_pair_old==m.end_pair_old then
         return open_pair.count_ambiguous_pair(o,true,0,true)
     end
     return open_pair.count_end_pair(o,true,0,true)
@@ -106,7 +106,7 @@ end
 ---@return number?
 function M.prev_open_start_pair(o)
     local m=o.m --[[@as ua.prof.pair.pair]]
-    if m.start_pair==m.end_pair then
+    if m.start_pair_old==m.end_pair_old then
         return open_pair.count_ambiguous_pair(o,false,0,true)
     end
     return open_pair.count_start_pair(o,true,0,true)

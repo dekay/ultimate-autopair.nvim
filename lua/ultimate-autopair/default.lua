@@ -49,8 +49,9 @@ return {
       enable=true,
       map='<bs>',
       overjump=function (_,obj)
+        ---@cast obj ua.prof.pair.pair
         --If pair is ambiguous then don't overjump
-        if obj and obj.ispair and obj.end_pair==obj.start_pair then
+        if obj and obj.ispair and obj.end_pair_old==obj.start_pair_old then
           return false
         end
         return true

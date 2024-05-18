@@ -13,5 +13,4 @@ vim.opt.runtimepath:append('/home/user/.local/share/nvim/lazy/nvim-treesitter/')
 vim.opt.runtimepath:append('/home/user/.local/share/nvim/lazy/nvim-treesitter-endwise/')
 vim.opt.runtimepath:append('/home/user/.local/share/nvim/lazy/nvim-ts-autotag//')
 require'nvim-treesitter'.setup()
-require'ultimate-autopair'.setup()
 vim.cmd'checkhealth ultimate-autopair'
