@@ -1,4 +1,5 @@
 ---@class ua.config #TODO
+---@field profile 'map'|'raw'|'cond'|'pair'|nil
 ---@class ua.instance
 ---@field [number] ua.object
 ---@field disabled boolean? --TODO: test

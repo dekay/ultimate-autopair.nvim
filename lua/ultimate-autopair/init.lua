@@ -2,9 +2,9 @@ local M={_id=0}
 ---@type table<ua.id,ua.instance>
 local instances={}
 M['~get_instances']=function() return instances end
----@type ua.config?
-local _config
-M['~get_config']=function() return _config end
+---@type ua.config[]?
+local _configs
+M['~get_configs']=function() return _configs end
 local default=require'ultimate-autopair.default'
 local prof=require'ultimate-autopair.profile'
 local hook=require'ultimate-autopair.hook'
@@ -12,7 +12,7 @@ local hook=require'ultimate-autopair.hook'
 ---@param id ua.id?
 function M.setup(conf,id)
     if vim.fn.has('nvim-0.9.2')~=1 then error('Requires at least version nvim-0.9.2') end
-    _config=conf
+    _configs={conf} --TODO: set to all configs, but M.extend_default creates a invalid config, so make M.extend_default create the valid config and move the inheritenc logic somewhere else
     M.init({M.extend_default(conf)},id)
 end
 ---@param configs ua.prof.conf[]
@@ -32,7 +32,7 @@ end
 ---@param conf ua.prof.conf?
 ---@return ua.prof.conf
 function M.extend_default(conf)
-    if conf and conf.profile and conf.profile~='default' then
+    if conf and conf.profile and conf.profile~='pair' then
         return conf
     end
     return require'ultimate-autopair.profile.pair.confsys'.merge_configs(default.conf,conf)
