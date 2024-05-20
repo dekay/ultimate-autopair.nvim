@@ -6,7 +6,15 @@ M.I.len=vim.api.nvim_strwidth
 ---@return T
 function M.keycode(str)
     if str and #str~=M.I.len(str) then
-        return str --TODO: somehow make it so that nvim_replace_termcodes doesn't break utf8 chars
+        ---HACK: nvim_replace_termcodes converts all \x80 bytes, even if they are part of a utf8 char
+        ---@cast str string
+        local pos=vim.str_utf_pos(str)
+        for k,v in ipairs(pos) do
+            local c=str:sub(v,(pos[k+1] or 0)-1)
+            if #c>1 and vim.tbl_contains({string.byte(c,2,-1)},128) then
+                return str
+            end
+        end
     end
     return str and vim.api.nvim_replace_termcodes(str,true,true,true)
 end
