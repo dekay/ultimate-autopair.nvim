@@ -9,12 +9,16 @@ function M.keycode(str)
         ---HACK: nvim_replace_termcodes converts all \x80 bytes, even if they are part of a utf8 char
         ---@cast str string
         local pos=vim.str_utf_pos(str)
+        local out=''
+        local sidx=1
         for k,v in ipairs(pos) do
             local c=str:sub(v,(pos[k+1] or 0)-1)
             if #c>1 and vim.tbl_contains({string.byte(c,2,-1)},128) then
-                return str
+                out=out..vim.api.nvim_replace_termcodes(str:sub(sidx,v-1),true,true,true)..c
+                sidx=pos[k+1]
             end
         end
+        return out..vim.api.nvim_replace_termcodes(sidx and str:sub(sidx) or '',true,true,true)
     end
     return str and vim.api.nvim_replace_termcodes(str,true,true,true)
 end
