@@ -61,7 +61,6 @@ return {
         {'\n"|"','"','\n""|'},
         {"\n'|'","'","\n''|",{ft='lua'}},
         {'(\n\n|\n)','(','(\n\n(|)\n)'},
-        {"'|",'\r',"'\n|",{c={cr={autoclose=true}},skip=true}},
         {'*\n|*','*','*\n*|',{c={{'*','*',multiline=true}}}},
         {'*\n|*','*','*\n*|*',{c={{'*','*',multiline=false}}}},
     },
@@ -90,9 +89,12 @@ return {
         {'a˚˚b˚|˚c','˚','a˚˚b˚˚|˚c',{c={{'˚˚','˚˚'}},skip=true}},
         {'print("π",|)','"','print("π","|")',{ft='lua'}},
         {"'ā|',","'","'ā'|,"},
-        {',(|)aŐe,','<C-e>',',(|aŐe),',{skip=true}}, --fastwarp
-        {',‹‹|››aŐe,','<C-e>',',‹‹|aŐe››,',{c={{'‹‹','››'}},skip=true}}, --fastwarp
-        {',˚˚|˚˚aŐe,','<C-e>',',˚˚|aŐe˚˚,',{c={{'˚˚','˚˚'}},skip=true}}, --fastwarp
+        {',(|aŐe),foo,','<C-e>',',(|aŐe,foo),'}, --fastwarp
+        {',‹‹|aŐe››,foo,','<C-e>',',‹‹|aŐe,foo››,',{c={{'‹‹','››'}},skip=true}}, --fastwarp
+        {',˚˚|aŐe˚˚,foo,,','<C-e>',',˚˚|aŐe,foo˚˚,',{c={{'˚˚','˚˚'}},skip=true}}, --fastwarp
+        {',(|)aŐe,','<C-e>',',(|aŐe),',{skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
+        {',‹‹|››aŐe,','<C-e>',',‹‹|aŐe››,',{c={{'‹‹','››'}},skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
+        {',˚˚|˚˚aŐe,','<C-e>',',˚˚|aŐe˚˚,',{c={{'˚˚','˚˚'}},skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
         --{'(|aáa),','','|aáa,',{interactive=true}}, --backspace
         --{'|"¿qué?",','(','(|"¿qué?"),',{interactive=true}}, --ext.surround
         {"ā|,","'","ā'|,"}, --ext.alpha
@@ -217,7 +219,7 @@ return {
         {"a''|",'<bs>',"a'|"},
         {"a'|'",'<bs>',"a|'"},
         {"a'|' '",'<bs>',"a|' '"},
-        {"a''| '",'<bs>',"a'| '",{skip=true}}, --TODO: dont alpha filter
+        {"a''| '",'<bs>',"a'| '",{skip=true}}, --TODO: dont alpha filter on non-insert (e.g. only alpha filter on insert)
         {'<!--|-->','<bs>','<!-|-->'},
         {'[|foo]','<bs>','|foo'},
         {'"|foo"','<bs>','|foo"'},
@@ -265,6 +267,7 @@ return {
         --{'"""|"""','\r','"""\n|\n"""',{ft='python'}},
         --{'```lua|```','\r','```lua\n|\n```',{ft='markdown',skip=true}},
         --{'{|','\r','{\n|\n}',{c={cr={autoclose=true}}}},
+        {"'|",'\r',"'\n|",{c={cr={autoclose=true}}}},
         --{'{[(|','\r','{[(\n|\n)]}',{c={cr={autoclose=true}}}},
         --{'({|\n)','\r','({\n|\n}\n)',{c={cr={autoclose=true}}}},
         --{'{foo|','\r','{foo\n|\n}',{c={cr={autoclose=true}}}},
