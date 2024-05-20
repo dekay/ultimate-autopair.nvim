@@ -5,6 +5,9 @@ M.I.len=vim.api.nvim_strwidth
 ---@param str T
 ---@return T
 function M.keycode(str)
+    if str and #str~=M.I.len(str) then
+        return str --TODO: somehow make it so that nvim_replace_termcodes doesn't break utf8 chars
+    end
     return str and vim.api.nvim_replace_termcodes(str,true,true,true)
 end
 M.I.key_bs=M.keycode'<bs>'

@@ -40,6 +40,17 @@ function M.get_lines_and_pos(cursor)
     lines[row]=lines[row]:sub(1,col)..(cursor or '|')..lines[row]:sub(col+1)
     return table.concat(lines,'\n')
 end
+function M.assert_no_autoconvert(s,t)
+    if not _G.UA_DEV then return end
+    if t and t.ascii then return end
+    local pos=vim.str_utf_pos(s)
+    for k,v in ipairs(pos) do
+        local n=vim.fn.char2nr(s:sub(v,(pos[k+1] or 0)-1))
+        if not (n<128 or n>255) then
+            error(('DEV ERROR: The `%s` in string `%s` may autoconvert\n%s'):format(s:sub(v,(pos[k+1] or 0)-1),s,M._create_mess(t)))
+        end
+    end
+end
 function M.feed(input)
     if M.request('nvim_input',input)~=#input then return false end
     local errmsg=M.request('nvim_eval','v:errmsg')
@@ -123,6 +134,9 @@ function M.run_tests(tests)
     M.chan_exec(('lua ua_conf=(require"ultimate-autopair.test.test".%s[%s][4] or {}).c'):format(pcategory,ptest))
     M.chan_exec('lua require"ultimate-autopair".setup(ua_conf)')
     for _,v in ipairs(tests) do
+        M.assert_no_autoconvert(v[1],v)
+        M.assert_no_autoconvert(v[2],v)
+        M.assert_no_autoconvert(v[3],v)
         local category=v._category
         v._category=nil
         local conf=v[4] or {}
