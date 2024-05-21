@@ -154,6 +154,32 @@ M.conf_spec_cache=vim.defaulttable(function (spec_name)
     end
     return spec
 end)
+function M.error(type_,traceback,value,expected)
+    if type_=='type' then
+        error(('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option `%s` has the value `%s`, which has the type `%s`.
+        However, that option should have the type `%s`.
+        ]]..'\n'):format(traceback,vim.inspect(value),type(value),expected))
+    elseif type_=='enum' then
+        error(('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option `%s` contains the value `%s`.
+        However, that option should be one of `%s`.
+        ]]..'\n'):format(traceback,vim.inspect(value),expected))
+    elseif type_=='table' then
+        error(('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option `%s` has the value `%s`, which has the type `%s`.
+        However, the option should be a table.
+        ]]..'\n'):format(traceback,vim.inspect(value),type(value)))
+    elseif type_=='key' then
+            error(('\n\n\n'..[[
+        Configuration for the plugin 'ultimate-autopair' is incorrect.
+        The option `%s` is set (to `%s`), but it should not be set.
+        ]]..'\n'):format(traceback,vim.inspect(value)))
+    end
+end
 function M.validate(conf,spec_name,traceback)
     local spec=type(spec_name)=='table' and spec_name or M.conf_spec_cache[spec_name]
     if spec.__runtime==true and type(conf)=='function' then
@@ -162,33 +188,21 @@ function M.validate(conf,spec_name,traceback)
         if type(conf)==spec.__data then
             return
         end
-        error(('\n\n\n'..[[
-        Configuration for the plugin 'ultimate-autopair' is incorrect.
-        The option `%s` has the value `%s`, which has the type `%s`.
-        However, that option should have the type `%s`.
-        ]]..'\n'):format(traceback,conf,type(conf),spec.__data))
+        M.error('type',traceback or ':root:',conf,spec.__data)
     elseif spec.__type=='enum' then
         for _,v in ipairs(spec.__data --[[@as table]]) do
             if v==conf then
                 return
             end
         end
-        error(('\n\n\n'..[[
-        Configuration for the plugin 'ultimate-autopair' is incorrect.
-        The option `%s` contains the value `%s`.
-        However, that option should be one of `%s`.
-        ]]..'\n'):format(traceback,conf,vim.inspect(spec.__data)))
+        M.error('enum',traceback or ':root:',conf,vim.inspect(spec.__data))
     elseif spec.__type=='special' then
         return
     elseif spec.__type and _G.UA_DEV then
         error''
     end
     if type(conf)~='table' then
-        error(('\n\n\n'..[[
-        Configuration for the plugin 'ultimate-autopair' is incorrect.
-        The option `%s` has the value `%s`, which has the type `%s`.
-        However, the option should be a table.
-        ]]..'\n'):format(traceback,vim.inspect(conf),type(conf)))
+        M.error('table',traceback or ':root:',conf,'table')
     end
     local tspec=setmetatable({merge='boolean'},{__index=spec})
     if tspec.__array_value then
@@ -204,13 +218,11 @@ function M.validate(conf,spec_name,traceback)
         return t
     end
     for k,v in pairs(conf) do
+        local t=traceback and traceback..'.'..convert(k) or convert(k)
         if not tspec[k] then
-            error(('\n\n\n'..[[
-        Configuration for the plugin 'ultimate-autopair' is incorrect.
-        The option `%s` is set (to `%s`), but it should not be set.
-        ]]..'\n'):format(traceback and traceback..'.'..convert(k) or convert(k),vim.inspect(v)))
+            M.error('key',t,v,nil)
         end
-        M.validate(v,tspec[k],traceback and traceback..'.'..convert(k) or convert(k))
+        M.validate(v,tspec[k],t)
     end
 end
 function M.generate_random(spec_name)
