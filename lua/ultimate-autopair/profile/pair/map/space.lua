@@ -1,4 +1,4 @@
-local hookutils=require'ultimate-autopair.hook.utils'
+local utils=require'ultimate-autopair.utils'
 local putils=require'ultimate-autopair.profile.pair.utils'
 ---@class ua.prof.pair.space:ua.object
 ---@field get_pairs fun():ua.prof.pair.pair[]
@@ -8,6 +8,7 @@ local M={}
 ---@param o ua.info
 ---@return ua.actions|nil
 function M.run(o)
+    local check_box_ft=true --TODO: make this configurable
     local m=o.m --[[@as ua.prof.pair.space]]
     local first_col=o.line:sub(1,o.col-1):find(' *$')
     local total=o.col-first_col
@@ -15,6 +16,14 @@ function M.run(o)
     for _,spair in ipairs(spairs) do
         local opair=setmetatable({m=spair},{__index=o})
         local col,row=putils.next_open_end_pair(opair)
+        if check_box_ft and o.col==col and spair.start_pair_old=='[' and spair.end_pair_old==']' and
+             utils.get_filetype(utils.info_to_filter(o))=='markdown' and vim.regex([=[\v^\s*([+*-]|(\d+\.))\s\[\]$]=]):match_str(o.line:sub(1,o.col)) then
+            return --TODO: temp
+        end
+        if check_box_ft and o.col==col and spair.start_pair_old=='(' and spair.end_pair_old==')' and
+             utils.get_filetype(utils.info_to_filter(o))=='norg' and vim.regex([=[\v^\s*([+*-]|(\d+\.))\s\(\)$]=]):match_str(o.line:sub(1,o.col)) then
+            return --TODO: temp
+        end
         if row and col then
             local ototal=#o.line:sub(o.col,col-1):reverse():match('^ *')
             if not (ototal>total) then

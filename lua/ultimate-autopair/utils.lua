@@ -194,13 +194,12 @@ function M.get_char(str,col)
         vim.str_utf_start(str,col)+col,
         vim.str_utf_end(str,col)+col)
 end
----@param filters table<string,table>
 ---@param o ua.info
 ---@param _coloff number? --TODO: temp
 ---@param _coloffe number? --TODO: temp
----@return boolean
-function M.run_filters(filters,o,_coloff,_coloffe)
-    local po={
+---@return ua.filter
+function M.info_to_filter(o,_coloff,_coloffe)
+    return {
         cols=o.col-(_coloff or 0),
         cole=o.col-(_coloffe or 0),
         line=o.line,
@@ -210,6 +209,14 @@ function M.run_filters(filters,o,_coloff,_coloffe)
         source=o.source,
         lsave=o.lsave,
     }
+end
+---@param filters table<string,table>
+---@param o ua.info
+---@param _coloff number? --TODO: temp
+---@param _coloffe number? --TODO: temp
+---@return boolean
+function M.run_filters(filters,o,_coloff,_coloffe)
+    local po=M.info_to_filter(o,_coloff,_coloffe)
     for filter,conf in pairs(filters) do
         if type(filter)=='number' then
             if not conf(po) then
