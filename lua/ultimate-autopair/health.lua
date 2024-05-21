@@ -31,17 +31,16 @@ function M.validate_config()
     end
 end
 function M.validate_externals()
-    start('External optional plugins')
+    start('External (optional) plugins')
     if not pcall(require,'nvim-treesitter') then
-        warn('nvim-treesitter not found: is required for treesitter specific behavior')
+        warn('nvim-treesitter not found')
         info('NOTE: nvim-treesitter is not required if parsers are installed through other ways')
     else
-        ok('nvim-treesitter found: treesitter specific behavior will work')
+        ok('nvim-treesitter found')
     end
     if not pcall(require,'nvim-treesitter-endwise') then
-        warn('nvim-treesitter-endwise not found: endwise integration will not work')
     else
-        ok('nvim-treesitter-endwise found: endwise integration will work')
+        ok('nvim-treesitter-endwise found: changing newline to not break endwise')
     end
     if not pcall(require,'nvim-ts-autotag') then
         warn('nvim-ts-autotag not found: autotag integration will not work')

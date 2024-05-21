@@ -33,14 +33,14 @@
 + Extensiv testing
 + Terminal and normal mode support
 + And much much more...
-## develop
-+ if your planing to use this with `rust`: `:h ultimate-autopair-use-with-rust`
+## Use
++ If your planing to use this with `rust`: `:h ultimate-autopair-use-with-rust`
 + If your planing to use this with `latex`: `:h ultimate-autopair-use-with-latex`
 + If your planing to use this with `lisp`: `:h ultimate-autopair-use-with-lisp`
 + If your planing to use this with `html`: `:h ultimate-autopair-use-with-html`
 ## Install (lazy)
-Minimum Neovim version: 0.9.2; Recommended: 0.10 or 0.11-dev\
-(Neovim versions 0.9.1<= and 0.10-dev had bugs which could crache Neovim (see: [neovim/neovim#24796](https://github.com/neovim/neovim/pull/24796)))
+Minimum Neovim version: 0.9.2; Recommended: 0.10 (or 0.11-dev)\
+(Neovim versions 0.9.1<= (and 0.10-dev) had bugs which could crache Neovim (see: [neovim/neovim#24796](https://github.com/neovim/neovim/pull/24796)))
 ```lua
 {
     'altermo/ultimate-autopair.nvim',
@@ -55,18 +55,17 @@ Minimum Neovim version: 0.9.2; Recommended: 0.10 or 0.11-dev\
         -- -- For installing parsers which will be used to get nodes and injected filetypes
         -- 'windwp/nvim-ts-autotag',
         -- -- html tag integration (IMPORTANT: read `:h ultimate-autopair-use-with-html`)
-        -- 'gpanders/nvim-parinfer'
-        -- -- the parinfer algorithm for LISP
-
-        -- -- Other recommended but not exactly related to ultimate-autopair
-        -- 'RRethy/nvim-treesitter-endwise',
-        -- -- Auto add `end` keyword for some languages
-        -- 'abecodes/tabout.nvim',
-        -- -- Treesitter based more complex tabout (if ultimate-autopair's tabout is not good enough)
-        -- 'kylechui/nvim-surround',
-        -- -- Surround selected with pairs, delete/change surrounding pairs (in normal/visual mode)
-    },
+    }
 }
+-- -- Recommended but not exactly related to ultimate-autopair
+-- 'gpanders/nvim-parinfer',
+-- -- the parinfer algorithm for LISP programming
+-- 'RRethy/nvim-treesitter-endwise',
+-- -- Auto add `end` keyword for some languages
+-- 'abecodes/tabout.nvim',
+-- -- Treesitter based more complex tabout (if ultimate-autopair's tabout is not good enough)
+-- 'kylechui/nvim-surround',
+-- -- Surround selected with pairs, delete/change surrounding pairs (in normal/visual mode)
 ```
 
 ### Donate
