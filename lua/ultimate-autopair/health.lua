@@ -55,9 +55,8 @@ function M.start()
         error('Could not find ultimate-autopair plugin path')
         return
     end
-    if vim.fn.has('nvim-0.9.0')==0 then
-        --TODO: somehow detect whether it is 0.10.0-dev
-        warn('You have an older version of neovim than recommended')
+    if vim.fn.has('nvim-0.9.2')==0 then
+        error('Your neovim version is not supported (please use 0.9.2 or newer)')
     end
     local plugin_path=vim.fn.fnamemodify(lua_path,':h:h')
     M.validate_config()
