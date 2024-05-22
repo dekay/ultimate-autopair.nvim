@@ -67,6 +67,12 @@ Minimum Neovim version: 0.9.2; Recommended: 0.10 (or 0.11-dev)\
 -- 'kylechui/nvim-surround',
 -- -- Surround selected with pairs, delete/change surrounding pairs (in normal/visual mode)
 ```
+## Issues
+### Keymap conflict
+Ultimate-autopair uses these insert-keymaps by default: `<A-e>`, `<C-A-e>`, `<A-S-e>`, `<C-A-S-e>`, `<BS>`, `<CR>`, `<A-)>` (+ the pair keymaps).
+Some plugins handle these keymap conflicts well, and no no extra config is needed.
+If you don't use the features that the keymaps are for then disable them in the config. (see `:h ultimate-autopair-default-config`)
+If you use the features that the keymaps are for but still want to use them for other things then look into `:h ultimate-autopair-fallback` and `:h ultimate-autopair-create-map`
 
 ### Donate
 If you want to donate then you need to find the correct link (hint: 50₁₀):
