@@ -1,16 +1,49 @@
 *ultimate-autopair.txt*
 ==============================================================================
 INTRODUCTION                                               *ultimate-autopair*
-{NOTE} This is a simplified intro into this plugin. If you want to read about
-the more advanced features, refer to |ultimate-autopair-advanced|.
-
 First, we need to talk about {[builtin-extra-pairs]}. They are a collection of
 pairs (and changes for the default pairs) for a particular filetype. For
 example, the `markdown` one adds pairs such as `*` `*`, and makes them not
 activate inside inline code.
+
+------------------------------------------------------------------------------
+TERMS                                                *ultimate-autopair-terms*
+A list of terms that I use in the documentation.
+• `pair` Two objects representing a pair.
+• `ambiguous pair` A pair where the start and end pair are the same.
+• `start pair` The left pair (Example `(`) (also includes ambiguous pairs)
+• `end pair` The right pair (Example `)`) (also includes ambiguous pairs)
+• `filter` A function that takes a range and returns a boolean.
+• `extension` A function that changes how pairing is done.
+• `profile` A function which turns config into objects.
+• `hook` A binding between neovim actions and objects.
+• `instance` A list of objects (plus other info)
+• `object` The default thing representing most things.
+
 ------------------------------------------------------------------------------
 Creating-pairs                              *ultimate-autopair-creating-pairs*
-{NOTE} If you want to change the config of or delete an existing pair, like
-the builtin pairs, read |ultimate-autopair-changing-pairs|.
+({NOTE} If you want to change the config of or delete an existing pair (e.g.
+the builtin pairs) read |ultimate-autopair-changing-pairs|.)
+
+To create a static pair, add it as a list of two strings to the config.
+Example: >lua
+ {
+   {'<','>'},
+ }
+To create a dynamic pair, TODO: documentation.
+Example: >lua
+ {
+   { --lua multiline string
+    '[',']',
+    start_pattern='%[=*%[',
+    end_pattern='%]=*%]',
+    start_to_end=function(match) return pair:gsub('%[',']') end,
+    end_to_start=function(match) return pair:gsub('%]','[') end,
+   },
+   {
+    '{','},',
+    end_search='}',
+   },
+ }
 
 vim:tw=78:ft=help:
