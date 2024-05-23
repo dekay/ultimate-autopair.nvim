@@ -174,8 +174,8 @@ return {
         {"let a: Vec<|a>;","'","let a: Vec<'|a>;",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}}, --TODO: only do on insertion, not on general filtering
         {"let a: Vec<a>;|","'","let a: Vec<'a>;'|'",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}},
         {"|","'","'|'",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}},
-        --{[["'"|"'"]],'"',[["'""|""'"]],{ft='lua'}},
-        --{[['"' '"' |]],"'",[['"' '"' '|']],{ts=true}},
+        {[["'"|"'"]],'"',[["'""|""'"]],{ft='lua'}},
+        {[['"' '"' |]],"'",[['"' '"' '|']],{ft='lua'}},
         --{"f'|","'","f''|",{ts=true,ft='lua'}},
         ----TODO: test multiline string (python)
         ----TODO: test more injected filter
