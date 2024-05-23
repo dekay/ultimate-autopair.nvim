@@ -13,7 +13,7 @@ function M.keycode(str)
         local sidx=1
         for k,v in ipairs(pos) do
             local c=str:sub(v,(pos[k+1] or 0)-1)
-            if #c>1 and vim.tbl_contains({string.byte(c,2,-1)},128) then
+            if #c>1 and vim.list_contains({string.byte(c,2,-1)},128) then
                 out=out..vim.api.nvim_replace_termcodes(str:sub(sidx,v-1),true,true,true)..c
                 sidx=pos[k+1]
             end

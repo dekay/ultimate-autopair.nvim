@@ -11,8 +11,8 @@ function M.call(o)
     else
         ft=utils.get_filetype(o)
     end
-    if conf.ft and not vim.tbl_contains(conf.ft,ft) then
-    elseif conf.nft and vim.tbl_contains(conf.nft,ft) then
+    if conf.ft and not vim.list_contains(conf.ft,ft) then
+    elseif conf.nft and vim.list_contains(conf.nft,ft) then
     else return true end
 end
 M.conf={
