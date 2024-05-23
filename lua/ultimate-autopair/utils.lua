@@ -224,7 +224,7 @@ function M.run_filters(filters,o,_coloff,_coloffe)
             end
             goto continue
         end
-        filter=filter:gsub('_*%d*$','')
+        filter=filter:gsub('_[_0-9]*$','') --TODO: what pattern to use? --TODO: move this into a function for reuse. : TODO: ALSO: (maybe allow configuration of it) TODO: or just redesign the whole thing
         if conf.filter==false then goto continue end
         if not require('ultimate-autopair.filter.'..filter).call(setmetatable({conf=conf},{__index=po})) then
             return false
