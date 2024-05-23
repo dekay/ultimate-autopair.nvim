@@ -58,7 +58,11 @@ function M.run_end(o)
         --Same as: count_open_start_pair_before
         if count1==0 or count1>count2 then return end
     else
-        if open_pair.count_ambiguous_pair(o,'both') then return end
+        --if there's an uneven number of ambiguous pairs or if were not in a pair
+        local open_pair_before=open_pair.count_ambiguous_pair(o,false)
+        if not open_pair_before then return end
+        local open_pair_after=open_pair.count_ambiguous_pair(o,true,1 --[[open_pair_before and 1 or 0]])
+        if open_pair_after then return end
     end
     return {
         {'right',m.end_pair_old},
