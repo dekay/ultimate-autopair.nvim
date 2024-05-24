@@ -1,11 +1,13 @@
 local utils=require'ultimate-autopair.utils'
 local M={}
 ---@param o ua.filter
+---@return boolean
 function M.in_lisp(o)
     local ft=utils.get_filetype(o)
-    return utils.ft_get_option(ft,'lisp')
+    return utils.ft_get_option(ft,'lisp') --[[@as boolean]]
 end
 ---@param o ua.filter
+---@return boolean
 function M.in_string(o)
     local query=require'ultimate-autopair._lib.query'
     local parser=o.source.get_parser()
@@ -25,6 +27,7 @@ function M.in_string(o)
     return false
 end
 ---@param o ua.filter
+---@return boolean
 function M.in_comment(o)
     local query=require'ultimate-autopair._lib.query'
     local parser=o.source.get_parser()
@@ -44,11 +47,31 @@ function M.in_comment(o)
     return false
 end
 ---@param o ua.filter
+---@param node_type string|string[]
+---@param inclusive boolean?
+---@return boolean|nil
+function M.in_node(o,node_type,inclusive)
+    local query=require'ultimate-autopair._lib.query'
+    local parser=o.source.get_parser()
+    if not parser then
+        return nil
+    end
+    local nodes=query.find_all_node_types(parser,type(node_type)=='string' and {node_type} or node_type --[[@as table]])
+    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
+    for _,node in ipairs(nodes) do
+        local trange={node:range()}
+        if utils.range_in_range(trange,range,inclusive) then
+            return true
+        end
+    end
+    return false
+end
+---@param o ua.filter
 ---@param procnames string[]?
----@return boolean|2
+---@return boolean|nil
 function M.term_in_shell_or_vim(o,procnames)
     if o.source.o.channel==0 then
-        return 2
+        return nil
     end
     procnames=procnames or {
         'sh',
