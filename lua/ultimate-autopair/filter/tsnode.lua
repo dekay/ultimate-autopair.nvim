@@ -24,8 +24,9 @@ function M.call(o)
     end
     if not parser then return true end
     if o.conf.separate and o.lsave then
+        local separate=query.get_node_types_from_config(o.conf.separate,utils.get_filetype(o))
         if o.lsave[M.id]==false then
-            local nodes=query.find_all_node_types(parser,o.conf.separate)
+            local nodes=query.find_all_node_types(parser,separate)
             for _,node in ipairs(nodes) do
                 local trange={node:range()}
                 if utils.range_in_range(trange,range,false) then
@@ -35,7 +36,7 @@ function M.call(o)
         elseif o.lsave[M.id] then
             if not M.filter(o,o.lsave[M.id]) then return end
         else
-            local nodes=query.find_all_node_types(parser,o.conf.separate)
+            local nodes=query.find_all_node_types(parser,separate)
             o.lsave[M.id]=false
             for _,node in ipairs(nodes) do
                 local trange={node:range()}

@@ -176,6 +176,8 @@ return {
         {"|","'","'|'",{ft='rust',c={filter={tsnode={dont={'lifetime'},detect_after="'"}}},skip=true}},
         {[["'"|"'"]],'"',[["'""|""'"]],{ft='lua'}},
         {[['"' '"' |]],"'",[['"' '"' '|']],{ft='lua'}},
+        {'| ")"','(','(|) ")"',{ft='lua',c={filter={tsnode={merge=false,separate={lua={'string'}}}}}}},
+        {'| ")"','(','(| ")"',{ft='lua',c={filter={tsnode={merge=false,separate={markdown={'string'}}}}}}},
         --{"f'|","'","f''|",{ts=true,ft='lua'}},
         ----TODO: test multiline string (python)
         ----TODO: test more injected filter
