@@ -7,11 +7,41 @@ function M.in_lisp(o)
 end
 ---@param o ua.filter
 function M.in_string(o)
-    return false --TODO
+    local query=require'ultimate-autopair._lib.query'
+    local parser=o.source.get_parser()
+    if not parser then
+        --TODO: some simple regex matching
+        return false
+    end
+    local nodes=query.find_all_node_types(parser,{'string' --[[TODO: add other string node types]]})
+    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
+    for _,node in ipairs(nodes) do
+        local trange={node:range()}
+        --NOTE: whether it is inclusive or not depends on the string, but as most strings are not inclusive
+        if utils.range_in_range(trange,range,false) then
+            return true
+        end
+    end
+    return false
 end
 ---@param o ua.filter
 function M.in_comment(o)
-    return false --TODO
+    local query=require'ultimate-autopair._lib.query'
+    local parser=o.source.get_parser()
+    if not parser then
+        --TODO: some simple regex matching (using commentstring)
+        return false
+    end
+    local nodes=query.find_all_node_types(parser,{'comment' --[[TODO: add other comment node types]]})
+    local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
+    for _,node in ipairs(nodes) do
+        local trange={node:range()}
+        --NOTE: whether it is inclusive or not depends on the comment, but as most comments are inclusive
+        if utils.range_in_range(trange,range,true) then
+            return true
+        end
+    end
+    return false
 end
 ---@param o ua.filter
 ---@param procnames string[]?

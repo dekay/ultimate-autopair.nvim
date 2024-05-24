@@ -187,6 +187,9 @@ return {
     filter={
         --TODO: test that generic function filters work
         {'|',"'","'|",{ft='lisp'}},
+        {'|',"'","'|",{ft='lua',cmd='set lisp'}},
+        {'"|"',"'",[["'|'"]],{ft='lua',cmd='set lisp'}},
+        {'-- |',"'","-- '|'",{ft='lua',cmd='set lisp'}},
         --{'"|"',"'",[["'|'"]],{ts=true,ft='fennel',tsft='lua'}},
         --{'|','(','(|',{c={extensions={cond={cond=function () return false end}}}}},
         --{'#|','(','#(|',{c={extensions={cond={cond=function (_,o) return o.line:sub(o.col-1,o.col-1)~='#' end}}}}},

@@ -1,6 +1,6 @@
 local in_lisp=function (o)
   local fn=require'ultimate-autopair._lib.filter' --TODO: better name
-  return not fn.in_lisp(o) or fn.in_string(o) or fn.in_comment(o)
+  return (not fn.in_lisp(o)) or fn.in_string(o) or fn.in_comment(o)
 end
 --local markdown={
   --ts_not_after={'latex_block','code_span','fenced_code_block'}
