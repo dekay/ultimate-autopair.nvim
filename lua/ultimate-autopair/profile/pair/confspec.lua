@@ -65,8 +65,8 @@ M.conf_spec={
     },
     filetype={
         __inherit_keys={'basefilter'},
-        ft='array_of_strings',
-        nft='array_of_strings',
+        ft='TODO', --TODO: array_of_filetypes instead of array_of_strings (filetype is for all intensive purposes a string (but extra validation))
+        nft='TODO',
         detect_after='TODO',
         lang_detect_after='TODO',
     },
@@ -81,6 +81,9 @@ M.conf_spec={
         detect_after='TODO',
         node_detect_after='TODO',
         separate='array_of_strings',
+        --TODO: tsnodes should be it's own type where the number keys point to the node types and any string keys are filetypes pointing to a list of node types
+        --TODO: validate that each filetype has a corresponding treesitter language
+        --TODO: validate each node type
     },
     basefilter={
         --modes='modes',
