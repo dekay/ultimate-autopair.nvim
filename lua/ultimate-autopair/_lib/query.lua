@@ -59,7 +59,6 @@ function M.find_all_node_types(parser,node_types)
         for _,node in query:iter_captures(tree:root(),ltree:source(),0,-1) do
             table.insert(ret,node)
         end
-
     end)
     return ret
 end
