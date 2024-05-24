@@ -1,1 +1,0 @@
---Filter where, if in terminal mode, and current process NOT in white list, then skip insert pair
