@@ -1,2 +1,0 @@
-#! /bin/sh
-nvim -u NONE -S /home/user/.config/nvim/.other/ua_/.test/test.lua
