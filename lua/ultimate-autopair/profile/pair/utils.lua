@@ -126,13 +126,15 @@ end
 ---@param obj table
 ---@return ua.object?
 function M.create_obj(conf,obj)
-    if type(conf.map)=='table' then
-        error('Not implemented')
-    end
     if not conf.enable then return end
+    local maps=type(conf.map)=='table' and conf.map or {conf.map} --[[@as table]]
+    local hooks={}
+    for _,map in ipairs(maps) do
+        vim.list_extend(hooks,M.create_hooks(map,conf.modes))
+    end
     return vim.tbl_extend('error',{
         p=conf.p,
-        hooks=M.create_hooks(conf.map --[[@as string]],conf.modes)
+        hooks=hooks,
     },obj)
 end
 ---@param extensions table<string,table>

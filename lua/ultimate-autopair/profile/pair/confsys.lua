@@ -5,9 +5,17 @@ function M.merge_val(origin,new)
     if new~=nil then return new end
     return origin
 end
+function M.merge_val_tbl(origin,new)
+    assert(type(origin)~='table')
+    assert(type(new)=='table' or new==nil)
+    if new~=nil then return new end
+    return origin
+end
 function M.merge(origin,new)
     if type(vim.F.if_nil(origin,new))=='table' then
         return M.merge_tbl(origin,new)
+    elseif type(new)=='table' then
+        return M.merge_val_tbl(origin,new)
     else
         return M.merge_val(origin,new)
     end
