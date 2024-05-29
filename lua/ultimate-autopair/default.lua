@@ -67,7 +67,7 @@ return {
     },
     fastwarp={
       enable=true,
-      map='<C-e>',
+      map='<A-e>',
     }
   },
   --TODO:

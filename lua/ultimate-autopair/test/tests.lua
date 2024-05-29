@@ -94,12 +94,12 @@ return {
         {'a˚˚b˚|˚c','˚','a˚˚b˚˚|˚c',{c={{'˚˚','˚˚'}},skip=true}},
         {'print("π",|)','"','print("π","|")',{ft='lua'}},
         {"'ā|',","'","'ā'|,"},
-        {',(|aŐe),foo,','<C-e>',',(|aŐe,foo),'}, --fastwarp
-        {',‹‹|aŐe››,foo,','<C-e>',',‹‹|aŐe,foo››,',{c={{'‹‹','››'}},skip=true}}, --fastwarp
-        {',˚˚|aŐe˚˚,foo,,','<C-e>',',˚˚|aŐe,foo˚˚,',{c={{'˚˚','˚˚'}},skip=true}}, --fastwarp
-        {',(|)aŐe,','<C-e>',',(|aŐe),',{skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
-        {',‹‹|››aŐe,','<C-e>',',‹‹|aŐe››,',{c={{'‹‹','››'}},skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
-        {',˚˚|˚˚aŐe,','<C-e>',',˚˚|aŐe˚˚,',{c={{'˚˚','˚˚'}},skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
+        {',(|aŐe),foo,','<A-e>',',(|aŐe,foo),'}, --fastwarp
+        {',‹‹|aŐe››,foo,','<A-e>',',‹‹|aŐe,foo››,',{c={{'‹‹','››'}},skip=true}}, --fastwarp
+        {',˚˚|aŐe˚˚,foo,,','<A-e>',',˚˚|aŐe,foo˚˚,',{c={{'˚˚','˚˚'}},skip=true}}, --fastwarp
+        {',(|)aŐe,','<A-e>',',(|aŐe),',{skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
+        {',‹‹|››aŐe,','<A-e>',',‹‹|aŐe››,',{c={{'‹‹','››'}},skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
+        {',˚˚|˚˚aŐe,','<A-e>',',˚˚|aŐe˚˚,',{c={{'˚˚','˚˚'}},skip='Non-ascii characters are never treated as word characters in fastwarp.'}}, --fastwarp
         --{'(|aáa),','','|aáa,',{interactive=true}}, --backspace
         --{'|"¿qué?",','(','(|"¿qué?"),',{interactive=true}}, --ext.surround
         {"ā|,","'","ā'|,"}, --ext.alpha
@@ -326,15 +326,15 @@ return {
         --{'<!-- |-->','f','<!-- f| -->',{interactive=true,c={{'<!--','-->',space2=true}}}},
     --},
     map_fastwarp={
-        {'{|}[]','<C-e>','{|[]}'},
-        {'{,|},','<C-e>','{,,|}'},
-        {'{|}foo','<C-e>','{|foo}'},
-        {'{|}foo,','<C-e>','{|foo},'},
-        {'{foo|},bar','<C-e>','{foo,bar|}'},
-        {'{foo|},()','<C-e>','{foo,|}()'},
-        {'<!--|-->foo','<C-e>','<!--|foo-->',{ft='markdown',skip=true}}, --TODO: test that this works in markdown+TREESITTER
-        --{'{foo,|}(),','<C-e>','{foo,()|},'},
-        --{'(|)"bar"','<C-e>','(|"bar")'},
+        {'{|}[]','<A-e>','{|[]}'},
+        {'{,|},','<A-e>','{,,|}'},
+        {'{|}foo','<A-e>','{|foo}'},
+        {'{|}foo,','<A-e>','{|foo},'},
+        {'{foo|},bar','<A-e>','{foo,bar|}'},
+        {'{foo|},()','<A-e>','{foo,|}()'},
+        {'<!--|-->foo','<A-e>','<!--|foo-->',{ft='markdown',skip=true}}, --TODO: test that this works in markdown+TREESITTER
+        --{'{foo,|}(),','<A-e>','{foo,()|},'},
+        --{'(|)"bar"','<A-e>','(|"bar")'},
         --{'{foo|},','','{foo,|}'},
         --{'{foo|},(bar)','','{foo,|}(bar)'},
         --{'{(|),}','','{(|,)}'},
