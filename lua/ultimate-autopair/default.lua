@@ -58,6 +58,7 @@ return {
       end
     },
     newline={
+      modes={'i'},
       enable=true,
       map='<cr>',
     },
