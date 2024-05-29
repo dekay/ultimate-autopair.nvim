@@ -332,6 +332,7 @@ return {
         {'{|}foo,','<C-e>','{|foo},'},
         {'{foo|},bar','<C-e>','{foo,bar|}'},
         {'{foo|},()','<C-e>','{foo,|}()'},
+        {'<!--|-->foo','<C-e>','<!--|foo-->',{ft='markdown',skip=true}}, --TODO: test that this works in markdown+TREESITTER
         --{'{foo,|}(),','<C-e>','{foo,()|},'},
         --{'(|)"bar"','<C-e>','(|"bar")'},
         --{'{foo|},','','{foo,|}'},
