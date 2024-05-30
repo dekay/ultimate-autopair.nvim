@@ -1,5 +1,9 @@
 local utils=require'ultimate-autopair.utils'
 local M={}
+M.global={}
+M.global.string={'string'} --[[TODO: add other string node types]]
+M.global.comment={'comment'} --[[TODO: add other comment node types]]
+
 ---@param o ua.filter
 ---@return boolean
 function M.in_lisp(o)
@@ -15,7 +19,7 @@ function M.in_string(o)
         --TODO: some simple regex matching
         return false
     end
-    local nodes=query.find_all_node_types(parser,{'string' --[[TODO: add other string node types]]})
+    local nodes=query.find_all_node_types(parser,M.global.string)
     local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
     for _,node in ipairs(nodes) do
         local trange={node:range()}
@@ -35,7 +39,7 @@ function M.in_comment(o)
         --TODO: some simple regex matching (using commentstring)
         return false
     end
-    local nodes=query.find_all_node_types(parser,{'comment' --[[TODO: add other comment node types]]})
+    local nodes=query.find_all_node_types(parser,M.global.comment)
     local range={o.rows-1,o.cols-1,o.rowe-1,o.cole-1}
     for _,node in ipairs(nodes) do
         local trange={node:range()}
