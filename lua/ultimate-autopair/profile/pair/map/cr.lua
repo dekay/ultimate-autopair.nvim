@@ -29,7 +29,7 @@ end
 ---@param conf ua.prof.pair.cr.conf
 ---@return ua.prof.pair.cr
 function M.init(objects,conf)
-    --TODO: each pair may have it's own backspace config defined
+    --TODO: each pair may have it's own newline config defined
     ---@type ua.prof.pair.cr
     return putils.create_obj(conf,{
         run=M.run,

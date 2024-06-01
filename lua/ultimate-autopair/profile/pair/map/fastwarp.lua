@@ -91,6 +91,7 @@ end
 ---@param conf ua.prof.pair.fastwarp.conf
 ---@return ua.prof.pair.fastwarp
 function M.init(objects,conf)
+    --TODO: each pair may have it's own fastwarp config defined
     ---@type ua.prof.pair.fastwarp
     return putils.create_obj(conf,{
         run=M.run,
