@@ -19,13 +19,30 @@ M.act={
     end,
     function (o,ind,p,first)
         if first then return end
-        local next_spair=putils.forward_get_start_pairs(o,o.m.get_pairs())
-        if #next_spair==0 then return end
+        local next_spairs=putils.forward_get_start_pairs(o,o.m.get_pairs())
+        if #next_spairs==0 then return end
         return {
             {'delete',0,p},
             {'pos',ind-1},
             p,{'left',p},
         }
+    end,
+    function (o,_,p,first)
+        if not first then return end
+        local next_spairs=putils.forward_get_start_pairs(o,o.m.get_pairs())
+        if #next_spairs==0 then return end
+        for _,v in ipairs(next_spairs) do
+            local opair=setmetatable({m=v,col=o.col+#v.start_pair_old},{__index=o})
+            local col,row=putils.next_open_end_pair(opair)
+            if row and col then
+                return {
+                    {'delete',0,p},
+                    {'pos',col},
+                    p,{'left',p},
+                }
+            end
+
+        end
     end
 }
 ---@param o ua.info
