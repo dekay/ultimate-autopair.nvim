@@ -154,15 +154,10 @@ function M.act_to_keys(act,mode,conf)
     conf=conf or {dot=true,true_dot=false,abbr=true}
     local buf=utils.new_str_buf(#act)
     for _,v in ipairs(act) do
-        if type(v)=='string' then v={'ins',v} end
+        if type(v)=='string' then v={'raw',v} end
         if not v then
-        elseif v[1]=='ins' then
-            if not mode:match'[ic]' then
-                buf:put(utils._to_cmd("vim.api.nvim_put({%s},'c',false,true)",{'string',v[2]}))
-            else
-                --TODO: always use nvim_put for `ins` and set the default action to `raw`
-                buf:put(v[2])
-            end
+        elseif v[1]=='raw' then
+            buf:put(v[2])
         elseif v[1]=='left' then
             --if _G.UA_DEV then --TODO
             --    assert(type(v[2])~='number')
@@ -185,6 +180,8 @@ function M.act_to_keys(act,mode,conf)
             --    assert(type(v[3])~='number')
             --end
             buf:put(utils.key_del(v[2],v[3]))
+        else
+            if _G.UA_DEV then error('Unknown action type: '..v[1]) end
         end
     end
     if conf.abbr and mode:match('[ic]') then

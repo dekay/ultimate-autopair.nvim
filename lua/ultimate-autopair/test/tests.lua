@@ -413,7 +413,7 @@ return {
     profile_raw={
         {'|','a','bb|',{c={profile='raw',{{'map','a','i'},function () return {'bb'} end}}}},
         {'|','a','bb|',{c={profile='raw',{hooks={{'map','a','i'}},run=function () return {'bb'} end}}}},
-        {'|a','<esc>!','bb|a',{c={profile='raw',{hooks={{'map','!','n'}},run=function () return {{'ins','bb'}} end}}}},
+        {'|a','<esc>!','bb|a',{c={profile='raw',{hooks={{'map','!','n'}},run=function () return {'ibb'} end}}}},
         --{'|','<esc>Y','|',{c={profile='raw',{hooks={{'map','Y','n'}},run=function () end}}}}, --TODO: important
     },
     profile_cond={

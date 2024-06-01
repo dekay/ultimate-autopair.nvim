@@ -14,7 +14,6 @@ function M.create_map(map)
     return {
         run=function (o)
             --TODO: test for non insert/cmdline mode map
-            --TODO: add action `raw` which inputs the characters as is
             local ret=''
             if type(rhs)=='function' then
                 ret=rhs(o)
