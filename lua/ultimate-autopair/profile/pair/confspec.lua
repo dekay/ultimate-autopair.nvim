@@ -281,7 +281,7 @@ function M.merge(origin,new,merge,spec_name)
     if new==nil then return origin end
     local tspec=setmetatable({merge='boolean'},{__index=spec})
     for k,v in pairs(spec) do
-        if type(k)=='number' or not k:find'^__' and (origin[k] or new[k]) then
+        if type(k)=='number' or not k:find'^__' and (origin[k]~=nil or new[k]~=nil) then
             if (not M.__array_value) or type(v)~='number' then
                 out[k]=M.merge(origin[k],new[k],merge,v)
             end
