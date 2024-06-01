@@ -35,6 +35,8 @@ function M.extend_default(conf)
     if conf and conf.profile and conf.profile~='pair' then
         return conf
     end
-    return require'ultimate-autopair.profile.pair.confsys'.merge_configs(default.conf,conf)
+    local confspec=require'ultimate-autopair.profile.pair.confspec'
+    local merged=confspec.merge(default.conf,conf,true,'main')
+    return confspec.inherit(merged)
 end
 return M

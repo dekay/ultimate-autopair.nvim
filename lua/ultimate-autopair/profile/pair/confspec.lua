@@ -12,12 +12,14 @@ M.conf_spec={
         filter='filters',
         extension='TODO',
         integration='TODO',
+        change='TODO',
     },
     pair={
         __inherit_keys={'basepair'},
         --TODO: specify that some values need to be set, while others are optional
         [1]='string',
         [2]='string',
+        map_modes='modes',
         start_pair='basepair',
         end_pair='basepair',
     },
@@ -54,6 +56,7 @@ M.conf_spec={
         before='boolean',
         after='boolean',
         py_fstr='boolean',
+        filter='boolean', --TODO: temp: this option should be replaced by something else
     },
     cmdtype={
         __inherit_keys={'basefilter'},
@@ -300,6 +303,53 @@ function M.merge(origin,new,merge,spec_name)
                 if not has[v] then table.insert(out,v) end
             end
         end
+    end
+    return out
+end
+function M.inherit(config) --TODO: temp
+    local out=setmetatable({},{__index=config})
+    if not config.pair_map_modes then
+        out.pair_map_modes=config.map_modes
+    end
+    for _,v in pairs(require'ultimate-autopair.profile.pair.map'.maps) do
+        out[v]=setmetatable({modes=M.merge(config.map_modes,config[v].modes,true,'modes')},{__index=config[v]})
+    end
+    local somepairs=vim.defaulttable(function() return {} end)
+    for k,v in ipairs(config) do
+        table.insert(somepairs[v[1]:gsub(';',';;')..';-'..v[2]],k)
+    end
+    local change={}
+    for _,v in ipairs(config.change or {}) do
+        assert(somepairs[v[1]:gsub(';',';;')..';-'..v[2]],('ultimate-autopair: configuration: trying to change pair %s,%s which does not exist'):format(v[1],v[2]))
+        for _,key in ipairs(somepairs[v[1]:gsub(';',';;')..';-'..v[2]]) do
+            change[key]=v
+        end
+    end
+    for k,pair in pairs(config) do
+        if type(k)~='number' then goto continue end
+        out[k]=setmetatable({
+            map_modes=M.merge(config.map_modes,pair.map_modes,true,'modes'),
+            multiline=M.merge(config.multiline,pair.multiline,true,'boolean'),
+        },{__index=pair})
+        if change[k] then
+            out[k]=M.merge(out[k],change[k],true,'pair')
+        end
+        local filters={}
+        for filter,_ in pairs(config.filter or {}) do
+            filters[filter]=out[k][filter]
+        end
+        filters=M.merge(filters,config.filter,true,'filters')
+        filters=M.merge(pair.filter,filters,true,'filters')
+        if pair.ft and filters.filetype then
+            filters.filetype=setmetatable({ft=M.merge(filters.filetype.ft,pair.ft,true,'array_of_strings')},{__index=filters.filetype})
+        end
+        if pair.nft and filters.filetype then
+            filters.filetype=setmetatable({nft=M.merge(filters.filetype.nft,pair.nft,true,'array_of_strings')},{__index=filters.filetype})
+        end
+        out[k].start_pair_filter=M.merge(filters,pair.start_pair,true,'filters') --TODO: temp: this is not valid config
+        out[k].end_pair_filter=M.merge(filters,pair.end_pair,true,'filters') --TODO: temp: this is not valid config
+        out[k].extension=config.extension
+        ::continue::
     end
     return out
 end

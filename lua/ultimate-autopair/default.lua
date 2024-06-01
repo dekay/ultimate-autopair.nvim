@@ -7,7 +7,7 @@ end
 --}
 return {
   conf={
-    map_modes={'i','c',merge=false},
+    map_modes={'i','c'},
     pair_map_modes=nil,
     multiline=true,
     {'(',')'},
