@@ -10,10 +10,17 @@ end
 function M.validate_config()
     start('Configuration is valid')
     local confspec=require'ultimate-autopair.profile.pair.confspec'
-    local configs=require'ultimate-autopair'['~get_configs']()
+    local configs,is_setup=require'ultimate-autopair'['~get_configs']()
     for _,config in ipairs(configs or {}) do
             if config.profile=='pair' or not config.profile then
             confspec.validate(config,'main')
+            if is_setup and _G.UA_DEV then
+                local s,err=pcall(confspec.validate,require'ultimate-autopair'.extend_default(config),'main')
+                if not s and err then
+                    error('Config after merging with default config is invalid:')
+                    info(err)
+                end
+            end
         end
     end
     ok('User configuration is valid')
