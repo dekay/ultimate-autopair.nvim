@@ -13,6 +13,7 @@ local hook=require'ultimate-autopair.hook'
 function M.setup(conf,id)
     if vim.fn.has('nvim-0.9.2')~=1 then error('Requires at least version nvim-0.9.2') end
     M.init({M.extend_default(conf)},id)
+    _configs={conf}
 end
 ---@param configs ua.prof.conf[]
 ---@param id ua.id?
