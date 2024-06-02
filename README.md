@@ -38,13 +38,15 @@
 + If your planing to use this with `latex`: `:h ultimate-autopair-use-with-latex`
 + If your planing to use this with `lisp`: `:h ultimate-autopair-use-with-lisp`
 + If your planing to use this with `html`: `:h ultimate-autopair-use-with-html`
-## Install (lazy)
+## Install
 Minimum Neovim version: 0.9.2; Recommended: 0.10 (or 0.11-dev)\
 (Neovim versions 0.9.1<= (and 0.10-dev) had bugs which could crache Neovim (see: [neovim/neovim#24796](https://github.com/neovim/neovim/pull/24796)))
+<details open=true><summary><b>Lazy</b></summary>
+
 ```lua
 {
     'altermo/ultimate-autopair.nvim',
-    event={'InsertEnter','CmdlineEnter'},
+    event={'InsertEnter','CmdlineEnter'}, -- initialization is slow so lazyloading is recommended
     branch='v0.7', --recommended as each new version will have breaking changes
     opts={
         --Config goes here
@@ -67,6 +69,37 @@ Minimum Neovim version: 0.9.2; Recommended: 0.10 (or 0.11-dev)\
 -- 'kylechui/nvim-surround',
 -- -- Surround selected with pairs, delete/change surrounding pairs (in normal/visual mode)
 ```
+</details>
+
+<details><summary><b>Plugin-manager-less</b></summary>
+
+```lua
+local install_dir=vim.fn.stdpath('data')..'/plugins'
+vim.fn.mkdir(install_dir,'p')
+for _,url in ipairs{
+    'altermo/ultimate-autopair.nvim',
+    --'nvim-treesitter/nvim-treesitter',
+} do
+    local install_path=install_dir..'/'..url:gsub('.*/','')
+    if vim.fn.isdirectory(install_path)==0 then
+        vim.fn.system{'git','clone','https://github.com/'..url,install_path}
+    end
+    vim.opt.runtimepath:append(install_path)
+end
+
+-- require'nvim-treesitter.configs'.setup{}
+
+-- initialization is slow so lazyloading is recommended
+local au_id
+au_id=vim.api.nvim_create_autocmd({'InsertEnter','CmdlineEnter'},{callback=function()
+    require('ultimate-autopair').setup{
+        --config
+    }
+    pcall(vim.api.nvim_del_autocmd,au_id)
+end})
+```
+</details>
+
 ## Issues
 ### Run health checks
 If things doesn't work, try running `:checkhealth ultimate-autopair` to see if there are any errors/warnings.
