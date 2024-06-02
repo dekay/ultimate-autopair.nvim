@@ -68,6 +68,11 @@ Minimum Neovim version: 0.9.2; Recommended: 0.10 (or 0.11-dev)\
 -- -- Surround selected with pairs, delete/change surrounding pairs (in normal/visual mode)
 ```
 ## Issues
+### Run health checks
+If things doesn't work, try running `:checkhealth ultimate-autopair` to see if there are any errors/warnings.
+This doesn't run all health checks, only the ones related to the user.
+To run all health checks (including develeopmental ones), run `:lua _G.UA_DEV=true` and then run `:checkhealth ultimate-autopair`.
+If this reports any errors (which the normal health check doesn't), then it is probably a bug and should be reported (though there are some exceptions).
 ### Keymap conflict
 Ultimate-autopair uses these insert-keymaps by default: `<A-e>`, `<A-S-e>`, `<BS>`, `<CR>`, `<A-)>` (+ the pair keymaps).
 Some plugins handle these keymap conflicts well, and no no extra config is needed.
