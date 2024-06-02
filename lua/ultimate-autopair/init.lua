@@ -12,12 +12,12 @@ local hook=require'ultimate-autopair.hook'
 ---@param id ua.id?
 function M.setup(conf,id)
     if vim.fn.has('nvim-0.9.2')~=1 then error('Requires at least version nvim-0.9.2') end
-    _configs={conf} --TODO: set to all configs, but M.extend_default creates a invalid config, so make M.extend_default create the valid config and move the inheritenc logic somewhere else
     M.init({M.extend_default(conf)},id)
 end
 ---@param configs ua.prof.conf[]
 ---@param id ua.id?
 function M.init(configs,id)
+    _configs=configs
     id=id or M._id
     M.deinit(id)
     instances[id]=prof.init(configs)

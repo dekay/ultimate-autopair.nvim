@@ -31,8 +31,10 @@ M.conf_spec={
         nft='array_of_strings',
         multiline='boolean',
         p='number',
-        insert='filter',
         filter='filters',
+        extension='TODO',
+        start_pair_filter='filters', --TODO: temp
+        end_pair_filter='filters', --TODO: temp
     },
     maps={
         backspace='backspace',
@@ -346,8 +348,8 @@ function M.inherit(config) --TODO: temp
         if pair.nft and filters.filetype then
             filters.filetype=setmetatable({nft=M.merge(filters.filetype.nft,pair.nft,true,'array_of_strings')},{__index=filters.filetype})
         end
-        out[k].start_pair_filter=M.merge(filters,pair.start_pair,true,'filters') --TODO: temp: this is not valid config
-        out[k].end_pair_filter=M.merge(filters,pair.end_pair,true,'filters') --TODO: temp: this is not valid config
+        out[k].start_pair_filter=M.merge(filters,pair.start_pair,true,'filters')
+        out[k].end_pair_filter=M.merge(filters,pair.end_pair,true,'filters')
         out[k].extension=config.extension
         ::continue::
     end

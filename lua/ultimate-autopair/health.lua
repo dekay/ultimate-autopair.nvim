@@ -28,6 +28,11 @@ function M.validate_config()
             error('Randomly generated configuration is invalid')
             info(err)
         end
+        s,err=pcall(confspec.validate,confspec.inherit(require'ultimate-autopair.default'.conf),'main')
+        if not s and err then
+            error('Default configuration after inheritance is invalid:')
+            info(err)
+        end
     end
 end
 function M.validate_externals()
