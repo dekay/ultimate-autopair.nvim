@@ -52,7 +52,29 @@ function M.validate_externals()
     end
     if not pcall(require,'nvim-treesitter-endwise') then
     else
-        ok('nvim-treesitter-endwise found: changing newline to not break endwise')
+        local int=require'ultimate-autopair.integration.endwise'
+        local err
+        local pack=package.loaded['nvim-treesitter.endwise']
+        local on_key=vim.on_key
+        pcall(function ()
+            local t={}
+            on_key=function (fn)
+                table.insert(t,fn)
+            end
+            package.loaded['nvim-treesitter.endwise']=nil
+            require'nvim-treesitter.endwise'
+            err=int.extract_function()
+        end)
+        vim.on_key=on_key
+        package.loaded['nvim-treesitter.endwise']=pack
+        if type(err)=='string' or not err then
+            warn('nvim-treesitter-endwise found, but could not extract endwise function')
+            info('This is probably because you are using a different version than supported')
+            info('NOTE This does not impact normal usage of endwise, only some edge cases')
+            info('The problem: '..(err or 'unknown error'))
+        else
+            ok('nvim-treesitter-endwise found: changing newline to not break endwise')
+        end
     end
     if not pcall(require,'nvim-ts-autotag') then
         warn('nvim-ts-autotag not found: autotag integration will not work')

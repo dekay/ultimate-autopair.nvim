@@ -17,7 +17,7 @@ local function extract_val_with_name(name,func)
     end
 end
 ---@return string|fun(o:ua.info):string
-function M.extract_functions()
+function M.extract_function()
     if not pcall(require,'nvim-treesitter-endwise') then
         return 'nvim-treesitter-endwise not found'
     end
@@ -34,15 +34,18 @@ function M.extract_functions()
     for _,fn in pairs(fns) do
         if vim.endswith(debug.getinfo(fn).source,'/endwise.lua') then
             endwise=extract_val_with_name('endwise',fn)
+            if type(endwise)~='function' then
+                return 'could not extract function "endwise"'
+            end
             tracking=extract_val_with_name('tracking',fn)
+            if type(tracking)~='table' then
+                return 'could not extract table "tracking"'
+            end
             break
         end
     end
-    if type(endwise)~='function' then
-        return 'could not extract function "endwise"'
-    end
-    if type(tracking)~='table' then
-        return 'could not extract table "tracking"'
+    if not endwise or not tracking then
+        return 'no endwise function in on_key callbacks'
     end
     local add_end_node,idx=extract_val_with_name('add_end_node',endwise)
     if not add_end_node or not idx then
@@ -74,7 +77,7 @@ function M.get_endwise(o)
     if _cache then
         return _cache(o)
     end
-    local fn=M.extract_functions()
+    local fn=M.extract_function()
     if type(fn)=='string' then
         return ''
     end
