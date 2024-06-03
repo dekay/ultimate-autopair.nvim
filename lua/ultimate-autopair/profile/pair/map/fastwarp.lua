@@ -1,7 +1,9 @@
 local putils=require'ultimate-autopair.profile.pair.utils'
 ---@class ua.prof.pair.fastwarp:ua.object
 ---@field get_pairs fun():ua.prof.pair.pair[]
+---@field nocursormove boolean?
 ---@class ua.prof.pair.fastwarp.conf:ua.prof.pair.map.conf
+---@field nocursormove boolean?
 
 local M={}
 ---@type (fun(o:ua.info,ind:number,p:string,first:boolean):ua.actions|nil)[]
@@ -43,6 +45,15 @@ M.act={
             end
 
         end
+    end,
+    function (o,ind,p)
+        local next_epairs=putils.forward_get_end_pairs(o,o.m.get_pairs())
+        if #next_epairs==0 then return end
+        return {
+            {'delete',0,p},
+            {'pos',ind-1},
+            p,{'left',p},
+        }
     end
 }
 ---@param o ua.info
@@ -50,7 +61,7 @@ M.act={
 function M.run(o,_rec)
     local m=o.m --[[@as ua.prof.pair.fastwarp]]
     local spairs=putils.backwards_get_start_pairs(o,m.get_pairs())
-    for _,spair in ipairs(_rec and {} or spairs) do
+    for _,spair in ipairs((_rec or m.nocursormove==false) and {} or spairs) do
         local opair=setmetatable({m=spair},{__index=o})
         local col,row=putils.next_open_end_pair(opair)
         if col and row
@@ -80,8 +91,12 @@ function M.run(o,_rec)
                 {'left',epair.end_pair_old},
             }
         else
+            --TODO: if last line, then don't move pair
             return {
-                {''},
+                {'delete',0,epair.end_pair_old},
+                {'pos',1,o.row+1},
+                epair.end_pair_old,
+                {'left',epair.end_pair_old},
             }
         end
     end
@@ -96,6 +111,7 @@ function M.init(objects,conf)
     return putils.create_obj(conf,{
         run=M.run,
         get_pairs=function () return putils.get_pairs(objects) end,
+        nocursormove=conf.nocursormove,
         doc='autopairs fastwarp',
     })
 end

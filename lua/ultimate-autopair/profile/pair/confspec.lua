@@ -106,6 +106,7 @@ M.conf_spec={
     },
     fastwarp={
         __inherit_keys={'basemap'},
+        nocursormove='boolean',
     },
     basemap={
         modes='modes',
