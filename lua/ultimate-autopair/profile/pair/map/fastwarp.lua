@@ -60,8 +60,8 @@ M.act={
 ---@return ua.actions|nil
 function M.run(o,_rec)
     local m=o.m --[[@as ua.prof.pair.fastwarp]]
-    local spairs=putils.backwards_get_start_pairs(o,m.get_pairs())
-    for _,spair in ipairs((_rec or m.nocursormove==false) and {} or spairs) do
+    local spairs=(_rec or m.nocursormove==false) and {} or putils.backwards_get_start_pairs(o,m.get_pairs())
+    for _,spair in ipairs(spairs) do
         local opair=setmetatable({m=spair},{__index=o})
         local col,row=putils.next_open_end_pair(opair)
         if col and row
