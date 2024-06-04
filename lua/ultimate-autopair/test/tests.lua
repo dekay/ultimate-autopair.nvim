@@ -349,6 +349,8 @@ return {
         {'"foo|",bar','<A-e>','"foo,bar|"',{ft='lua'}},
         {'"|" ""','<A-e>','"| """',{ft='lua'}},
         {'"foo|"\n','<A-e>','"foo|"\n',{ft='lua',skip=true}}, --TODO
+        {'<<|>>foo','<A-e>','<<|>>foo',{c={{'<<','>>',fastwarp=false}},skip=true}},
+        {'<<|>>foo','<A-e>','<<|>>foo',{c={{'<<','>>',fastwarp={enable=false}}},skip=true}},
         --{'<<|>>foo','','<<|foo>>',{c={{'<<','>>',fastwarp=true}}}},
         --{'<<|>>()','','<<|()>>',{c={{'<<','>>',fastwarp=true}}}},
         --{'<<|>><<>>','','<<|<<>>>>',{c={{'<<','>>',fastwarp=true}}}},
